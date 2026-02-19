@@ -1,0 +1,26 @@
+{
+  "name": "portfolio-web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "framer-motion": "^12.34.2",
+    "motion": "^12.34.2",
+    "next": "15.1.7",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "styled-components": "6.1.13"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.3",
+    "@types/styled-components": "^5.1.34"
+  }
+}
