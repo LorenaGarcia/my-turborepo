@@ -7,6 +7,7 @@ import team from "../../images/team.png";
 import notfound from "../../images/notfound.png";
 import tracker from "../../images/tracker.png";
 import buttons from "../../images/button-component.png";
+import flashcard from "../../images/flashcard.png";
 
 const PROJECTS = [
   {
@@ -17,6 +18,15 @@ const PROJECTS = [
     demo: "https://lorenagarcia.github.io/expense-tracker-react/",
     code: "https://github.com/LorenaGarcia/expense-tracker-react",
     hash: "#React #context"
+  },
+  {
+    title: "Flashcard App",
+    tags: ["html", "css", "react", "styled", "nextjs", "typescript", "tailwindcss"],
+    description: "Web site created using React",
+    image: flashcard,
+    demo: "https://my-turborepo-flashcard-app.vercel.app/",
+    code: "https://github.com/LorenaGarcia/my-turborepo/tree/main/apps/flashcard-app",
+    hash: "#CSS #NextJS #styled-components #TypeScript #tailwindcss"
   },
   {
     title: "Interior Consultant",
@@ -101,6 +111,6 @@ const PROJECTS = [
   }
 ];
 
-const TAGS = ["all", "html", "css", "react", "styled", "context"];
+const TAGS = ["all", "html", "css", "react", "styled", "context", "nextjs", "typescript", "tailwindcss"];
 
 export { PROJECTS, TAGS };
