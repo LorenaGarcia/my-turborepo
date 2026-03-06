@@ -1,37 +1,17 @@
 import React from "react";
-import Sunny from "../../public/images/sunny";
-import PartlyCloudy from "../../public/images/partly-cloudy";
-import Overcast from "../../public/images/overcast";
-import Fog from "../../public/images/fog";
-import Drizzle from "../../public/images/drizzle";
-import Rain from "../../public/images/rain";
-import Snow from "../../public/images/snow";
-import Thunderstorms from "../../public/images/thunderstorms";
+import { getWeatherIcon } from "../daily-forecast/daily-forecast.utils";
 
 interface HourlyForecastProps {
-  hourly: {
+  hourly?: {
     time: string[];
     temperature_2m: number[];
     weather_code: number[];
   };
-  hourlyUnits: {
+  hourlyUnits?: {
     temperature_2m: string;
   };
+  isLoading?: boolean;
 }
-
-const getWeatherIcon = (code: number) => {
-  const iconProps = { className: "w-8 h-8" };
-  if (code === 0) return <Sunny {...iconProps} />;
-  if (code >= 1 && code <= 2) return <PartlyCloudy {...iconProps} />;
-  if (code === 3) return <Overcast {...iconProps} />;
-  if (code === 45 || code === 48) return <Fog {...iconProps} />;
-  if (code >= 51 && code <= 55) return <Drizzle {...iconProps} />;
-  if (code >= 61 && code <= 65) return <Rain {...iconProps} />;
-  if (code >= 71 && code <= 75) return <Snow {...iconProps} />;
-  if (code >= 80 && code <= 82) return <Rain {...iconProps} />;
-  if (code >= 95) return <Thunderstorms {...iconProps} />;
-  return <Sunny {...iconProps} />; // Default
-};
 
 const formatTime = (time: string) => {
   const date = new Date(time);
@@ -42,11 +22,13 @@ const formatTime = (time: string) => {
   return `${hours} ${ampm}`;
 };
 
-const HourlyForecast = ({ hourly, hourlyUnits }: HourlyForecastProps) => {
+const HourlyForecast = ({ hourly, hourlyUnits, isLoading }: HourlyForecastProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedDay, setSelectedDay] = React.useState(
     new Date().toLocaleDateString("en-US", { weekday: "long" })
   );
+
+  const skeletonItems = Array(8).fill(null);
 
   const days = [
     "Monday",
@@ -59,15 +41,15 @@ const HourlyForecast = ({ hourly, hourlyUnits }: HourlyForecastProps) => {
   ];
 
   return (
-    <div className="bg-[#1D1C35]/50 backdrop-blur-md rounded-[32px] p-6 text-white w-full max-w-md relative">
+    <div className="bg-[#1D1C35]/50 backdrop-blur-md rounded-[32px] p-6 text-white w-full max-w-md relative min-h-[500px]">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl font-medium">Hourly forecast</h3>
         <div className="relative">
           <div
-            onClick={() => setIsOpen(!isOpen)}
-            className="bg-white/10 px-4 py-1.5 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-white/20 transition-colors"
+            onClick={() => !isLoading && setIsOpen(!isOpen)}
+            className={`bg-white/10 px-4 py-1.5 rounded-xl flex items-center gap-2 transition-colors ${isLoading ? "cursor-default opacity-50" : "cursor-pointer hover:bg-white/20"}`}
           >
-            <span className="text-sm font-medium">{selectedDay}</span>
+            <span className="text-sm font-medium">{isLoading ? "-" : selectedDay}</span>
             <svg
               width="12"
               height="8"
@@ -88,7 +70,7 @@ const HourlyForecast = ({ hourly, hourlyUnits }: HourlyForecastProps) => {
             </svg>
           </div>
 
-          {isOpen && (
+          {isOpen && !isLoading && (
             <div className="absolute top-full right-0 mt-2 w-48 bg-[#252440] border border-white/10 rounded-2xl overflow-hidden z-50 shadow-2xl backdrop-blur-xl">
               {days.map((day) => (
                 <div
@@ -109,43 +91,39 @@ const HourlyForecast = ({ hourly, hourlyUnits }: HourlyForecastProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 overflow-y-auto max-h-[450px] pr-2 custom-scrollbar">
-        {hourly.time.slice(0, 12).map((time: string, index: number) => (
-          <div
-            key={time}
-            className="flex justify-between items-center bg-white/5 hover:bg-white/10 transition-colors rounded-2xl p-4 border border-white/5"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 flex items-center justify-center">
-                {getWeatherIcon(hourly.weather_code[index])}
+      <div className="flex flex-col gap-3 overflow-y-auto max-h-[450px] pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
+        {isLoading
+          ? skeletonItems.map((_, index) => (
+              <div
+                key={`hourly-skeleton-${index}`}
+                className="flex justify-between items-center bg-white/5 animate-pulse rounded-2xl p-4 border border-white/5 h-[64px]"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-white/10 rounded-full" />
+                  <div className="w-16 h-4 bg-white/10 rounded-full" />
+                </div>
+                <div className="w-10 h-6 bg-white/10 rounded-full" />
               </div>
-              <span className="text-lg font-medium text-zinc-100">
-                {formatTime(time)}
-              </span>
-            </div>
-            <span className="text-lg font-bold">
-              {Math.round(hourly.temperature_2m[index])}°
-            </span>
-          </div>
-        ))}
+            ))
+          : hourly?.time.slice(0, 12).map((time: string, index: number) => (
+              <div
+                key={time}
+                className="flex justify-between items-center bg-white/5 hover:bg-white/10 transition-colors rounded-2xl p-4 border border-white/5"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    {getWeatherIcon(hourly.weather_code[index], "w-full h-full")}
+                  </div>
+                  <span className="text-lg font-medium text-zinc-100">
+                    {formatTime(time)}
+                  </span>
+                </div>
+                <span className="text-lg font-bold">
+                  {Math.round(hourly.temperature_2m[index])}°
+                </span>
+              </div>
+            ))}
       </div>
-
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.2);
-        }
-      `}</style>
     </div>
   );
 };

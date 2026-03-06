@@ -1,4 +1,5 @@
 "use client";
+import React, { useState, useEffect } from "react";
 
 import Flower from "@/public/images/flower";
 import { UnitsDropdown } from "../units-dropdown/units-dropdown";
@@ -9,7 +10,7 @@ import HourlyForecast from "../hourly-forecast/hourly-forecast";
 import Search from "../search/search";
 import { Details } from "../details/details";
 import DailyForecast from "../daily-forecast/daily-forecast";
-import React, { useState, useEffect } from "react";
+import { DEFAULT_LOCATION } from "./home.constants";
 
 function Home() {
   const [location, setLocation] = useState<{
@@ -33,19 +34,11 @@ function Home() {
         (error) => {
           console.error("Error getting location:", error);
 
-          setLocation({
-            lat: 19.4326,
-            lon: -99.1332,
-            name: "Ciudad de México",
-          });
+          setLocation(DEFAULT_LOCATION);
         }
       );
     } else {
-      setLocation({
-        lat: 19.4326,
-        lon: -99.1332,
-        name: "Ciudad de México",
-      });
+      setLocation(DEFAULT_LOCATION);
     }
   }, []);
 
@@ -77,51 +70,46 @@ function Home() {
       
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_390px] gap-4 xl:gap-12">
         <div className="flex flex-col gap-4 md:gap-6 order-1 lg:order-none">
-          {isLoading ? (
-            <div className="animate-pulse bg-white/5 rounded-[32px] h-[300px]" />
-          ) : error ? (
+          {error ? (
             <div className="text-center p-12 bg-red-500/10 rounded-[32px] border border-red-500/20">
               <p className="text-red-400">Something went wrong. Please try again.</p>
             </div>
-          ) : data ? (
+          ) : (
             <>
               <WeatherBanner
-                city={data.locationName}
-                temperature={data.current.temperature_2m}
-                tempUnit={data.current_units.temperature_2m}
+                city={data?.locationName}
+                temperature={data?.current.temperature_2m}
+                tempUnit={data?.current_units.temperature_2m}
+                isLoading={isLoading}
               />
               <Details
-                feelsLike={data.current.apparent_temperature}
-                humidity={data.current.relative_humidity_2m}
-                windSpeed={data.current.wind_speed_10m}
-                precipitation={data.current.precipitation}
-                units={{
+                feelsLike={data?.current.apparent_temperature}
+                humidity={data?.current.relative_humidity_2m}
+                windSpeed={data?.current.wind_speed_10m}
+                precipitation={data?.current.precipitation}
+                units={data ? {
                   temp: data.current_units.apparent_temperature,
                   wind: data.current_units.wind_speed_10m,
                   precipitation: data.current_units.precipitation,
-                }}
+                } : undefined}
+                isLoading={isLoading}
               />
               <div className="hidden md:block">
-                <DailyForecast daily={data.daily} />
+                <DailyForecast daily={data?.daily} isLoading={isLoading} />
               </div>
             </>
-          ) : null}
+          )}
         </div>
         
         <div className="flex flex-col gap-4 order-3 lg:order-none lg:sticky lg:top-8 h-fit">
-          {!isLoading && data && (
-            <div className="md:hidden">
-              <DailyForecast daily={data.daily} />
-            </div>
-          )}
-          {isLoading ? (
-            <div className="animate-pulse bg-white/5 rounded-[32px] h-[400px]" />
-          ) : data ? (
-            <HourlyForecast
-              hourly={data.hourly}
-              hourlyUnits={data.hourly_units}
-            />
-          ) : null}
+          <div className="md:hidden">
+            <DailyForecast daily={data?.daily} isLoading={isLoading} />
+          </div>
+          <HourlyForecast
+            hourly={data?.hourly}
+            hourlyUnits={data?.hourly_units}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </div>

@@ -2,15 +2,16 @@ import React from "react";
 import { DetailCard } from "./components/detail-card/detail-card";
 
 interface DetailsProps {
-  feelsLike: number;
-  humidity: number;
-  windSpeed: number;
-  precipitation: number;
-  units: {
+  feelsLike?: number;
+  humidity?: number;
+  windSpeed?: number;
+  precipitation?: number;
+  units?: {
     temp: string;
     wind: string;
     precipitation: string;
   };
+  isLoading?: boolean;
 }
 
 function Details({
@@ -19,24 +20,33 @@ function Details({
   windSpeed,
   precipitation,
   units,
+  isLoading,
 }: DetailsProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
       <DetailCard
         label="Feels Like"
-        value={Math.round(feelsLike)}
-        unit={units.temp}
+        value={feelsLike !== undefined ? Math.round(feelsLike) : undefined}
+        unit={units?.temp}
+        isLoading={isLoading}
       />
-      <DetailCard label="Humidity" value={humidity} unit="%" />
+      <DetailCard 
+        label="Humidity" 
+        value={humidity} 
+        unit="%" 
+        isLoading={isLoading}
+      />
       <DetailCard
         label="Wind"
-        value={Math.round(windSpeed)}
-        unit={units.wind}
+        value={windSpeed !== undefined ? Math.round(windSpeed) : undefined}
+        unit={units?.wind}
+        isLoading={isLoading}
       />
       <DetailCard
         label="Precipitation"
         value={precipitation}
-        unit={units.precipitation}
+        unit={units?.precipitation}
+        isLoading={isLoading}
       />
     </div>
   );

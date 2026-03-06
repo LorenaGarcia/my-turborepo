@@ -54,7 +54,7 @@ export async function searchLocations(query: string): Promise<GeocodingResult[]>
   return data.results || [];
 }
 
-export async function getWeatherData(latitude = 19.903, longitude = -99.341, name = "Tepeji del Rio, Hidalgo"): Promise<WeatherData> {
+export async function getWeatherData(latitude: number, longitude: number, name: string): Promise<WeatherData> {
   const locationName = name;
 
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,apparent_temperature,relative_humidity_2m,precipitation&hourly=temperature_2m,relative_humidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`;
