@@ -11,6 +11,31 @@ function HourlyForecast({ hourly, isLoading }: HourlyForecastProps) {
   const [selectedDay, setSelectedDay] = React.useState(
     new Date().toLocaleDateString("en-US", { weekday: "long" })
   );
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const filteredData = React.useMemo(() => {
     if (!hourly) return [];
@@ -32,10 +57,15 @@ function HourlyForecast({ hourly, isLoading }: HourlyForecastProps) {
   return (
     <div className="bg-[#1D1C35]/50 backdrop-blur-md rounded-[32px] p-6 text-white w-full max-w-md relative min-h-[500px]">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-medium">Hourly forecast</h3>
-        <div className="relative">
-          <div
+        <h2 className="text-xl font-medium">Hourly forecast</h2>
+        <div className="relative" ref={dropdownRef}>
+          <button
+            id="day-selector-button"
             onClick={() => !isLoading && setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-haspopup="listbox"
+            aria-controls="day-selector-menu"
+            disabled={isLoading}
             className={`bg-white/10 px-4 py-1.5 rounded-xl flex items-center gap-2 transition-colors ${
               isLoading
                 ? "cursor-default opacity-50"
@@ -63,25 +93,32 @@ function HourlyForecast({ hourly, isLoading }: HourlyForecastProps) {
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
+          </button>
 
           {isOpen && !isLoading && (
-            <div className="absolute top-full right-0 mt-2 w-48 bg-[#252440] border border-white/10 rounded-2xl overflow-hidden z-50 shadow-2xl backdrop-blur-xl">
+            <div
+              id="day-selector-menu"
+              role="listbox"
+              aria-labelledby="day-selector-button"
+              className="absolute top-full right-0 mt-2 w-48 bg-[#252440] border border-white/10 rounded-2xl overflow-hidden z-50 shadow-2xl backdrop-blur-xl"
+            >
               {DAYS.map((day) => (
-                <div
+                <button
                   key={day}
+                  role="option"
+                  aria-selected={selectedDay === day}
                   onClick={() => {
                     setSelectedDay(day);
                     setIsOpen(false);
                   }}
-                  className={`px-4 py-3 text-sm cursor-pointer transition-colors hover:bg-white/10 ${
+                  className={`w-full text-left px-4 py-3 text-sm cursor-pointer transition-colors hover:bg-white/10 ${
                     selectedDay === day
                       ? "bg-white/5 text-white"
                       : "text-zinc-400"
                   }`}
                 >
                   {day}
-                </div>
+                </button>
               ))}
             </div>
           )}

@@ -17,8 +17,19 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
         setIsOpen(false);
       }
     }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const toggleUnit = (category: keyof UnitState, value: string) => {
@@ -39,7 +50,11 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
+        id="units-dropdown-button"
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        aria-controls="units-dropdown-menu"
         className="flex items-center gap-[10px] px-4 py-3 rounded-[8px] bg-[#262540] hover:bg-[#25254d] transition-all text-white font-medium text-base shadow-sm"
       >
         <svg
@@ -71,8 +86,14 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 rounded-[8px] p-3 flex flex-col gap-3 shadow-2xl z-50 bg-[#262540]">
+        <div
+          id="units-dropdown-menu"
+          role="menu"
+          aria-labelledby="units-dropdown-button"
+          className="absolute right-0 mt-2 w-64 rounded-[8px] p-3 flex flex-col gap-3 shadow-2xl z-50 bg-[#262540]"
+        >
           <button
+            role="menuitem"
             onClick={isImperial ? switchToMetric : switchToImperial}
             className="w-full py-2 px-3 rounded-[6px] bg-white/5 text-white hover:bg-white/10 transition-all text-left font-medium text-sm"
           >
@@ -84,6 +105,7 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
               Temperature
             </h3>
             <button
+              role="menuitem"
               onClick={() => toggleUnit("temp", "c")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
                 units.temp === "c"
@@ -105,6 +127,7 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
               )}
             </button>
             <button
+              role="menuitem"
               onClick={() => toggleUnit("temp", "f")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
                 units.temp === "f"
@@ -134,6 +157,7 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
               Wind Speed
             </h3>
             <button
+              role="menuitem"
               onClick={() => toggleUnit("wind", "kmh")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
                 units.wind === "kmh"
@@ -155,6 +179,7 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
               )}
             </button>
             <button
+              role="menuitem"
               onClick={() => toggleUnit("wind", "mph")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
                 units.wind === "mph"
@@ -184,6 +209,7 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
               Precipitation
             </h3>
             <button
+              role="menuitem"
               onClick={() => toggleUnit("precip", "mm")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
                 units.precip === "mm"
@@ -205,6 +231,7 @@ function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
               )}
             </button>
             <button
+              role="menuitem"
               onClick={() => toggleUnit("precip", "in")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
                 units.precip === "in"

@@ -8,9 +8,9 @@ const DailyForecast = ({ daily, isLoading }: DailyForecastProps) => {
 
   return (
     <div className="w-full">
-      <h3 className="text-lg md:text-xl font-medium text-white mb-2 md:mb-4 pl-2">
+      <h2 className="text-lg md:text-xl font-medium text-white mb-2 md:mb-4 pl-2">
         Daily forecast
-      </h3>
+      </h2>
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-4 pb-2 md:pb-4 px-2 overflow-x-auto [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
         {isLoading
           ? skeletonItems.map((_, index) => (

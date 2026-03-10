@@ -53,6 +53,10 @@ function Search({ onSelectLocation }: SearchProps) {
     <div
       className="relative w-full max-w-2xl mx-auto mb-10 md:mb-12"
       ref={dropdownRef}
+      role="combobox"
+      aria-haspopup="listbox"
+      aria-expanded={isOpen}
+      aria-owns="search-results-listbox"
     >
       <form
         onSubmit={onSubmit}
@@ -82,6 +86,9 @@ function Search({ onSelectLocation }: SearchProps) {
             onFocus={() =>
               query.length > 2 && results.length > 0 && setIsOpen(true)
             }
+            aria-label="Search for a place"
+            aria-autocomplete="list"
+            aria-controls="search-results-listbox"
             placeholder="Search for a place..."
             className="bg-transparent text-white placeholder-zinc-400 outline-none w-full text-base md:text-lg"
           />
@@ -95,10 +102,16 @@ function Search({ onSelectLocation }: SearchProps) {
       </form>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 sm:right-1/4 mt-2 bg-[#252440] border border-white/10 rounded-2xl overflow-hidden z-50 shadow-2xl backdrop-blur-xl max-h-[300px] overflow-y-auto custom-scrollbar">
+        <div
+          id="search-results-listbox"
+          role="listbox"
+          className="absolute top-full left-0 right-0 sm:right-1/4 mt-2 bg-[#252440] border border-white/10 rounded-2xl overflow-hidden z-50 shadow-2xl backdrop-blur-xl max-h-[300px] overflow-y-auto custom-scrollbar"
+        >
           {results.map((result: GeocodingResult) => (
             <div
               key={result.id}
+              role="option"
+              aria-selected="false"
               onClick={() => onSelect(result)}
               className="px-5 py-3.5 hover:bg-white/10 cursor-pointer border-b border-white/5 last:border-none group"
             >
