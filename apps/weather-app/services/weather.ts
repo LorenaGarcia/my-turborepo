@@ -54,10 +54,23 @@ export async function searchLocations(query: string): Promise<GeocodingResult[]>
   return data.results || [];
 }
 
-export async function getWeatherData(latitude: number, longitude: number, name: string): Promise<WeatherData> {
+export async function getWeatherData(
+  latitude: number,
+  longitude: number,
+  name: string,
+  units?: {
+    temp: "c" | "f";
+    wind: "kmh" | "mph";
+    precip: "mm" | "in";
+  }
+): Promise<WeatherData> {
   const locationName = name;
 
-  const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,apparent_temperature,relative_humidity_2m,precipitation&hourly=temperature_2m,relative_humidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`;
+  const tempUnit = units?.temp === "f" ? "fahrenheit" : "celsius";
+  const windUnit = units?.wind === "mph" ? "mph" : "kmh";
+  const precipUnit = units?.precip === "in" ? "inch" : "mm";
+
+  const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,apparent_temperature,relative_humidity_2m,precipitation&hourly=temperature_2m,relative_humidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&temperature_unit=${tempUnit}&wind_speed_unit=${windUnit}&precipitation_unit=${precipUnit}`;
   
   const weatherResponse = await fetch(weatherUrl);
   if (!weatherResponse.ok) {

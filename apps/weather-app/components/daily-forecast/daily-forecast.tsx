@@ -1,15 +1,6 @@
 import React from "react";
+import { DailyForecastProps } from "./daily-forecast.types";
 import { getWeatherIcon, formatDay } from "./daily-forecast.utils";
-
-interface DailyForecastProps {
-  daily?: {
-    time: string[];
-    weather_code: number[];
-    temperature_2m_max: number[];
-    temperature_2m_min: number[];
-  };
-  isLoading?: boolean;
-}
 
 
 const DailyForecast = ({ daily, isLoading }: DailyForecastProps) => {

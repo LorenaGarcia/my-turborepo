@@ -4,14 +4,9 @@ import SkyBackgroundDesktop from "@/public/images/sky-background-desktop";
 import SkyBackgroundMobile from "@/public/images/sky-background-mobile";
 import Sunny from "@/public/images/sunny";
 
-interface WeatherBannerProps {
-  city?: string;
-  temperature?: number;
-  tempUnit?: string;
-  isLoading?: boolean;
-}
+import { WeatherBannerProps } from "./weather-banner.types";
 
-export default function WeatherBanner({
+function WeatherBanner({
   city,
   temperature,
   tempUnit,
@@ -25,7 +20,11 @@ export default function WeatherBanner({
   });
 
   return (
-    <div className={`relative w-full overflow-hidden rounded-[24px] md:rounded-[32px] min-h-[240px] lg:min-h-[220px] xl:min-h-[286px] flex flex-col justify-center transition-all duration-300 ${isLoading ? 'bg-[#1D1C35]/50 backdrop-blur-md' : ''}`}>
+    <div
+      className={`relative w-full overflow-hidden rounded-[24px] md:rounded-[32px] min-h-[240px] lg:min-h-[220px] xl:min-h-[286px] flex flex-col justify-center transition-all duration-300 ${
+        isLoading ? "bg-[#1D1C35]/50 backdrop-blur-md" : ""
+      }`}
+    >
       <div className="absolute inset-0 z-0">
         {!isLoading && (
           <>
@@ -71,3 +70,5 @@ export default function WeatherBanner({
     </div>
   );
 }
+
+export { WeatherBanner };

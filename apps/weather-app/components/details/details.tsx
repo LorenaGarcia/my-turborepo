@@ -1,18 +1,7 @@
 import React from "react";
 import { DetailCard } from "./components/detail-card/detail-card";
 
-interface DetailsProps {
-  feelsLike?: number;
-  humidity?: number;
-  windSpeed?: number;
-  precipitation?: number;
-  units?: {
-    temp: string;
-    wind: string;
-    precipitation: string;
-  };
-  isLoading?: boolean;
-}
+import { DetailsProps } from "./details.types";
 
 function Details({
   feelsLike,
@@ -30,10 +19,10 @@ function Details({
         unit={units?.temp}
         isLoading={isLoading}
       />
-      <DetailCard 
-        label="Humidity" 
-        value={humidity} 
-        unit="%" 
+      <DetailCard
+        label="Humidity"
+        value={humidity}
+        unit="%"
         isLoading={isLoading}
       />
       <DetailCard

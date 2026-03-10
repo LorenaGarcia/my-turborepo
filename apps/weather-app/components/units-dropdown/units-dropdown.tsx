@@ -1,25 +1,19 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { UnitState, UnitsDropdownProps } from "./units-dropdown.types";
+import { UNITS, UNITS_IMPERIAL } from "./units-dropdown.constants";
 
-type UnitState = {
-  temp: "c" | "f";
-  wind: "kmh" | "mph";
-  precip: "mm" | "in";
-};
-
-function UnitsDropdown() {
+function UnitsDropdown({ units, onChangeUnits }: UnitsDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [units, setUnits] = useState<UnitState>({
-    temp: "c",
-    wind: "kmh",
-    precip: "mm",
-  });
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
@@ -27,18 +21,19 @@ function UnitsDropdown() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const toggleUnit = (category: keyof UnitState, value: any) => {
-    setUnits((prev) => ({ ...prev, [category]: value }));
+  const toggleUnit = (category: keyof UnitState, value: string) => {
+    onChangeUnits({ ...units, [category]: value });
   };
 
-  const isImperial = units.temp === "f" && units.wind === "mph" && units.precip === "in";
+  const isImperial =
+    units.temp === "f" && units.wind === "mph" && units.precip === "in";
 
   const switchToImperial = () => {
-    setUnits({ temp: "f", wind: "mph", precip: "in" });
+    onChangeUnits(UNITS_IMPERIAL);
   };
 
   const switchToMetric = () => {
-    setUnits({ temp: "c", wind: "kmh", precip: "mm" });
+    onChangeUnits(UNITS);
   };
 
   return (
@@ -67,16 +62,16 @@ function UnitsDropdown() {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`w-4 h-4 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </button>
 
       {isOpen && (
-        <div 
-          className="absolute right-0 mt-2 w-64 rounded-[8px] p-3 flex flex-col gap-3 shadow-2xl z-50 bg-[#262540]"
-        >
+        <div className="absolute right-0 mt-2 w-64 rounded-[8px] p-3 flex flex-col gap-3 shadow-2xl z-50 bg-[#262540]">
           <button
             onClick={isImperial ? switchToMetric : switchToImperial}
             className="w-full py-2 px-3 rounded-[6px] bg-white/5 text-white hover:bg-white/10 transition-all text-left font-medium text-sm"
@@ -85,16 +80,26 @@ function UnitsDropdown() {
           </button>
 
           <section className="flex flex-col">
-            <h3 className="text-zinc-500 text-[11px] font-bold px-2 py-2 uppercase tracking-tight">Temperature</h3>
+            <h3 className="text-zinc-500 text-[11px] font-bold px-2 py-2 uppercase tracking-tight">
+              Temperature
+            </h3>
             <button
               onClick={() => toggleUnit("temp", "c")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
-                units.temp === "c" ? "bg-[#302F4A] text-white" : "text-white/60 hover:bg-white/5"
+                units.temp === "c"
+                  ? "bg-[#302F4A] text-white"
+                  : "text-white/60 hover:bg-white/5"
               }`}
             >
               <span className="text-sm">Celsius (°C)</span>
               {units.temp === "c" && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  className="w-4 h-4 text-white"
+                >
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
@@ -102,12 +107,20 @@ function UnitsDropdown() {
             <button
               onClick={() => toggleUnit("temp", "f")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
-                units.temp === "f" ? "bg-[#302F4A] text-white" : "text-white/60 hover:bg-white/5"
+                units.temp === "f"
+                  ? "bg-[#302F4A] text-white"
+                  : "text-white/60 hover:bg-white/5"
               }`}
             >
               <span className="text-sm">Fahrenheit (°F)</span>
               {units.temp === "f" && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  className="w-4 h-4 text-white"
+                >
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
@@ -117,16 +130,26 @@ function UnitsDropdown() {
           <div className="h-[1px] bg-white/5 mx-2" />
 
           <section className="flex flex-col">
-            <h3 className="text-zinc-500 text-[11px] font-bold px-2 py-2 uppercase tracking-tight">Wind Speed</h3>
+            <h3 className="text-zinc-500 text-[11px] font-bold px-2 py-2 uppercase tracking-tight">
+              Wind Speed
+            </h3>
             <button
               onClick={() => toggleUnit("wind", "kmh")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
-                units.wind === "kmh" ? "bg-[#302F4A] text-white" : "text-white/60 hover:bg-white/5"
+                units.wind === "kmh"
+                  ? "bg-[#302F4A] text-white"
+                  : "text-white/60 hover:bg-white/5"
               }`}
             >
               <span className="text-sm">km/h</span>
               {units.wind === "kmh" && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  className="w-4 h-4 text-white"
+                >
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
@@ -134,12 +157,20 @@ function UnitsDropdown() {
             <button
               onClick={() => toggleUnit("wind", "mph")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
-                units.wind === "mph" ? "bg-[#302F4A] text-white" : "text-white/60 hover:bg-white/5"
+                units.wind === "mph"
+                  ? "bg-[#302F4A] text-white"
+                  : "text-white/60 hover:bg-white/5"
               }`}
             >
               <span className="text-sm">mph</span>
               {units.wind === "mph" && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  className="w-4 h-4 text-white"
+                >
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
@@ -149,16 +180,26 @@ function UnitsDropdown() {
           <div className="h-[1px] bg-white/5 mx-2" />
 
           <section className="flex flex-col">
-            <h3 className="text-zinc-500 text-[11px] font-bold px-2 py-2 uppercase tracking-tight">Precipitation</h3>
+            <h3 className="text-zinc-500 text-[11px] font-bold px-2 py-2 uppercase tracking-tight">
+              Precipitation
+            </h3>
             <button
               onClick={() => toggleUnit("precip", "mm")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
-                units.precip === "mm" ? "bg-[#302F4A] text-white" : "text-white/60 hover:bg-white/5"
+                units.precip === "mm"
+                  ? "bg-[#302F4A] text-white"
+                  : "text-white/60 hover:bg-white/5"
               }`}
             >
               <span className="text-sm">Millimeters (mm)</span>
               {units.precip === "mm" && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  className="w-4 h-4 text-white"
+                >
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
@@ -166,12 +207,20 @@ function UnitsDropdown() {
             <button
               onClick={() => toggleUnit("precip", "in")}
               className={`flex items-center justify-between px-3 py-2 rounded-[6px] transition-all ${
-                units.precip === "in" ? "bg-[#302F4A] text-white" : "text-white/60 hover:bg-white/5"
+                units.precip === "in"
+                  ? "bg-[#302F4A] text-white"
+                  : "text-white/60 hover:bg-white/5"
               }`}
             >
               <span className="text-sm">Inches (in)</span>
               {units.precip === "in" && (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  className="w-4 h-4 text-white"
+                >
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
@@ -183,4 +232,4 @@ function UnitsDropdown() {
   );
 }
 
-export { UnitsDropdown }
+export { UnitsDropdown };
