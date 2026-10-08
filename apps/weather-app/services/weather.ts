@@ -45,7 +45,9 @@ export interface GeocodingResult {
   admin1?: string;
 }
 
-export async function searchLocations(query: string): Promise<GeocodingResult[]> {
+export async function searchLocations(
+  query: string,
+): Promise<GeocodingResult[]> {
   if (!query || query.length < 2) return [];
   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`;
   const response = await fetch(url);
@@ -62,7 +64,7 @@ export async function getWeatherData(
     temp: "c" | "f";
     wind: "kmh" | "mph";
     precip: "mm" | "in";
-  }
+  },
 ): Promise<WeatherData> {
   const locationName = name;
 
@@ -71,14 +73,14 @@ export async function getWeatherData(
   const precipUnit = units?.precip === "in" ? "inch" : "mm";
 
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,apparent_temperature,relative_humidity_2m,precipitation&hourly=temperature_2m,relative_humidity_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&temperature_unit=${tempUnit}&wind_speed_unit=${windUnit}&precipitation_unit=${precipUnit}`;
-  
+
   const weatherResponse = await fetch(weatherUrl);
   if (!weatherResponse.ok) {
     throw new Error("Weather request failed");
   }
 
   const weatherData = await weatherResponse.json();
-  
+
   return {
     ...weatherData,
     locationName,

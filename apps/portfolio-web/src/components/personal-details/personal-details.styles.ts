@@ -2,8 +2,6 @@
 import React from "react";
 import styled from "styled-components";
 
-
-
 const Container = styled.div`
   align-items: center;
   background-color: ${(props) => props.theme.cardBackground};

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import * as Styled from "./projects.styles";
-import { PROJECTS, TAGS} from "./projects.constants";
+import { PROJECTS, TAGS } from "./projects.constants";
 
 const Projects = () => {
   const [filter, setFilter] = useState("all");

@@ -3,7 +3,6 @@ import { DM_Sans, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 
-
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],

@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  --background: #EFF5FF;
+  --foreground: #F8F9FF;
+
+  /* White & Black */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
+  /* Grey */
+  --color-grey-500: #9699AA;
+
+  /* Orange */
+  --color-orange-300: #FFAF7E;
+
+  /* Red */
+  --color-red-500: #EE374A;
+  --color-red-450: #E96170;
+  --color-red-400: #F9818E;
+
+  /* Purple */
+  --color-purple-600: #483EFF;
+  --color-purple-500: #6259FF;
+  --color-purple-400: #928CFF;
+  --color-purple-200: #D6D9E6;
+
+  /* Blue */
+  --color-blue-950: #02295A;
+  --color-blue-700: #164A8A;
+  --color-blue-300: #ABBCFF;
+  --color-blue-200: #BEE2FD;
+  --color-blue-100: #EFF5FF;
+  --color-blue-50: #F8F9FF;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-ubuntu), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* Add Custom Colors mapped directly for Tailwind */
+  --color-grey-500: var(--color-grey-500);
+  --color-orange-300: var(--color-orange-300);
+  --color-red-500: var(--color-red-500);
+  --color-red-450: var(--color-red-450);
+  --color-red-400: var(--color-red-400);
+  --color-purple-600: var(--color-purple-600);
+  --color-purple-500: var(--color-purple-500);
+  --color-purple-400: var(--color-purple-400);
+  --color-purple-200: var(--color-purple-200);
+  --color-blue-950: var(--color-blue-950);
+  --color-blue-700: var(--color-blue-700);
+  --color-blue-300: var(--color-blue-300);
+  --color-blue-200: var(--color-blue-200);
+  --color-blue-100: var(--color-blue-100);
+  --color-blue-50: var(--color-blue-50);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}

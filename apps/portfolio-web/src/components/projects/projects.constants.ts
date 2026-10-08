@@ -17,16 +17,24 @@ const PROJECTS = [
     image: tracker,
     demo: "https://lorenagarcia.github.io/expense-tracker-react/",
     code: "https://github.com/LorenaGarcia/expense-tracker-react",
-    hash: "#React #context"
+    hash: "#React #context",
   },
   {
     title: "Flashcard App",
-    tags: ["html", "css", "react", "styled", "nextjs", "typescript", "tailwindcss"],
+    tags: [
+      "html",
+      "css",
+      "react",
+      "styled",
+      "nextjs",
+      "typescript",
+      "tailwindcss",
+    ],
     description: "Web site created using React",
     image: flashcard,
     demo: "https://my-turborepo-flashcard-app.vercel.app/",
     code: "https://github.com/LorenaGarcia/my-turborepo/tree/main/apps/flashcard-app",
-    hash: "#CSS #NextJS #styled-components #TypeScript #tailwindcss"
+    hash: "#CSS #NextJS #styled-components #TypeScript #tailwindcss",
   },
   {
     title: "Interior Consultant",
@@ -35,7 +43,7 @@ const PROJECTS = [
     image: interior,
     demo: "https://lorenagarcia.github.io/interior-consultant/",
     code: "https://github.com/LorenaGarcia/interior-consultant",
-    hash: "#HTML #CSS #React #styled-components"
+    hash: "#HTML #CSS #React #styled-components",
   },
   {
     title: "My Gallery",
@@ -44,7 +52,7 @@ const PROJECTS = [
     image: mygalery,
     demo: "https://lorenagarcia.github.io/my-gallery/",
     code: "https://github.com/LorenaGarcia/my-gallery",
-    hash: "#HTML #CSS #React #styled-components"
+    hash: "#HTML #CSS #React #styled-components",
   },
   {
     title: "Homepage",
@@ -53,7 +61,7 @@ const PROJECTS = [
     image: homepage,
     demo: "https://lorenagarcia.github.io/edie-homepage/",
     code: "https://github.com/LorenaGarcia/edie-homepage",
-    hash: "#HTML #CSS #React #styled-components"
+    hash: "#HTML #CSS #React #styled-components",
   },
   {
     title: "Checkout Page",
@@ -62,7 +70,7 @@ const PROJECTS = [
     image: checkout,
     demo: "https://lorenagarcia.github.io/checkout-page/",
     code: "https://github.com/LorenaGarcia/checkout-page",
-    hash: "#HTML #CSS #React #styled-components"
+    hash: "#HTML #CSS #React #styled-components",
   },
   {
     title: "Recipe Page",
@@ -71,7 +79,7 @@ const PROJECTS = [
     image: recipe,
     demo: "https://lorenagarcia.github.io/recipe-page/",
     code: "https://github.com/LorenaGarcia/recipe-page",
-    hash: "#HTML #CSS #React #styled-components"
+    hash: "#HTML #CSS #React #styled-components",
   },
   {
     title: "My Team Page",
@@ -80,7 +88,7 @@ const PROJECTS = [
     image: team,
     demo: "https://lorenagarcia.github.io/my-team-page/",
     code: "https://github.com/LorenaGarcia/my-team-page",
-    hash: "#HTML #CSS #React #styled-components"
+    hash: "#HTML #CSS #React #styled-components",
   },
   {
     title: "404 Not Found",
@@ -89,16 +97,17 @@ const PROJECTS = [
     image: notfound,
     demo: "https://lorenagarcia.github.io/404-not-found/",
     code: "https://github.com/LorenaGarcia/404-not-found",
-    hash: "#HTML #CSS"
+    hash: "#HTML #CSS",
   },
   {
     title: "Input Component",
     tags: ["html", "css", "react"],
     description: "Web site created using React",
-    image: "https://raw.githubusercontent.com/LorenaGarcia/input-component/master/public/imageHome.jpg",
+    image:
+      "https://raw.githubusercontent.com/LorenaGarcia/input-component/master/public/imageHome.jpg",
     demo: "https://lorenagarcia.github.io/input-component/",
     code: "https://github.com/LorenaGarcia/input-component",
-    hash: "#HTML #CSS #React"
+    hash: "#HTML #CSS #React",
   },
   {
     title: "Button Component",
@@ -107,10 +116,20 @@ const PROJECTS = [
     image: buttons,
     demo: "https://lorenagarcia.github.io/button-component/",
     code: "https://github.com/LorenaGarcia/button-component",
-    hash: "#HTML #CSS #React"
-  }
+    hash: "#HTML #CSS #React",
+  },
 ];
 
-const TAGS = ["all", "html", "css", "react", "styled", "context", "nextjs", "typescript", "tailwindcss"];
+const TAGS = [
+  "all",
+  "html",
+  "css",
+  "react",
+  "styled",
+  "context",
+  "nextjs",
+  "typescript",
+  "tailwindcss",
+];
 
 export { PROJECTS, TAGS };

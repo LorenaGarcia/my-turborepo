@@ -42,7 +42,9 @@ export default function AllCardsPage() {
   const filteredCards = useMemo(() => {
     let result = cards;
     if (selectedCategories.length > 0) {
-      result = result.filter((card) => selectedCategories.includes(card.category));
+      result = result.filter((card) =>
+        selectedCategories.includes(card.category)
+      );
     }
     if (hideMastered) {
       result = result.filter((card) => card.knownCount < 5);
@@ -63,14 +65,14 @@ export default function AllCardsPage() {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto overflow-x-hidden scrollbar-hide py-8 px-4">
-      <div className="w-full max-w-[1240px] mx-auto flex flex-col gap-12">
-        
-        
+    <div className="scrollbar-hide flex h-full flex-col overflow-x-hidden overflow-y-auto px-4 py-8">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-12">
         <div className="rounded-[20px] border-[2px] border-[#2e1401] bg-white p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
           <form className="flex flex-col gap-6" onSubmit={formik.handleSubmit}>
             <div className="flex flex-col gap-2">
-              <label className="text-lg font-bold text-[#2e1401]">Question</label>
+              <label className="text-lg font-bold text-[#2e1401]">
+                Question
+              </label>
               <input
                 type="text"
                 name="question"
@@ -78,15 +80,15 @@ export default function AllCardsPage() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder="e.g., What is the capital of France?"
-                className={`w-full rounded-[12px] border-[2px] p-4 text-lg outline-none transition-all ${
+                className={`w-full rounded-[12px] border-[2px] p-4 text-lg transition-all outline-none ${
                   formik.touched.question && formik.errors.question
                     ? "border-pink-500 bg-pink-50/10"
                     : "border-[#a1b0d0] focus:border-[#2e1401]"
                 }`}
               />
               {formik.touched.question && formik.errors.question && (
-                <div className="flex items-center gap-1.5 text-pink-600 font-bold text-sm ml-2">
-                  <ErrorIcon className="w-4 h-4" />
+                <div className="ml-2 flex items-center gap-1.5 text-sm font-bold text-pink-600">
+                  <ErrorIcon className="h-4 w-4" />
                   <span>{formik.errors.question}</span>
                 </div>
               )}
@@ -101,22 +103,24 @@ export default function AllCardsPage() {
                 onBlur={formik.handleBlur}
                 placeholder="e.g., Paris"
                 rows={2}
-                className={`w-full rounded-[12px] border-[2px] p-4 text-lg outline-none transition-all ${
+                className={`w-full rounded-[12px] border-[2px] p-4 text-lg transition-all outline-none ${
                   formik.touched.answer && formik.errors.answer
                     ? "border-pink-500 bg-pink-50/10"
                     : "border-[#2e1401]/20 focus:border-[#2e1401]"
                 }`}
               />
               {formik.touched.answer && formik.errors.answer && (
-                <div className="flex items-center gap-1.5 text-pink-600 font-bold text-sm ml-2">
-                  <ErrorIcon className="w-4 h-4" />
+                <div className="ml-2 flex items-center gap-1.5 text-sm font-bold text-pink-600">
+                  <ErrorIcon className="h-4 w-4" />
                   <span>{formik.errors.answer}</span>
                 </div>
               )}
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-lg font-bold text-[#2e1401]">Category</label>
+              <label className="text-lg font-bold text-[#2e1401]">
+                Category
+              </label>
               <input
                 type="text"
                 name="category"
@@ -124,15 +128,15 @@ export default function AllCardsPage() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 placeholder="e.g., Geography"
-                className={`w-full rounded-[12px] border-[2px] p-4 text-lg outline-none transition-all ${
+                className={`w-full rounded-[12px] border-[2px] p-4 text-lg transition-all outline-none ${
                   formik.touched.category && formik.errors.category
                     ? "border-pink-500 bg-pink-50/10"
                     : "border-[#2e1401]/20 focus:border-[#2e1401]"
                 }`}
               />
               {formik.touched.category && formik.errors.category && (
-                <div className="flex items-center gap-1.5 text-pink-600 font-bold text-sm ml-2">
-                  <ErrorIcon className="w-4 h-4" />
+                <div className="ml-2 flex items-center gap-1.5 text-sm font-bold text-pink-600">
+                  <ErrorIcon className="h-4 w-4" />
                   <span>{formik.errors.category}</span>
                 </div>
               )}
@@ -144,7 +148,7 @@ export default function AllCardsPage() {
                 className="flex items-center gap-2 rounded-[100px] border-[2px] border-[#2e1401] bg-[#ffcc00] px-8 py-3 text-lg font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-y-[1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-none"
               >
                 <div className="flex h-6 w-6 items-center justify-center rounded-full border-[2px] border-[#2e1401]">
-                  <PlusIcon className="w-4 h-4" />
+                  <PlusIcon className="h-4 w-4" />
                 </div>
                 Create Card
               </button>
@@ -153,8 +157,8 @@ export default function AllCardsPage() {
         </div>
 
         <div className="flex flex-col gap-8">
-          <div className="rounded-[20px] border-[2px] border-[#2e1401] bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative">
-            <HeaderCards 
+          <div className="relative rounded-[20px] border-[2px] border-[#2e1401] bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <HeaderCards
               selectedCategories={selectedCategories}
               onCategoryChange={setSelectedCategories}
               hideMastered={hideMastered}
@@ -163,9 +167,9 @@ export default function AllCardsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {filteredCards.slice(0, visibleCount).map((card) => (
-              <FlashcardListItem 
+              <FlashcardListItem
                 key={card.id}
                 {...card}
                 onDelete={() => handleDeleteCard(card.id)}
@@ -174,7 +178,7 @@ export default function AllCardsPage() {
           </div>
 
           {filteredCards.length > visibleCount && (
-            <div className="flex justify-center mt-4 mb-8">
+            <div className="mt-4 mb-8 flex justify-center">
               <button
                 onClick={handleLoadMore}
                 className="rounded-[100px] border-[2px] border-[#2e1401] bg-white px-10 py-3 text-lg font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-y-[1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-none"
@@ -185,10 +189,15 @@ export default function AllCardsPage() {
           )}
 
           {filteredCards.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
-              <p className="text-2xl font-black text-[#2e1401]/20">No cards found matching your filters</p>
-              <button 
-                onClick={() => { setSelectedCategories([]); setHideMastered(false); }}
+            <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
+              <p className="text-2xl font-black text-[#2e1401]/20">
+                No cards found matching your filters
+              </p>
+              <button
+                onClick={() => {
+                  setSelectedCategories([]);
+                  setHideMastered(false);
+                }}
                 className="text-lg font-black text-[#2e1401] underline decoration-yellow-500 decoration-4 underline-offset-4"
               >
                 Clear all filters
@@ -220,11 +229,7 @@ function PlusIcon({ className }: { className?: string }) {
 
 function ErrorIcon({ className }: { className?: string }) {
   return (
-    <svg 
-      viewBox="0 0 24 24" 
-      fill="currentColor" 
-      className={className}
-    >
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
     </svg>
   );

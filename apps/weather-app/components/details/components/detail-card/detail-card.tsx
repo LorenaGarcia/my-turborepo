@@ -2,7 +2,6 @@ import React from "react";
 import { DetailCardProps } from "./detail-card.types";
 
 function DetailCard({ label, value, unit, isLoading }: DetailCardProps) {
-  
   return (
     <div
       className={`bg-[#1D1C35]/50 backdrop-blur-md rounded-[20px] p-4 lg:p-4 xl:p-6 text-white min-w-0 flex-1 border border-white/5 transition-all ${

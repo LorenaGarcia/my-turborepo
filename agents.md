@@ -25,7 +25,9 @@ This monorepo uses [Turborepo](https://turbo.build/repo) and npm workspaces.
 ## 🚀 Common Workflows
 
 ### Running Tasks
+
 Run these from the root directory:
+
 - `npm run dev`: Starts development servers (parallel).
 - `npm run build`: Builds all projects.
 - `npm run lint`: Lints the entire monorepo.
@@ -65,4 +67,5 @@ Run these from the root directory:
 4. **Environment**: Check for `.env.example` files when working on apps to understand required environment variables.
 
 ---
-*Created by Antigravity AI Assistant*
+
+_Created by Antigravity AI Assistant_

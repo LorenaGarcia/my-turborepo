@@ -39,7 +39,7 @@ function Home() {
           console.error("Error getting location:", error);
 
           setLocation(DEFAULT_LOCATION);
-        }
+        },
       );
     } else {
       setLocation(DEFAULT_LOCATION);
@@ -47,8 +47,14 @@ function Home() {
   }, []);
 
   const { data, isLoading, error } = useQuery<WeatherData>({
-    queryKey: ["weather", location?.lat.toString(), location?.lon.toString(), units],
-    queryFn: () => getWeatherData(location!.lat, location!.lon, location!.name, units),
+    queryKey: [
+      "weather",
+      location?.lat.toString(),
+      location?.lon.toString(),
+      units,
+    ],
+    queryFn: () =>
+      getWeatherData(location!.lat, location!.lon, location!.name, units),
     enabled: !!location,
   });
 

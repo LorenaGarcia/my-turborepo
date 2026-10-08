@@ -2,7 +2,6 @@ import React from "react";
 import { DailyForecastProps } from "./daily-forecast.types";
 import { getWeatherIcon, formatDay } from "./daily-forecast.utils";
 
-
 const DailyForecast = ({ daily, isLoading }: DailyForecastProps) => {
   const skeletonItems = Array(7).fill(null);
 

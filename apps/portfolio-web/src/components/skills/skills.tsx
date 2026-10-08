@@ -4,7 +4,6 @@ import * as Styled from "./skills.styles";
 import { SKILL_LIST } from "./skills.constants";
 
 const Skills = () => {
-
   return (
     <Styled.Container>
       <Styled.MainHeader>

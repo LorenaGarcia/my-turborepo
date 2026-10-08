@@ -5,11 +5,10 @@ import { getWeatherIcon } from "../daily-forecast/daily-forecast.utils";
 import { formatTime } from "./hourly-forecast.utils";
 import { HourlyForecastProps } from "./hourly-forecast.types";
 
-
 function HourlyForecast({ hourly, isLoading }: HourlyForecastProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedDay, setSelectedDay] = React.useState(
-    new Date().toLocaleDateString("en-US", { weekday: "long" })
+    new Date().toLocaleDateString("en-US", { weekday: "long" }),
   );
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
@@ -152,6 +151,4 @@ function HourlyForecast({ hourly, isLoading }: HourlyForecastProps) {
     </div>
   );
 }
-;
-
 export { HourlyForecast };

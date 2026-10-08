@@ -8,9 +8,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="h-full">
-      <body 
+      <body
         className="flex h-screen flex-col overflow-hidden px-[10px] py-[24px] md:px-[20px]"
-        style={{ backgroundColor: '#F7F3F0' }}
+        style={{ backgroundColor: "#F7F3F0" }}
       >
         <Header />
 

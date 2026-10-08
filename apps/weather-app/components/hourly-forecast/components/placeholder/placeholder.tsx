@@ -1,11 +1,7 @@
 import React from "react";
 import { SKELETON_ITEMS } from "../../hourly-forecast.constants";
 
-
-
 function Placeholder() {
-
-
   return (
     <>
       {SKELETON_ITEMS.map((_, index) => (
@@ -22,6 +18,6 @@ function Placeholder() {
       ))}
     </>
   );
-};
+}
 
 export { Placeholder };

@@ -14,11 +14,11 @@ function Header() {
           <Logo className="cursor-pointer" />
         </Link>
 
-        <div className="border-color: var(--color-black) flex h-[52px] w-[300px] flex-row items-center justify-between rounded-[100px] border p-[4px] shadow-md shadow-black bg-white">
+        <div className="border-color: var(--color-black) flex h-[52px] w-[300px] flex-row items-center justify-between rounded-[100px] border bg-white p-[4px] shadow-md shadow-black">
           <Link
             className={`flex h-full w-[50%] items-center justify-center rounded-[100px] font-bold transition-all ${
-              pathname === "/" 
-                ? "bg-yellow-500 border border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]" 
+              pathname === "/"
+                ? "border border-black bg-yellow-500 shadow-[2px_2px_0_0_rgba(0,0,0,1)]"
                 : "text-gray-500 hover:text-black"
             }`}
             href="/"
@@ -27,8 +27,8 @@ function Header() {
           </Link>
           <Link
             className={`flex h-full w-[50%] items-center justify-center rounded-[100px] font-bold transition-all ${
-              pathname === "/all-cards" 
-                ? "bg-yellow-500 border border-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]" 
+              pathname === "/all-cards"
+                ? "border border-black bg-yellow-500 shadow-[2px_2px_0_0_rgba(0,0,0,1)]"
                 : "text-gray-500 hover:text-black"
             }`}
             href="/all-cards"

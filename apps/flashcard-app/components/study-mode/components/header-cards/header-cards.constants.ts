@@ -12,4 +12,4 @@ const CATEGORIES = [
   { id: "Web Development", label: "Web Development", count: 5 },
 ];
 
-export {CATEGORIES}
+export { CATEGORIES };

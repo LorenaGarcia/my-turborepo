@@ -17,7 +17,7 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-  color: ${props => props.theme.text};
+  color: ${(props) => props.theme.text};
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0;
@@ -30,10 +30,12 @@ const FilterContainer = styled.div`
 `;
 
 const ButtonHash = styled.button<{ $active?: boolean }>`
-  background-color: ${props => props.$active ? props.theme.primary : props.theme.cardBackground};
+  background-color: ${(props) =>
+    props.$active ? props.theme.primary : props.theme.cardBackground};
   border-radius: 0.5rem;
-  border: 0.0625rem solid ${props => props.$active ? props.theme.primary : props.theme.border};
-  color: ${props => props.$active ? '#ffffff' : props.theme.text};
+  border: 0.0625rem solid
+    ${(props) => (props.$active ? props.theme.primary : props.theme.border)};
+  color: ${(props) => (props.$active ? "#ffffff" : props.theme.text)};
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
@@ -41,8 +43,14 @@ const ButtonHash = styled.button<{ $active?: boolean }>`
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: ${props => props.$active ? props.theme.primary : (props.theme.mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : '#252a33')};
-    border-color: ${props => props.$active ? props.theme.primary : props.theme.border};
+    background-color: ${(props) =>
+      props.$active
+        ? props.theme.primary
+        : props.theme.mode === "light"
+          ? "rgba(0, 0, 0, 0.05)"
+          : "#252a33"};
+    border-color: ${(props) =>
+      props.$active ? props.theme.primary : props.theme.border};
   }
 `;
 
@@ -57,15 +65,20 @@ const ProjectsGrid = styled.div`
 `;
 
 const ProjectCard = styled.div`
-  background-color: ${props => props.theme.cardBackground};
+  background-color: ${(props) => props.theme.cardBackground};
   border-radius: 0.9375rem;
-  border: 0.0625rem solid ${props => props.theme.border};
+  border: 0.0625rem solid ${(props) => props.theme.border};
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-0.3125rem);
-    box-shadow: ${props => props.theme.mode === 'light' ? '0 0.625rem 1.875rem rgba(0, 0, 0, 0.05)' : '0 0.625rem 1.875rem rgba(0, 0, 0, 0.3)'};
+    box-shadow: ${(props) =>
+      props.theme.mode === "light"
+        ? "0 0.625rem 1.875rem rgba(0, 0, 0, 0.05)"
+        : "0 0.625rem 1.875rem rgba(0, 0, 0, 0.3)"};
   }
 `;
 
@@ -92,14 +105,14 @@ const Content = styled.div`
 `;
 
 const Hash = styled.p`
-  color: ${props => props.theme.secondary};
+  color: ${(props) => props.theme.secondary};
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 0.625rem;
 `;
 
 const TitleExample = styled.h3`
-  color: ${props => props.theme.text};
+  color: ${(props) => props.theme.text};
   font-size: 1.25rem;
   font-weight: 700;
   margin: 0 0 0.625rem 0;
@@ -108,7 +121,7 @@ const TitleExample = styled.h3`
 const Description = styled.p`
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  color: ${props => props.theme.textSecondary};
+  color: ${(props) => props.theme.textSecondary};
   display: -webkit-box;
   font-size: 0.9375rem;
   height: 2.8125rem;
@@ -124,7 +137,7 @@ const ButtonGroup = styled.div`
 
 const ButtonDemo = styled.a`
   align-items: center;
-  background-color: ${props => props.theme.primary};
+  background-color: ${(props) => props.theme.primary};
   border-radius: 0.375rem;
   color: #ffffff;
   display: flex;
@@ -144,8 +157,8 @@ const ButtonCode = styled.a`
   align-items: center;
   background-color: transparent;
   border-radius: 0.375rem;
-  border: 0.0625rem solid ${props => props.theme.primary};
-  color: ${props => props.theme.primary};
+  border: 0.0625rem solid ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   display: flex;
   font-size: 0.875rem;
   font-weight: 600;
@@ -175,5 +188,5 @@ export {
   ProjectCard,
   ProjectsGrid,
   Title,
-  TitleExample
-}
+  TitleExample,
+};

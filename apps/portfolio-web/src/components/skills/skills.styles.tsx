@@ -18,7 +18,7 @@ const MainHeader = styled.div`
 
 const IconBox = styled.div`
   align-items: center;
-  background-color: ${props => props.theme.primary};
+  background-color: ${(props) => props.theme.primary};
   border-radius: 0.5rem;
   color: white;
   display: flex;
@@ -31,16 +31,16 @@ const IconBox = styled.div`
 `;
 
 const MainTitle = styled.h2`
-  color: ${props => props.theme.text};
+  color: ${(props) => props.theme.text};
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0;
 `;
 
 const DivContainer = styled.div`
-  background-color: ${props => props.theme.cardBackground};
+  background-color: ${(props) => props.theme.cardBackground};
   border-radius: 0.9375rem;
-  border: 0.0625rem solid ${props => props.theme.border};
+  border: 0.0625rem solid ${(props) => props.theme.border};
   box-sizing: border-box;
   padding: 2.1875rem;
   width: 100%;
@@ -52,7 +52,7 @@ const DivContainer = styled.div`
 
 const SubHeader = styled.div`
   align-items: center;
-  color: ${props => props.theme.secondary};
+  color: ${(props) => props.theme.secondary};
   display: flex;
   gap: 0.625rem;
   margin-bottom: 1.875rem;
@@ -75,17 +75,18 @@ const SkillsWrapper = styled.div`
 `;
 
 const SkillTag = styled.div`
-  background-color: ${props => props.theme.skillTag};
+  background-color: ${(props) => props.theme.skillTag};
   border-radius: 0.625rem;
-  border: 0.0625rem solid ${props => props.theme.border};
-  color: ${props => props.theme.skillText};
+  border: 0.0625rem solid ${(props) => props.theme.border};
+  color: ${(props) => props.theme.skillText};
   font-size: 1rem;
   font-weight: 500;
   padding: 0.625rem 1.25rem;
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: ${props => props.theme.mode === 'light' ? 'rgba(0, 0, 0, 0.06)' : '#3d2531'};
+    background-color: ${(props) =>
+      props.theme.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "#3d2531"};
     transform: translateY(-0.125rem);
   }
 `;
@@ -99,5 +100,5 @@ export {
   SubHeader,
   Name,
   SkillsWrapper,
-  SkillTag
-}
+  SkillTag,
+};
