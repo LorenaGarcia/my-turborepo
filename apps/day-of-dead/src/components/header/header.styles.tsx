@@ -46,14 +46,17 @@ export const BrandSection = styled.div`
 export const SkullIconBadge = styled.div`
   width: 42px;
   height: 42px;
-  border-radius: 50%;
-  background: #FFB300;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #120326;
-  font-size: 1.3rem;
-  box-shadow: 0 0 12px rgba(255, 179, 0, 0.4);
+  flex-shrink: 0;
+  background: transparent;
+`;
+
+export const HeaderFlowerImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 `;
 
 export const BrandTitles = styled.div`
@@ -65,7 +68,7 @@ export const BrandName = styled.span`
   font-family: 'Cinzel', serif;
   font-weight: 800;
   font-size: 1.15rem;
-  color: #FFFFFF;
+  color: #e85917ff;
   display: flex;
   align-items: center;
   gap: 6px;

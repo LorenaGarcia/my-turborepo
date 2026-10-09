@@ -1,14 +1,15 @@
 "use client";
 
 import styled, { keyframes } from "styled-components";
+import { motion } from "framer-motion";
 
 const pulseGlow = keyframes`
   0%, 100% {
-    opacity: 0.35;
+    opacity: 0.1;
     transform: scale(1);
   }
   50% {
-    opacity: 0.6;
+    opacity: 0.1;
     transform: scale(1.05);
   }
 `;
@@ -17,7 +18,7 @@ export const MainContainer = styled.div`
   min-height: 100vh;
   background-color: #0C0512;
   background-image: 
-    linear-gradient(180deg, rgba(12, 5, 18, 0.75) 0%, rgba(12, 5, 18, 0.88) 50%, rgba(12, 5, 18, 0.96) 100%),
+    linear-gradient(180deg, rgba(12, 5, 18, 0.4) 0%, rgba(12, 5, 18, 0.6) 50%, rgba(12, 5, 18, 0.8) 100%),
     url('/bg-altar.jpg');
   background-size: cover;
   background-position: center top;
@@ -105,18 +106,35 @@ export const TraditionSubtitle = styled.h3`
   z-index: 1;
 `;
 
-export const MainTitle = styled.h1`
+export const MainTitle = styled(motion.h1)`
   font-family: 'Cinzel Decorative', 'Cinzel', serif;
   font-size: clamp(3rem, 7.5vw, 5.8rem);
   font-weight: 900;
   letter-spacing: 4px;
   margin: 8px 0;
   line-height: 1.1;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35em;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+`;
+
+export const WordSpan = styled(motion.span)`
+  display: inline-flex;
+  white-space: nowrap;
+`;
+
+export const TitleLetter = styled(motion.span)`
+  display: inline-block;
   background: linear-gradient(180deg, #f2670aff 0%, #d48541ff 40%, #E2AB59 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.6));
-  z-index: 1;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
 `;
 
 export const DescriptionText = styled.p`
@@ -181,17 +199,24 @@ export const CardLeftContent = styled.div`
 `;
 
 export const CatrinaBadge = styled.div`
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  background: #3A0C4A;
-  border: 1px solid rgba(233, 30, 99, 0.4);
-  color: #E91E63;
+  background: #FFFFFF;
+  border: 2px solid rgba(233, 30, 99, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
   flex-shrink: 0;
+  overflow: hidden;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 10px rgba(233, 30, 99, 0.3);
+`;
+
+export const CatrinaImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 `;
 
 export const OfrendaBadge = styled.div`

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   TopBarWrapper,
   ColorBanner,
@@ -8,17 +9,12 @@ import {
   HeaderContainer,
   BrandSection,
   SkullIconBadge,
+  HeaderFlowerImage,
   BrandTitles,
   BrandName,
-  BrandSubtitle,
   NavContainer,
   NavButton,
-  RightSection,
-  MusicButton,
-  StatusDot,
-  AvatarButton,
 } from "./header.styles";
-import { User, Radio } from "lucide-react";
 
 const bannerColors = [
   "#FFC107", // Yellow
@@ -32,7 +28,8 @@ const bannerColors = [
 ];
 
 export function Header() {
-  const [activeTab, setActiveTab] = useState("Inicio");
+  const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <TopBarWrapper>
@@ -43,38 +40,40 @@ export function Header() {
       </ColorBanner>
 
       <HeaderContainer>
-        <BrandSection>
-          <SkullIconBadge>💀</SkullIconBadge>
+        <BrandSection onClick={() => router.push("/")} style={{ cursor: "pointer" }}>
+          <SkullIconBadge>
+            <HeaderFlowerImage src="/cempasuchil-flower.png" alt="Flor de cempasúchil" />
+          </SkullIconBadge>
           <BrandTitles>
-            <BrandName>Día de Muertos <span>💀</span></BrandName>
+            <BrandName>Día de Muertos</BrandName>
           </BrandTitles>
         </BrandSection>
 
         <NavContainer>
           <NavButton
-            $active={activeTab === "Inicio"}
-            onClick={() => setActiveTab("Inicio")}
+            $active={pathname === "/" || pathname === ""}
+            onClick={() => router.push("/")}
           >
             Inicio
           </NavButton>
 
           <NavButton
-            $active={activeTab === "Viste tu Catrina"}
-            onClick={() => setActiveTab("Viste tu Catrina")}
+            $active={pathname === "/catrinas"}
+            onClick={() => router.push("/catrinas")}
           >
             Viste tu Catrina
           </NavButton>
 
           <NavButton
-            $active={activeTab === "Crea tu Ofrenda"}
-            onClick={() => setActiveTab("Crea tu Ofrenda")}
+            $active={pathname === "/ofrenda"}
+            onClick={() => router.push("/ofrenda")}
           >
             Crea tu Ofrenda
           </NavButton>
 
           <NavButton
-            $active={activeTab === "Tradiciones y Música"}
-            onClick={() => setActiveTab("Tradiciones y Música")}
+            $active={pathname === "/tradiciones"}
+            onClick={() => router.push("/tradiciones")}
           >
             Tradiciones y Música
           </NavButton>

@@ -1,13 +1,55 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import Header from "../header/header";
 import Footer from "../footer/footer";
 import Petals from "../petals/petals";
 import * as Styled from "./home.styles";
 import { ArrowRight, Flame } from "lucide-react";
 
+const titleText = "DÍA DE MUERTOS";
+const titleWords = titleText.split(" ");
+
+const titleContainerVariants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const letterVariants = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+    z: -100,
+    rotateX: -90,
+    scale: 0.4,
+    filter: "blur(12px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    z: 0,
+    rotateX: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      type: "spring",
+      damping: 12,
+      stiffness: 100,
+      mass: 0.8,
+    },
+  },
+};
+
 export function Home() {
+  const router = useRouter();
+
   return (
     <Styled.MainContainer>
       <Petals />
@@ -16,12 +58,29 @@ export function Home() {
       <Styled.HeroWrapper>
         <Styled.TitleBacklight />
 
-        <Styled.MainTitle>DÍA DE MUERTOS</Styled.MainTitle>
+        <Styled.MainTitle
+          initial="hidden"
+          animate="visible"
+          variants={titleContainerVariants}
+          aria-label={titleText}
+        >
+          {titleWords.map((word, wordIdx) => (
+            <Styled.WordSpan key={wordIdx}>
+              {word.split("").map((char, charIdx) => (
+                <Styled.TitleLetter key={charIdx} variants={letterVariants}>
+                  {char}
+                </Styled.TitleLetter>
+              ))}
+            </Styled.WordSpan>
+          ))}
+        </Styled.MainTitle>
 
         <Styled.InteractiveCardsGrid>
-          <Styled.InteractiveCard>
+          <Styled.InteractiveCard onClick={() => router.push("/catrinas")}>
             <Styled.CardLeftContent>
-              <Styled.CatrinaBadge>💀</Styled.CatrinaBadge>
+              <Styled.CatrinaBadge>
+                <Styled.CatrinaImage src="/catrina-skull.png" alt="Catrina" />
+              </Styled.CatrinaBadge>
               <Styled.CardTextContent>
                 <Styled.CardTitle>Viste tu Catrina</Styled.CardTitle>
                 <Styled.CardDesc>
