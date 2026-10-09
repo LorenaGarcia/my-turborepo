@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import type { Variants } from "framer-motion";
 import Header from "../header/header";
 import Footer from "../footer/footer";
 import Petals from "../petals/petals";
@@ -11,7 +12,7 @@ import { ArrowRight, Flame } from "lucide-react";
 const titleText = "DÍA DE MUERTOS";
 const titleWords = titleText.split(" ");
 
-const titleContainerVariants = {
+const titleContainerVariants: Variants = {
   hidden: { opacity: 1 },
   visible: {
     opacity: 1,
@@ -22,7 +23,7 @@ const titleContainerVariants = {
   },
 };
 
-const letterVariants = {
+const letterVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 50,
