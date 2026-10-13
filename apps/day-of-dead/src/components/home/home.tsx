@@ -94,7 +94,10 @@ export function Home() {
             </Styled.CardArrow>
           </Styled.InteractiveCard>
 
-          <Styled.InteractiveCard>
+          <Styled.InteractiveCard
+            onClick={() => router.push("/ofrenda")}
+            style={{ cursor: "pointer" }}
+          >
             <Styled.CardLeftContent>
               <Styled.OfrendaBadge>
                 <Flame size={24} />

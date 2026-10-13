@@ -14,6 +14,10 @@ import {
   BrandName,
   NavContainer,
   NavButton,
+  RightSection,
+  MusicButton,
+  StatusDot,
+  AvatarButton,
 } from "./header.styles";
 
 const bannerColors = [
@@ -71,12 +75,6 @@ export function Header() {
             Crea tu Ofrenda
           </NavButton>
 
-          <NavButton
-            $active={pathname === "/tradiciones"}
-            onClick={() => router.push("/tradiciones")}
-          >
-            Tradiciones y Música
-          </NavButton>
         </NavContainer>
       </HeaderContainer>
     </TopBarWrapper>
@@ -84,3 +82,4 @@ export function Header() {
 }
 
 export default Header;
+
