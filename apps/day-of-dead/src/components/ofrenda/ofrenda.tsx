@@ -584,7 +584,7 @@ export function OfrendaView() {
                         />
                       ) : (
                         <Styled.ItemIconFallback>
-                          {item.iconFallback}
+                          {item.iconFallback || "✨"}
                         </Styled.ItemIconFallback>
                       )}
                     </Styled.ItemThumbnailWrap>
@@ -870,7 +870,7 @@ export function OfrendaView() {
                     />
                   ) : (
                     <span style={{ fontSize: "2.3rem", opacity: 0.85 }}>
-                      {draggedItem.iconFallback}
+                      {draggedItem.iconFallback || "✨"}
                     </span>
                   )}
                 </Styled.DropPreviewGhost>
@@ -968,7 +968,7 @@ export function OfrendaView() {
                               : 2.6
                           }
                         >
-                          {itemDef.iconFallback}
+                          {itemDef.iconFallback || "✨"}
                         </Styled.PlacedItemFallback>
                       )}
 
@@ -1052,7 +1052,7 @@ export function OfrendaView() {
                         />
                       ) : (
                         <Styled.ItemIconFallback>
-                          {item.iconFallback}
+                          {item.iconFallback || "✨"}
                         </Styled.ItemIconFallback>
                       )}
                     </Styled.ItemThumbnailWrap>

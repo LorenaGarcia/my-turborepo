@@ -16,6 +16,7 @@ export interface OfrendaItem {
   category: ItemCategory;
   defaultTier: AltarTier;
   crop: OfrendaCrop;
+  iconFallback?: string;
   isCandle?: boolean;
   height?: number;
   width?: number;
