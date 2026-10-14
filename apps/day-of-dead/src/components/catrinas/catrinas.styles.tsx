@@ -148,7 +148,6 @@ export const StageLayout = styled.div`
   }
 `;
 
-/* SIDEBAR VESTIMENTAS */
 export const SidebarWrapper = styled.aside`
   background: rgba(22, 10, 32, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
