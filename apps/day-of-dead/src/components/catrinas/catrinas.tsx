@@ -60,7 +60,9 @@ export function CatrinasView() {
   }, [handleWheel]);
 
   const currentOutfit = outfitOptions[selectedIndex] || outfitOptions[0];
-  const scrollProgress = Math.round(((selectedIndex + 1) / outfitOptions.length) * 100);
+  const scrollProgress = Math.round(
+    ((selectedIndex + 1) / outfitOptions.length) * 100
+  );
 
   return (
     <Styled.MainContainer>
@@ -101,7 +103,6 @@ export function CatrinasView() {
             })}
           </Styled.SidebarWrapper>
 
-      
           <Styled.CharacterStage>
             <Skull
               activeOutfit={currentOutfit.id}
@@ -109,11 +110,12 @@ export function CatrinasView() {
             />
           </Styled.CharacterStage>
 
-       
           <Styled.ScrollIndicatorWrapper>
             <Styled.ScrollLabel>SCROLL</Styled.ScrollLabel>
             <Styled.ScrollTrack>
-              <Styled.ScrollThumb $progress={selectedIndex / (outfitOptions.length - 1 || 1)} />
+              <Styled.ScrollThumb
+                $progress={selectedIndex / (outfitOptions.length - 1 || 1)}
+              />
             </Styled.ScrollTrack>
             <Styled.ScrollPercentage>{scrollProgress}%</Styled.ScrollPercentage>
           </Styled.ScrollIndicatorWrapper>

@@ -46,56 +46,74 @@ const floatGentle = keyframes`
   }
 `;
 
-export const MainContainer = styled.div`
+const MainContainer = styled.div`
   min-height: 100vh;
-  background-color: #0A040F;
-  background-image: 
-    radial-gradient(ellipse at 50% 15%, rgba(45, 14, 60, 0.65) 0%, rgba(10, 4, 15, 0.95) 70%),
-    linear-gradient(180deg, rgba(10, 4, 15, 0.7) 0%, rgba(10, 4, 15, 0.92) 50%, rgba(10, 4, 15, 1) 100%),
-    url('/bg-altar.jpg');
+  background-color: #0a040f;
+  background-image: radial-gradient(
+      ellipse at 50% 15%,
+      rgba(45, 14, 60, 0.65) 0%,
+      rgba(10, 4, 15, 0.95) 70%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(10, 4, 15, 0.7) 0%,
+      rgba(10, 4, 15, 0.92) 50%,
+      rgba(10, 4, 15, 1) 100%
+    ),
+    url("/bg-altar.jpg");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
   background-attachment: fixed;
   display: flex;
   flex-direction: column;
-  color: #FFF9E6;
+  color: #fff9e6;
   position: relative;
   overflow-x: hidden;
 `;
 
-export const ContentWrapper = styled.main`
+const ContentWrapper = styled.main`
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 100px 24px 60px;
+  padding: 80px 16px 40px;
   position: relative;
   z-index: 5;
   width: 100%;
   max-width: 1540px;
   margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 90px 20px 50px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 100px 24px 60px;
+  }
 `;
 
-export const TitleBacklight = styled.div`
+const TitleBacklight = styled.div`
   position: absolute;
   top: 180px;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 750px;
   height: 380px;
-  background: radial-gradient(ellipse at center, rgba(255, 122, 0, 0.3) 0%, rgba(233, 30, 99, 0.18) 50%, transparent 70%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 122, 0, 0.3) 0%,
+    rgba(233, 30, 99, 0.18) 50%,
+    transparent 70%
+  );
   filter: blur(60px);
   pointer-events: none;
   animation: ${pulseGlow} 5s ease-in-out infinite;
   z-index: 0;
 `;
 
-// ============================================
-// TOP SYMBOLS RIBBON
-// ============================================
-export const SymbolsRibbon = styled.div`
+const SymbolsRibbon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,7 +123,7 @@ export const SymbolsRibbon = styled.div`
   flex-wrap: wrap;
 `;
 
-export const RibbonBadge = styled.div<{ $color: string }>`
+const RibbonBadge = styled.div<{ $color: string }>`
   width: 36px;
   height: 36px;
   border-radius: 8px;
@@ -114,7 +132,8 @@ export const RibbonBadge = styled.div<{ $color: string }>`
   align-items: center;
   justify-content: center;
   font-size: 1.15rem;
-  box-shadow: 0 4px 12px ${(props) => props.$color}40, inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px ${(props) => props.$color}40,
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: default;
 
@@ -123,10 +142,7 @@ export const RibbonBadge = styled.div<{ $color: string }>`
   }
 `;
 
-// ============================================
-// HEADER SECTION
-// ============================================
-export const RitualPill = styled.div`
+const RitualPill = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -137,7 +153,7 @@ export const RitualPill = styled.div`
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 2.2px;
-  color: #FFB366;
+  color: #ffb366;
   text-transform: uppercase;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
@@ -145,14 +161,20 @@ export const RitualPill = styled.div`
   margin-bottom: 10px;
 `;
 
-export const MainTitle = styled.h1`
-  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+const MainTitle = styled.h1`
+  font-family: "Cinzel Decorative", "Cinzel", serif;
   font-size: clamp(2.4rem, 5vw, 4.4rem);
   font-weight: 900;
   letter-spacing: 2px;
   margin: 0 0 12px;
   line-height: 1.15;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFE2C2 35%, #FF8A14 80%, #E65100 100%);
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #ffe2c2 35%,
+    #ff8a14 80%,
+    #e65100 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 4px 22px rgba(255, 122, 0, 0.45));
@@ -162,7 +184,7 @@ export const MainTitle = styled.h1`
 
 export const Subtitle = styled.p`
   font-size: clamp(0.95rem, 1.5vw, 1.12rem);
-  color: #DCC8E8;
+  color: #dcc8e8;
   max-width: 720px;
   margin: 0 auto 28px;
   line-height: 1.6;
@@ -171,23 +193,27 @@ export const Subtitle = styled.p`
   font-weight: 400;
 `;
 
-// ============================================
-// CONTROLS TOOLBAR
-// ============================================
 export const ToolbarContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  background: rgba(23, 10, 32, 0.8);
+  gap: 10px;
+  background: rgba(23, 10, 32, 0.85);
   border: 1px solid rgba(255, 140, 25, 0.3);
   border-radius: 9999px;
-  padding: 8px 18px;
+  padding: 8px 14px;
   backdrop-filter: blur(16px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  margin-bottom: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  margin-bottom: 24px;
   z-index: 10;
   flex-wrap: wrap;
+
+  @media (min-width: 768px) {
+    gap: 16px;
+    padding: 8px 18px;
+    margin-bottom: 32px;
+  }
 `;
 
 export const CounterBadge = styled.div`
@@ -196,18 +222,20 @@ export const CounterBadge = styled.div`
   gap: 8px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #F5E8FF;
+  color: #f5e8ff;
   padding-right: 14px;
   border-right: 1px solid rgba(255, 255, 255, 0.15);
 
   strong {
-    color: #FF9D00;
+    color: #ff9d00;
     font-size: 1.05rem;
     font-weight: 800;
   }
 `;
 
-export const ToolbarButton = styled.button<{ $variant?: "secondary" | "primary" | "active" }>`
+export const ToolbarButton = styled.button<{
+  $variant?: "secondary" | "primary" | "active";
+}>`
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -222,31 +250,31 @@ export const ToolbarButton = styled.button<{ $variant?: "secondary" | "primary" 
   ${(props) =>
     props.$variant === "primary"
       ? css`
-          background: linear-gradient(135deg, #FF8A00 0%, #FF5722 100%);
-          color: #FFF9E6;
+          background: linear-gradient(135deg, #ff8a00 0%, #ff5722 100%);
+          color: #fff9e6;
           box-shadow: 0 4px 18px rgba(255, 110, 0, 0.45);
 
           &:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 24px rgba(255, 110, 0, 0.65);
-            background: linear-gradient(135deg, #FFA000 0%, #F4511E 100%);
+            background: linear-gradient(135deg, #ffa000 0%, #f4511e 100%);
           }
         `
       : props.$variant === "active"
       ? css`
           background: rgba(255, 160, 0, 0.22);
-          border-color: #FFA000;
-          color: #FFD54F;
+          border-color: #ffa000;
+          color: #ffd54f;
           box-shadow: 0 0 14px rgba(255, 160, 0, 0.35);
         `
       : css`
           background: rgba(255, 255, 255, 0.06);
           border-color: rgba(255, 255, 255, 0.12);
-          color: #E6D8F2;
+          color: #e6d8f2;
 
           &:hover {
             background: rgba(255, 255, 255, 0.12);
-            color: #FFFFFF;
+            color: #ffffff;
             transform: translateY(-1px);
           }
         `}
@@ -256,46 +284,50 @@ export const ToolbarButton = styled.button<{ $variant?: "secondary" | "primary" 
   }
 `;
 
-// ============================================
-// MAIN THREE-COLUMN WORKSPACE
-// ============================================
-export const WorkspaceLayout = styled.div`
-  display: grid;
-  grid-template-columns: 340px 1fr 340px;
-  gap: 24px;
+const WorkspaceLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
   width: 100%;
-  align-items: start;
+  align-items: center;
   z-index: 5;
 
-  @media (max-width: 1300px) {
+  @media (min-width: 1100px) {
+    display: grid;
     grid-template-columns: 300px 1fr 300px;
     gap: 16px;
+    align-items: start;
   }
 
-  @media (max-width: 1100px) {
-    grid-template-columns: 1fr;
-    gap: 32px;
+  @media (min-width: 1300px) {
+    grid-template-columns: 340px 1fr 340px;
+    gap: 24px;
   }
 `;
 
-// ============================================
-// SIDE PANELS (LEFT & RIGHT GRIDS)
-// ============================================
-export const SidePanel = styled.aside<{ $isDraggingActive?: boolean }>`
+const SidePanel = styled.aside<{ $isDraggingActive?: boolean }>`
   background: rgba(22, 10, 30, 0.72);
   border: 1px solid rgba(255, 138, 20, 0.22);
   border-radius: 20px;
-  padding: 20px 16px;
+  padding: 16px 14px;
   backdrop-filter: blur(14px);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  max-height: 860px;
-  overflow-y: ${(props) => (props.$isDraggingActive ? "visible" : "auto")};
-  overflow-x: visible;
+  gap: 12px;
+  width: 100%;
+  max-width: 520px;
   position: relative;
   z-index: 10;
+  overflow: visible;
+
+  @media (min-width: 1100px) {
+    max-width: none;
+    padding: 10px;
+    gap: 14px;
+    max-height: 860px;
+    overflow-y: ${(props) => (props.$isDraggingActive ? "visible" : "auto")};
+  }
 
   /* Custom scrollbar */
   &::-webkit-scrollbar {
@@ -316,7 +348,7 @@ export const PanelHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 12px;
+  padding-bottom: 5px;
 `;
 
 export const PanelTitleWrap = styled.div`
@@ -337,7 +369,7 @@ export const PanelTitle = styled.h2`
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 0.5px;
-  color: #FFF2E0;
+  color: #fff2e0;
   margin: 0;
 `;
 
@@ -349,13 +381,13 @@ export const CategoryTag = styled.span`
   padding: 3px 8px;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.08);
-  color: #CDB9DF;
+  color: #cdb9df;
   border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 export const PanelDescription = styled.p`
   font-size: 0.8rem;
-  color: #BBA5CC;
+  color: #bba5cc;
   line-height: 1.45;
   margin: 0;
 `;
@@ -375,9 +407,7 @@ export const ItemCard = styled(motion.div)<{
   $isSelected?: boolean;
 }>`
   background: ${(props) =>
-    props.$isSelected
-      ? "rgba(255, 138, 20, 0.25)"
-      : "rgba(34, 15, 46, 0.65)"};
+    props.$isSelected ? "rgba(255, 138, 20, 0.25)" : "rgba(34, 15, 46, 0.65)"};
   border: 1px solid
     ${(props) =>
       props.$isSelected
@@ -386,7 +416,7 @@ export const ItemCard = styled(motion.div)<{
         ? "rgba(255, 160, 0, 0.5)"
         : "rgba(255, 255, 255, 0.08)"};
   border-radius: 14px;
-  padding: 12px 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -419,7 +449,8 @@ export const ItemCard = styled(motion.div)<{
     css`
       z-index: 25 !important;
       opacity: 0.95;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 140, 25, 0.8);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8),
+        0 0 25px rgba(255, 140, 25, 0.8);
       transform: scale(1.15) !important;
     `}
 `;
@@ -454,14 +485,14 @@ export const ItemIconFallback = styled.span`
 export const ItemName = styled.h3`
   font-size: 0.82rem;
   font-weight: 700;
-  color: #FFF2DF;
+  color: #fff2df;
   margin: 0 0 4px;
   line-height: 1.25;
 `;
 
 export const ItemSubtitle = styled.p`
   font-size: 0.68rem;
-  color: #AFA0BE;
+  color: #afa0be;
   margin: 0 0 8px;
   line-height: 1.25;
 `;
@@ -470,8 +501,8 @@ export const PlacedCountBadge = styled.div`
   position: absolute;
   top: 6px;
   right: 6px;
-  background: #FF8A00;
-  color: #0A040F;
+  background: #ff8a00;
+  color: #0a040f;
   font-size: 0.62rem;
   font-weight: 900;
   border-radius: 9999px;
@@ -479,20 +510,19 @@ export const PlacedCountBadge = styled.div`
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 `;
 
-
 export const ItemActionsRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   margin-top: auto;
-  padding-top: 6px;
+  padding-top: 3px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 `;
 
 export const DragHint = styled.span`
   font-size: 0.65rem;
-  color: #8C7B9E;
+  color: #8c7b9e;
   display: flex;
   align-items: center;
   gap: 3px;
@@ -504,7 +534,7 @@ export const AddButton = styled.button`
   border-radius: 50%;
   background: rgba(255, 140, 25, 0.18);
   border: 1px solid rgba(255, 140, 25, 0.45);
-  color: #FFB366;
+  color: #ffb366;
   font-size: 0.8rem;
   font-weight: 800;
   display: flex;
@@ -514,21 +544,20 @@ export const AddButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: #FF8A00;
-    color: #0A040F;
+    background: #ff8a00;
+    color: #0a040f;
     transform: scale(1.15);
   }
 `;
 
-// ============================================
-// CENTER ALTAR STAGE (IMAGE 2 DESIGN)
-// ============================================
-export const AltarStageWrapper = styled.div`
+const AltarStageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   position: relative;
+  padding-top: clamp(40px, 8vw, 75px);
+  margin-bottom: 12px;
 `;
 
 export const AltarContainer = styled.div`
@@ -549,7 +578,11 @@ export const AltarBackingImage = styled.img`
   pointer-events: none;
 `;
 
-export const TierGuideZone = styled.div<{ $isOver?: boolean; $tier: string; $isAnyDragging?: boolean }>`
+export const TierGuideZone = styled.div<{
+  $isOver?: boolean;
+  $tier: string;
+  $isAnyDragging?: boolean;
+}>`
   position: absolute;
   border-radius: 12px;
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -590,8 +623,9 @@ export const TierGuideZone = styled.div<{ $isOver?: boolean; $tier: string; $isA
     props.$isOver
       ? css`
           background: rgba(255, 160, 0, 0.28);
-          border: 2.5px dashed #FFA000;
-          box-shadow: 0 0 35px rgba(255, 160, 0, 0.65), inset 0 0 20px rgba(255, 160, 0, 0.35);
+          border: 2.5px dashed #ffa000;
+          box-shadow: 0 0 35px rgba(255, 160, 0, 0.65),
+            inset 0 0 20px rgba(255, 160, 0, 0.35);
         `
       : props.$isAnyDragging
       ? css`
@@ -612,8 +646,8 @@ export const ToastFeedback = styled(motion.div)`
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #FF8A00 0%, #E65100 100%);
-  color: #FFF9E6;
+  background: linear-gradient(135deg, #ff8a00 0%, #e65100 100%);
+  color: #fff9e6;
   font-weight: 800;
   font-size: 0.92rem;
   padding: 10px 24px;
@@ -638,28 +672,28 @@ export const TierLabelBadge = styled.div<{ $tier: string }>`
   border-radius: 9999px;
   background: rgba(20, 8, 28, 0.92);
   border: 1px solid rgba(255, 140, 25, 0.5);
-  color: #FFB366;
+  color: #ffb366;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   pointer-events: none;
 `;
 
 export const ItemRemoveBtn = styled.button`
   position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 16px;
-  height: 16px;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: rgba(220, 38, 38, 0.9);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(220, 38, 38, 0.95);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
   opacity: 0;
   padding: 0;
   line-height: 1;
@@ -667,9 +701,18 @@ export const ItemRemoveBtn = styled.button`
   z-index: 100;
   transition: opacity 0.15s ease, transform 0.15s ease, background 0.15s ease;
 
+  &::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+  }
+
   &:hover {
-    background: #FF1744;
-    transform: scale(1.18);
+    background: #ff1744;
+    transform: scale(1.15);
   }
 `;
 
@@ -679,17 +722,45 @@ export const PlacedItemDraggable = styled(motion.div)<{
   $yPercent: number;
   $zIndex?: number;
   $isDraggingThis?: boolean;
+  $isArco?: boolean;
 }>`
   position: absolute;
-  left: ${(props) => `${props.$xPercent}%`};
-  top: ${(props) => `${props.$yPercent}%`};
-  transform: translate(-50%, -100%);
+  ${(props) =>
+    props.$isArco
+      ? css`
+          left: 50% !important;
+          top: -15%;
+          width: 44%;
+          max-width: 250px;
+          transform: translateX(-50%) !important;
+
+          @media (min-width: 768px) {
+            top: -18%;
+          }
+
+          @media (min-width: 1024px) {
+            top: -20%;
+            width: 250px;
+          }
+        `
+      : css`
+          left: ${props.$xPercent}%;
+          top: ${props.$yPercent}%;
+          transform: translate(-50%, -100%);
+        `}
   /* Reglas de orden de apilamiento: los niveles superiores (atrás) tienen menor z-index,
      los niveles inferiores (frente) mayor z-index, y el arrastre se eleva al frente */
   z-index: ${(props) =>
     props.$isDraggingThis
       ? 10
-      : props.$zIndex ?? (props.$yPercent < 20 ? 1 : props.$yPercent < 45 ? 2 : 3)};
+      : props.$zIndex ??
+        (props.$isArco
+          ? 1
+          : props.$yPercent < 20
+          ? 1
+          : props.$yPercent < 45
+          ? 2
+          : 3)};
   cursor: ${(props) => (props.$isDraggingThis ? "grabbing" : "grab")};
   display: flex;
   flex-direction: column;
@@ -706,7 +777,9 @@ export const PlacedItemDraggable = styled(motion.div)<{
     props.$isDraggingThis &&
     css`
       filter: drop-shadow(0 14px 24px rgba(255, 160, 0, 0.75)) brightness(1.12);
-      transform: translate(-50%, -100%) scale(1.08) !important;
+      transform: ${props.$isArco
+        ? "translateX(-50%) scale(1.06)"
+        : "translate(-50%, -100%) scale(1.08)"} !important;
     `}
 
   &:hover {
@@ -719,9 +792,23 @@ export const PlacedItemDraggable = styled(motion.div)<{
   }
 `;
 
-export const PlacedItemImg = styled.img<{ $height?: number }>`
-  height: ${(props) => props.$height || 64}px;
-  max-width: 125px;
+export const PlacedItemImg = styled.img<{
+  $height?: number;
+  $width?: number;
+  $isArco?: boolean;
+}>`
+  ${(props) =>
+    props.$isArco
+      ? css`
+          width: 100% !important;
+          max-width: 100% !important;
+          height: auto !important;
+          display: block;
+        `
+      : css`
+          height: ${props.$height ? `${props.$height}px` : "auto"};
+          max-width: ${props.$width ? `${props.$width}px` : "125px"};
+        `}
   object-fit: contain;
   filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.7));
   pointer-events: none;
@@ -743,7 +830,13 @@ export const CandleFlameEffect = styled.div`
   transform: translateX(-50%);
   width: 14px;
   height: 22px;
-  background: radial-gradient(ellipse at bottom, #FFF 0%, #FFD54F 35%, #FF6D00 75%, transparent 100%);
+  background: radial-gradient(
+    ellipse at bottom,
+    #fff 0%,
+    #ffd54f 35%,
+    #ff6d00 75%,
+    transparent 100%
+  );
   border-radius: 50% 50% 35% 35%;
   animation: ${candleFlicker} 1.2s ease-in-out infinite alternate;
   pointer-events: none;
@@ -757,7 +850,12 @@ export const CandleAura = styled.div`
   transform: translateX(-50%);
   width: 60px;
   height: 60px;
-  background: radial-gradient(circle, rgba(255, 160, 0, 0.35) 0%, rgba(255, 87, 34, 0.15) 50%, transparent 75%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 160, 0, 0.35) 0%,
+    rgba(255, 87, 34, 0.15) 50%,
+    transparent 75%
+  );
   border-radius: 50%;
   filter: blur(8px);
   pointer-events: none;
@@ -771,7 +869,7 @@ export const ItemLabelTag = styled.div`
   transform: translateX(-50%);
   background: rgba(14, 6, 20, 0.95);
   border: 1px solid rgba(255, 160, 0, 0.55);
-  color: #FFE082;
+  color: #ffe082;
   font-size: 0.62rem;
   font-weight: 700;
   padding: 2px 8px;
@@ -790,11 +888,35 @@ export const ItemLabelTag = styled.div`
 
 export const RemoveTooltip = ItemLabelTag;
 
-export const DropPreviewGhost = styled.div<{ $x: number; $y: number }>`
+export const DropPreviewGhost = styled.div<{
+  $x: number;
+  $y: number;
+  $isArco?: boolean;
+}>`
   position: absolute;
-  left: ${(props) => `${props.$x}%`};
-  top: ${(props) => `${props.$y}%`};
-  transform: translate(-50%, -100%);
+  ${(props) =>
+    props.$isArco
+      ? css`
+          left: 50% !important;
+          top: -15%;
+          width: 44%;
+          max-width: 250px;
+          transform: translateX(-50%) !important;
+
+          @media (min-width: 768px) {
+            top: -18%;
+          }
+
+          @media (min-width: 1024px) {
+            top: -20%;
+            width: 250px;
+          }
+        `
+      : css`
+          left: ${props.$x}%;
+          top: ${props.$y}%;
+          transform: translate(-50%, -100%);
+        `}
   pointer-events: none;
   z-index: 15;
   display: flex;
@@ -809,8 +931,12 @@ export const DropTargetRing = styled.div`
   width: 56px;
   height: 24px;
   border-radius: 50%;
-  border: 2px dashed #FFA000;
-  background: radial-gradient(ellipse at center, rgba(255, 160, 0, 0.45) 0%, transparent 70%);
+  border: 2px dashed #ffa000;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 160, 0, 0.45) 0%,
+    transparent 70%
+  );
   animation: ${pulseGlow} 1.2s infinite ease-in-out;
 `;
 
@@ -819,15 +945,24 @@ export const TipBanner = styled.div`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 20px;
-  font-size: 0.82rem;
-  color: #C0ACCE;
+  margin-top: 16px;
+  font-size: 0.78rem;
+  color: #c0acce;
   text-align: center;
   background: rgba(22, 10, 30, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9999px;
-  padding: 8px 20px;
+  border-radius: 14px;
+  padding: 10px 16px;
   backdrop-filter: blur(8px);
+  max-width: 600px;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    margin-top: 20px;
+    font-size: 0.82rem;
+    border-radius: 9999px;
+    padding: 8px 20px;
+  }
 `;
 
 // ============================================
@@ -838,18 +973,22 @@ export const SignificanceCard = styled.div`
   background: rgba(23, 10, 33, 0.8);
   border: 1px solid rgba(255, 140, 25, 0.28);
   border-radius: 18px;
-  padding: 24px 30px;
-  margin-top: 48px;
+  padding: 20px 18px;
+  margin-top: 36px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
   backdrop-filter: blur(14px);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
 
-  @media (max-width: 900px) {
-    flex-direction: column;
-    align-items: flex-start;
+  @media (min-width: 900px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 30px;
+    margin-top: 48px;
+    gap: 24px;
   }
 `;
 
@@ -869,7 +1008,7 @@ export const SignificanceIconWrap = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  color: #FFA000;
+  color: #ffa000;
   flex-shrink: 0;
 `;
 
@@ -882,13 +1021,13 @@ export const SignificanceText = styled.div`
 export const SignificanceTitle = styled.h3`
   font-size: 1.05rem;
   font-weight: 800;
-  color: #FFF2DF;
+  color: #fff2df;
   margin: 0;
 `;
 
 export const SignificanceBody = styled.p`
   font-size: 0.85rem;
-  color: #C0ACCE;
+  color: #c0acce;
   line-height: 1.55;
   margin: 0;
 `;
@@ -911,27 +1050,28 @@ export const SacredBadge = styled.div`
   padding: 6px 14px;
   font-size: 0.78rem;
   font-weight: 700;
-  color: #E2D3F0;
+  color: #e2d3f0;
 `;
 
-// ============================================
-// FOOTER QUOTE
-// ============================================
 export const QuoteFooter = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 36px;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  margin-top: 28px;
   padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.82rem;
-  color: #8C7B9E;
+  color: #8c7b9e;
 
-  @media (max-width: 800px) {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
+  @media (min-width: 800px) {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    margin-top: 36px;
   }
 `;
 
@@ -939,18 +1079,15 @@ export const QuoteText = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #DCC8E8;
+  color: #dcc8e8;
   font-style: italic;
 `;
 
 export const HeritageText = styled.div`
-  color: #A08FB0;
+  color: #a08fb0;
 `;
 
-// ============================================
-// CONSECRATION MODAL
-// ============================================
-export const ModalOverlay = styled(motion.div)`
+const ModalOverlay = styled(motion.div)`
   position: fixed;
   inset: 0;
   background: rgba(10, 4, 15, 0.85);
@@ -962,8 +1099,8 @@ export const ModalOverlay = styled(motion.div)`
   padding: 24px;
 `;
 
-export const ModalCard = styled(motion.div)`
-  background: linear-gradient(180deg, #220F30 0%, #150820 100%);
+const ModalCard = styled(motion.div)`
+  background: linear-gradient(180deg, #220f30 0%, #150820 100%);
   border: 2px solid rgba(255, 140, 25, 0.5);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 140, 25, 0.35);
   border-radius: 24px;
@@ -975,36 +1112,40 @@ export const ModalCard = styled(motion.div)`
   overflow: hidden;
 `;
 
-export const ModalGlow = styled.div`
+const ModalGlow = styled.div`
   position: absolute;
   top: -50px;
   left: 50%;
   transform: translateX(-50%);
   width: 300px;
   height: 200px;
-  background: radial-gradient(circle, rgba(255, 140, 25, 0.4) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 140, 25, 0.4) 0%,
+    transparent 70%
+  );
   filter: blur(40px);
   pointer-events: none;
 `;
 
-export const ModalTitle = styled.h2`
-  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+const ModalTitle = styled.h2`
+  font-family: "Cinzel Decorative", "Cinzel", serif;
   font-size: 2.2rem;
-  color: #FFE6C2;
+  color: #ffe6c2;
   margin: 12px 0 16px;
   filter: drop-shadow(0 2px 10px rgba(255, 122, 0, 0.5));
 `;
 
-export const ModalMessage = styled.p`
+const ModalMessage = styled.p`
   font-size: 0.95rem;
-  color: #D8C7E6;
+  color: #d8c7e6;
   line-height: 1.6;
   margin-bottom: 24px;
 `;
 
-export const ModalCloseButton = styled.button`
-  background: linear-gradient(135deg, #FF8A00 0%, #E65100 100%);
-  color: #FFF9E6;
+const ModalCloseButton = styled.button`
+  background: linear-gradient(135deg, #ff8a00 0%, #e65100 100%);
+  color: #fff9e6;
   font-size: 0.95rem;
   font-weight: 800;
   padding: 12px 32px;
@@ -1018,3 +1159,22 @@ export const ModalCloseButton = styled.button`
     transform: translateY(-2px) scale(1.03);
   }
 `;
+
+export {
+  AltarStageWrapper,
+  ContentWrapper,
+  MainContainer,
+  MainTitle,
+  ModalCard,
+  ModalCloseButton,
+  ModalGlow,
+  ModalMessage,
+  ModalOverlay,
+  ModalTitle,
+  RibbonBadge,
+  RitualPill,
+  SidePanel,
+  SymbolsRibbon,
+  TitleBacklight,
+  WorkspaceLayout,
+};

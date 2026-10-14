@@ -15,16 +15,20 @@ const pulseGlow = keyframes`
 
 export const MainContainer = styled.div`
   min-height: 100vh;
-  background-color: #0C0512;
-  background-image: 
-    linear-gradient(180deg, rgba(12, 5, 18, 0.6) 0%, rgba(12, 5, 18, 0.82) 50%, rgba(12, 5, 18, 0.98) 100%),
-    url('/bg-altar.jpg');
+  background-color: #0c0512;
+  background-image: linear-gradient(
+      180deg,
+      rgba(12, 5, 18, 0.6) 0%,
+      rgba(12, 5, 18, 0.82) 50%,
+      rgba(12, 5, 18, 0.98) 100%
+    ),
+    url("/bg-altar.jpg");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
-  color: #FFF9E6;
+  color: #fff9e6;
   position: relative;
   overflow-x: hidden;
 `;
@@ -51,7 +55,12 @@ export const TitleBacklight = styled.div`
   transform: translate(-50%, -50%);
   width: 650px;
   height: 320px;
-  background: radial-gradient(ellipse at center, rgba(255, 122, 0, 0.28) 0%, rgba(233, 30, 99, 0.18) 45%, transparent 70%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 122, 0, 0.28) 0%,
+    rgba(233, 30, 99, 0.18) 45%,
+    transparent 70%
+  );
   filter: blur(50px);
   pointer-events: none;
   animation: ${pulseGlow} 4s ease-in-out infinite;
@@ -69,7 +78,7 @@ export const TradicionPill = styled.div`
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 1.8px;
-  color: #F0E6FA;
+  color: #f0e6fa;
   text-transform: uppercase;
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -78,18 +87,18 @@ export const TradicionPill = styled.div`
 `;
 
 export const FlowerIcon = styled.span`
-  color: #FF9D00;
+  color: #ff9d00;
   font-size: 0.85rem;
 `;
 
 export const MainTitle = styled.h1`
-  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-family: "Cinzel Decorative", "Cinzel", serif;
   font-size: clamp(2.5rem, 5.5vw, 4.2rem);
   font-weight: 900;
   letter-spacing: 3px;
   margin: 4px 0 8px;
   line-height: 1.1;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFD6A5 30%, #FF7A00 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #ffd6a5 30%, #ff7a00 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 4px 20px rgba(255, 122, 0, 0.4));
@@ -108,11 +117,16 @@ export const SubtitleDividerWrapper = styled.div`
 export const DividerLine = styled.div`
   width: 50px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 157, 0, 0.5), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 157, 0, 0.5),
+    transparent
+  );
 `;
 
 export const SubtitleText = styled.span`
-  color: #C5B4D6;
+  color: #c5b4d6;
   font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 1.2px;
@@ -164,7 +178,7 @@ export const SidebarHeader = styled.div`
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 1.5px;
-  color: #A090B0;
+  color: #a090b0;
   text-transform: uppercase;
   margin-bottom: 6px;
   padding-left: 6px;
@@ -176,7 +190,8 @@ export const OutfitOptionButton = styled.button<{ $active?: boolean }>`
   gap: 12px;
   padding: 10px 14px;
   border-radius: 12px;
-  border: 1px solid ${(props) => (props.$active ? "rgba(255, 122, 0, 0.7)" : "transparent")};
+  border: 1px solid
+    ${(props) => (props.$active ? "rgba(255, 122, 0, 0.7)" : "transparent")};
   background: ${(props) =>
     props.$active
       ? "linear-gradient(135deg, rgba(255, 111, 0, 0.9) 0%, rgba(233, 30, 99, 0.85) 100%)"
@@ -187,14 +202,15 @@ export const OutfitOptionButton = styled.button<{ $active?: boolean }>`
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
   text-align: left;
-  box-shadow: ${(props) => (props.$active ? "0 4px 15px rgba(255, 111, 0, 0.35)" : "none")};
+  box-shadow: ${(props) =>
+    props.$active ? "0 4px 15px rgba(255, 111, 0, 0.35)" : "none"};
 
   &:hover {
     background: ${(props) =>
       props.$active
         ? "linear-gradient(135deg, rgba(255, 111, 0, 1) 0%, rgba(233, 30, 99, 0.95) 100%)"
         : "rgba(255, 255, 255, 0.08)"};
-    color: #FFFFFF;
+    color: #ffffff;
     transform: translateX(4px);
   }
 `;
@@ -234,7 +250,7 @@ export const ScrollLabel = styled.span`
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 2px;
-  color: #A090B0;
+  color: #a090b0;
   text-transform: uppercase;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
@@ -252,7 +268,7 @@ export const ScrollTrack = styled.div`
 export const ScrollThumb = styled.div<{ $progress: number }>`
   width: 100%;
   height: 35%;
-  background: linear-gradient(180deg, #FF7A00 0%, #E91E63 100%);
+  background: linear-gradient(180deg, #ff7a00 0%, #e91e63 100%);
   border-radius: 4px;
   position: absolute;
   top: ${(props) => props.$progress * 65}%;
@@ -263,7 +279,7 @@ export const ScrollThumb = styled.div<{ $progress: number }>`
 export const ScrollPercentage = styled.span`
   font-size: 0.72rem;
   font-weight: 700;
-  color: #FF7A00;
+  color: #ff7a00;
 `;
 
 export const BottomDivider = styled.div`
@@ -279,11 +295,16 @@ export const BottomDivider = styled.div`
 export const BottomDividerLine = styled.div`
   width: 80px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 157, 0, 0.5), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 157, 0, 0.5),
+    transparent
+  );
 `;
 
 export const BottomDividerIcon = styled.span`
-  color: #FF9D00;
+  color: #ff9d00;
   font-size: 0.85rem;
   opacity: 0.8;
 `;

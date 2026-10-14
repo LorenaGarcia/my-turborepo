@@ -30,12 +30,12 @@ export interface PlacedInstance {
   tier: AltarTier;
   xPercent: number; // 0 to 100% of altar width
   yPercent: number; // exact shelf level (18.5, 38.5, or 58.5)
-  zIndex?: number;  // stacking order
+  zIndex?: number; // stacking order
 }
 
 export const TIER_SHELF_Y: Record<AltarTier, number> = {
-  cielo: 5.0,      // Escalón I (Cielo): plataforma superior de madera elevada
-  tierra: 32,     // Escalón II (Tierra): plataforma intermedia de madera
+  cielo: 5.0, // Escalón I (Cielo): plataforma superior de madera elevada
+  tierra: 32, // Escalón II (Tierra): plataforma intermedia de madera
   inframundo: 58.5, // Escalón III (Inframundo): plataforma inferior de madera
 };
 
@@ -51,20 +51,52 @@ export const getClampedX = (tier: AltarTier, xPercent: number): number => {
   return Math.max(10, Math.min(90, xPercent));
 };
 
-export const getItemHeight = (itemId: string, tier: AltarTier): number => {
-  if (itemId === "arco_cempasuchil") {
-    if (tier === "cielo") return 78;
-    if (tier === "tierra") return 92;
-    return 106;
+export const isArcoItem = (itemId?: string | null): boolean => {
+  if (!itemId) return false;
+  return itemId === "arco_flores" || itemId.includes("arco");
+};
+
+export const ARCO_LEFT_X = 50; // Centrado horizontalmente
+export const ARCO_TOP_Y = -20; // top: -20%
+export const ARCO_SHELF_Y = -20;
+
+const TIER_SCALE: Record<AltarTier, number> = {
+  cielo: 0.85,
+  tierra: 1.0,
+  inframundo: 1.15,
+};
+
+export const getItemHeight = (
+  itemOrId: OfrendaItem | string,
+  tier: AltarTier
+): number => {
+  const item =
+    typeof itemOrId === "string"
+      ? OFRENDA_ITEMS.find((i) => i.id === itemOrId)
+      : itemOrId;
+
+  const baseHeight = item?.height ?? item?.heigth ?? 56;
+  if (isArcoItem(item?.id)) {
+    return baseHeight;
   }
-  if (itemId === "pan_de_muerto1" || itemId === "pan_de_muerto_azucar") {
-    if (tier === "cielo") return 54;
-    if (tier === "tierra") return 66;
-    return 76;
+  return Math.round(baseHeight * TIER_SCALE[tier]);
+};
+
+export const getItemWidth = (
+  itemOrId: OfrendaItem | string,
+  tier: AltarTier
+): number | undefined => {
+  const item =
+    typeof itemOrId === "string"
+      ? OFRENDA_ITEMS.find((i) => i.id === itemOrId)
+      : itemOrId;
+
+  const baseWidth = item?.width ?? item?.weigth;
+  if (!baseWidth) return undefined;
+  if (isArcoItem(item?.id)) {
+    return baseWidth;
   }
-  if (tier === "cielo") return 48;
-  if (tier === "tierra") return 56;
-  return 62;
+  return Math.round(baseWidth * TIER_SCALE[tier]);
 };
 
 const SYMBOL_RIBBONS = [
@@ -85,9 +117,15 @@ export function OfrendaView() {
   const [velasEncendidas, setVelasEncendidas] = useState<boolean>(false);
   const [hoveredTier, setHoveredTier] = useState<AltarTier | null>(null);
   const [draggedItem, setDraggedItem] = useState<OfrendaItem | null>(null);
-  const [selectedItemForPlacement, setSelectedItemForPlacement] = useState<OfrendaItem | null>(null);
-  const [draggingInstanceId, setDraggingInstanceId] = useState<string | null>(null);
-  const [dropPreviewCoords, setDropPreviewCoords] = useState<{ x: number; y: number } | null>(null);
+  const [selectedItemForPlacement, setSelectedItemForPlacement] =
+    useState<OfrendaItem | null>(null);
+  const [draggingInstanceId, setDraggingInstanceId] = useState<string | null>(
+    null
+  );
+  const [dropPreviewCoords, setDropPreviewCoords] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // References to altar elements
@@ -108,20 +146,30 @@ export function OfrendaView() {
   // Convert any event or info coordinates to true viewport coordinates
   const getViewportCoords = (event: any, info?: any) => {
     if (event) {
-      if (typeof event.clientX === "number" && (event.clientX !== 0 || event.clientY !== 0)) {
+      if (
+        typeof event.clientX === "number" &&
+        (event.clientX !== 0 || event.clientY !== 0)
+      ) {
         return { x: event.clientX, y: event.clientY };
       }
       if (event.touches?.[0]) {
         return { x: event.touches[0].clientX, y: event.touches[0].clientY };
       }
       if (event.changedTouches?.[0]) {
-        return { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+        return {
+          x: event.changedTouches[0].clientX,
+          y: event.changedTouches[0].clientY,
+        };
       }
     }
     if (info?.point) {
       return {
-        x: info.point.x - (typeof window !== "undefined" ? window.scrollX || 0 : 0),
-        y: info.point.y - (typeof window !== "undefined" ? window.scrollY || 0 : 0),
+        x:
+          info.point.x -
+          (typeof window !== "undefined" ? window.scrollX || 0 : 0),
+        y:
+          info.point.y -
+          (typeof window !== "undefined" ? window.scrollY || 0 : 0),
       };
     }
     return null;
@@ -134,17 +182,22 @@ export function OfrendaView() {
     rawYPercent: number,
     explicitTier?: AltarTier
   ) => {
-    const tier = explicitTier || getTierFromYPercent(rawYPercent);
-    const shelfY = TIER_SHELF_Y[tier];
-    const clampedX = getClampedX(tier, rawXPercent);
+    const isArco = isArcoItem(itemId);
+    const tier = isArco
+      ? "cielo"
+      : explicitTier || getTierFromYPercent(rawYPercent);
+    const shelfY = isArco ? ARCO_SHELF_Y : TIER_SHELF_Y[tier];
+    const clampedX = isArco ? ARCO_LEFT_X : getClampedX(tier, rawXPercent);
 
     const newInstance: PlacedInstance = {
-      instanceId: `inst-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      instanceId: `inst-${Date.now()}-${Math.random()
+        .toString(36)
+        .substring(2, 6)}`,
       itemId,
       tier,
       xPercent: Math.round(clampedX * 10) / 10,
       yPercent: shelfY,
-      zIndex: tier === "cielo" ? 1 : tier === "tierra" ? 2 : 3,
+      zIndex: isArco ? 1 : tier === "cielo" ? 2 : tier === "tierra" ? 3 : 4,
     };
 
     setPlacedItems((prev) => [...prev, newInstance]);
@@ -153,6 +206,13 @@ export function OfrendaView() {
 
   // Place item with smart default coordinates on its designated tier shelf
   const addDefaultItem = (item: OfrendaItem) => {
+    const isArco = isArcoItem(item.id);
+    if (isArco) {
+      addItemToAltarAt(item.id, ARCO_LEFT_X, ARCO_SHELF_Y, "cielo");
+      showFeedbackToast(item.name, "cielo");
+      return;
+    }
+
     const tier = item.defaultTier;
     const shelfY = TIER_SHELF_Y[tier];
     const existingOnTier = placedItems.filter((p) => p.tier === tier);
@@ -183,10 +243,11 @@ export function OfrendaView() {
   };
 
   // Pointer drag handler for moving items already placed on the altar along shelves
-  const handleItemPointerDown = (
-    e: React.PointerEvent,
-    instanceId: string
-  ) => {
+  const handleItemPointerDown = (e: React.PointerEvent, instanceId: string) => {
+    // Ignore drag if clicking the remove button
+    if ((e.target as HTMLElement)?.closest("button")) {
+      return;
+    }
     if (e.button !== 0 && e.pointerType === "mouse") return;
     e.preventDefault();
     e.stopPropagation();
@@ -209,9 +270,14 @@ export function OfrendaView() {
       const rawX = ((moveEvent.clientX - rect.left) / rect.width) * 100;
       const rawY = ((moveEvent.clientY - rect.top) / rect.height) * 100;
 
-      const tier = getTierFromYPercent(rawY);
-      const shelfY = TIER_SHELF_Y[tier];
-      const clampedX = getClampedX(tier, rawX);
+      const currentItem = placedItems.find(
+        (it) => it.instanceId === instanceId
+      );
+      const isArco = isArcoItem(currentItem?.itemId);
+
+      const tier = isArco ? "cielo" : getTierFromYPercent(rawY);
+      const shelfY = isArco ? ARCO_SHELF_Y : TIER_SHELF_Y[tier];
+      const clampedX = isArco ? ARCO_LEFT_X : getClampedX(tier, rawX);
 
       setHoveredTier(tier);
 
@@ -239,9 +305,15 @@ export function OfrendaView() {
         const rect = altarContainerRef.current.getBoundingClientRect();
         const rawX = ((upEvent.clientX - rect.left) / rect.width) * 100;
         const rawY = ((upEvent.clientY - rect.top) / rect.height) * 100;
-        const finalTier = getTierFromYPercent(rawY);
-        const finalShelfY = TIER_SHELF_Y[finalTier];
-        const finalClampedX = getClampedX(finalTier, rawX);
+        const currentItem = placedItems.find(
+          (p) => p.instanceId === instanceId
+        );
+        const isArco = isArcoItem(currentItem?.itemId);
+        const finalTier = isArco ? "cielo" : getTierFromYPercent(rawY);
+        const finalShelfY = isArco ? ARCO_SHELF_Y : TIER_SHELF_Y[finalTier];
+        const finalClampedX = isArco
+          ? ARCO_LEFT_X
+          : getClampedX(finalTier, rawX);
 
         setPlacedItems((prev) =>
           prev.map((it) =>
@@ -251,14 +323,21 @@ export function OfrendaView() {
                   xPercent: Math.round(finalClampedX * 10) / 10,
                   yPercent: finalShelfY,
                   tier: finalTier,
-                  zIndex: finalTier === "cielo" ? 1 : finalTier === "tierra" ? 2 : 3,
+                  zIndex: isArco
+                    ? 1
+                    : finalTier === "cielo"
+                    ? 2
+                    : finalTier === "tierra"
+                    ? 3
+                    : 4,
                 }
               : it
           )
         );
 
-        const currentItem = placedItems.find((p) => p.instanceId === instanceId);
-        const itemDef = currentItem ? OFRENDA_ITEMS.find((i) => i.id === currentItem.itemId) : null;
+        const itemDef = currentItem
+          ? OFRENDA_ITEMS.find((i) => i.id === currentItem.itemId)
+          : null;
         if (itemDef) {
           showFeedbackToast(itemDef.name, finalTier);
         }
@@ -349,7 +428,11 @@ export function OfrendaView() {
         {/* Top Sacred Symbols Ribbon */}
         <Styled.SymbolsRibbon>
           {SYMBOL_RIBBONS.map((badge, idx) => (
-            <Styled.RibbonBadge key={idx} $color={badge.color} title={badge.label}>
+            <Styled.RibbonBadge
+              key={idx}
+              $color={badge.color}
+              title={badge.label}
+            >
               {badge.icon}
             </Styled.RibbonBadge>
           ))}
@@ -375,9 +458,15 @@ export function OfrendaView() {
             <Flame
               size={15}
               color={velasEncendidas ? "#FFB300" : "#D8C7E6"}
-              style={{ filter: velasEncendidas ? "drop-shadow(0 0 6px #FFA000)" : "none" }}
+              style={{
+                filter: velasEncendidas
+                  ? "drop-shadow(0 0 6px #FFA000)"
+                  : "none",
+              }}
             />
-            <span>{velasEncendidas ? "Velas Encendidas" : "Encender Velas"}</span>
+            <span>
+              {velasEncendidas ? "Velas Encendidas" : "Encender Velas"}
+            </span>
           </Styled.ToolbarButton>
 
           <Styled.ToolbarButton
@@ -411,8 +500,9 @@ export function OfrendaView() {
           >
             <span>👉</span>
             <span>
-              Has seleccionado <strong>{selectedItemForPlacement.name}</strong>. Haz
-              clic en cualquier nivel del altar para colocarlo, o selecciona otro.
+              Has seleccionado <strong>{selectedItemForPlacement.name}</strong>.
+              Haz clic en cualquier nivel del altar para colocarlo, o selecciona
+              otro.
             </span>
             <button
               onClick={() => setSelectedItemForPlacement(null)}
@@ -447,7 +537,8 @@ export function OfrendaView() {
             <Styled.ItemsGrid>
               {leftItems.map((item) => {
                 const count = getItemCount(item.id);
-                const imgSrc = itemImages[item.id] || `/ofrenda/elementos/${item.id}.png`;
+                const imgSrc =
+                  itemImages[item.id] || `/ofrenda/elementos/${item.id}.png`;
                 const isSelected = selectedItemForPlacement?.id === item.id;
                 const isItemDragging = draggedItem?.id === item.id;
 
@@ -492,7 +583,9 @@ export function OfrendaView() {
                           draggable={false}
                         />
                       ) : (
-                        <Styled.ItemIconFallback>{item.iconFallback}</Styled.ItemIconFallback>
+                        <Styled.ItemIconFallback>
+                          {item.iconFallback}
+                        </Styled.ItemIconFallback>
                       )}
                     </Styled.ItemThumbnailWrap>
 
@@ -528,13 +621,22 @@ export function OfrendaView() {
               ref={altarContainerRef}
               onClick={(e) => {
                 if (selectedItemForPlacement && altarContainerRef.current) {
-                  const rect = altarContainerRef.current.getBoundingClientRect();
+                  const rect =
+                    altarContainerRef.current.getBoundingClientRect();
                   const rawX = ((e.clientX - rect.left) / rect.width) * 100;
                   const rawY = ((e.clientY - rect.top) / rect.height) * 100;
-                  const tier = getTierFromYPercent(rawY);
-                  const shelfY = TIER_SHELF_Y[tier];
-                  const clampedX = getClampedX(tier, rawX);
-                  addItemToAltarAt(selectedItemForPlacement.id, clampedX, shelfY, tier);
+                  const isArco = isArcoItem(selectedItemForPlacement.id);
+                  const tier = isArco ? "cielo" : getTierFromYPercent(rawY);
+                  const shelfY = isArco ? ARCO_SHELF_Y : TIER_SHELF_Y[tier];
+                  const clampedX = isArco
+                    ? ARCO_LEFT_X
+                    : getClampedX(tier, rawX);
+                  addItemToAltarAt(
+                    selectedItemForPlacement.id,
+                    clampedX,
+                    shelfY,
+                    tier
+                  );
                   showFeedbackToast(selectedItemForPlacement.name, tier);
                   setSelectedItemForPlacement(null);
                 }
@@ -543,12 +645,16 @@ export function OfrendaView() {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = "copy";
                 if (altarContainerRef.current) {
-                  const rect = altarContainerRef.current.getBoundingClientRect();
+                  const rect =
+                    altarContainerRef.current.getBoundingClientRect();
                   const rawX = ((e.clientX - rect.left) / rect.width) * 100;
                   const rawY = ((e.clientY - rect.top) / rect.height) * 100;
-                  const tier = getTierFromYPercent(rawY);
-                  const shelfY = TIER_SHELF_Y[tier];
-                  const clampedX = getClampedX(tier, rawX);
+                  const isArco = isArcoItem(draggedItem?.id);
+                  const tier = isArco ? "cielo" : getTierFromYPercent(rawY);
+                  const shelfY = isArco ? ARCO_SHELF_Y : TIER_SHELF_Y[tier];
+                  const clampedX = isArco
+                    ? ARCO_LEFT_X
+                    : getClampedX(tier, rawX);
                   setDropPreviewCoords({ x: Math.round(clampedX), y: shelfY });
                   setHoveredTier(tier);
                 }
@@ -561,15 +667,17 @@ export function OfrendaView() {
               }}
               onDrop={(e) => {
                 e.preventDefault();
-                const itemId = e.dataTransfer.getData("text/plain") || draggedItem?.id;
+                const itemId =
+                  e.dataTransfer.getData("text/plain") || draggedItem?.id;
                 if (!itemId || !altarContainerRef.current) return;
 
                 const rect = altarContainerRef.current.getBoundingClientRect();
                 const rawX = ((e.clientX - rect.left) / rect.width) * 100;
                 const rawY = ((e.clientY - rect.top) / rect.height) * 100;
-                const tier = getTierFromYPercent(rawY);
-                const shelfY = TIER_SHELF_Y[tier];
-                const clampedX = getClampedX(tier, rawX);
+                const isArco = isArcoItem(itemId);
+                const tier = isArco ? "cielo" : getTierFromYPercent(rawY);
+                const shelfY = isArco ? ARCO_SHELF_Y : TIER_SHELF_Y[tier];
+                const clampedX = isArco ? ARCO_LEFT_X : getClampedX(tier, rawX);
 
                 addItemToAltarAt(itemId, clampedX, shelfY, tier);
                 const itemDef = OFRENDA_ITEMS.find((i) => i.id === itemId);
@@ -607,25 +715,79 @@ export function OfrendaView() {
                   </defs>
 
                   {/* TIER 1 - TOP */}
-                  <polygon points="210,65 390,65 460,110 140,110" fill="url(#woodStep)" stroke="#221105" strokeWidth="3" />
-                  <rect x="180" y="110" width="240" height="85" fill="url(#woodFace)" stroke="#221105" strokeWidth="3" />
+                  <polygon
+                    points="210,65 390,65 460,110 140,110"
+                    fill="url(#woodStep)"
+                    stroke="#221105"
+                    strokeWidth="3"
+                  />
+                  <rect
+                    x="180"
+                    y="110"
+                    width="240"
+                    height="85"
+                    fill="url(#woodFace)"
+                    stroke="#221105"
+                    strokeWidth="3"
+                  />
 
                   {/* TIER 2 - MIDDLE */}
-                  <polygon points="140,195 460,195 520,250 80,250" fill="url(#woodStep)" stroke="#221105" strokeWidth="3" />
-                  <rect x="130" y="250" width="340" height="95" fill="url(#woodFace)" stroke="#221105" strokeWidth="3" />
+                  <polygon
+                    points="140,195 460,195 520,250 80,250"
+                    fill="url(#woodStep)"
+                    stroke="#221105"
+                    strokeWidth="3"
+                  />
+                  <rect
+                    x="130"
+                    y="250"
+                    width="340"
+                    height="95"
+                    fill="url(#woodFace)"
+                    stroke="#221105"
+                    strokeWidth="3"
+                  />
 
                   {/* TIER 3 - BOTTOM */}
-                  <polygon points="80,345 520,345 570,410 30,410" fill="url(#woodStep)" stroke="#221105" strokeWidth="3" />
-                  <rect x="65" y="410" width="470" height="100" fill="url(#woodFace)" stroke="#221105" strokeWidth="3" />
+                  <polygon
+                    points="80,345 520,345 570,410 30,410"
+                    fill="url(#woodStep)"
+                    stroke="#221105"
+                    strokeWidth="3"
+                  />
+                  <rect
+                    x="65"
+                    y="410"
+                    width="470"
+                    height="100"
+                    fill="url(#woodFace)"
+                    stroke="#221105"
+                    strokeWidth="3"
+                  />
 
                   {/* Papel Picado Garland Tier 1 - Orange */}
-                  <path d="M 180 115 Q 240 160 300 115 Q 360 160 420 115 L 420 185 Q 360 195 300 185 Q 240 195 180 185 Z" fill="#FF7A00" stroke="#221105" strokeWidth="2" />
+                  <path
+                    d="M 180 115 Q 240 160 300 115 Q 360 160 420 115 L 420 185 Q 360 195 300 185 Q 240 195 180 185 Z"
+                    fill="#FF7A00"
+                    stroke="#221105"
+                    strokeWidth="2"
+                  />
 
                   {/* Papel Picado Garland Tier 2 - Purple & Pink */}
-                  <path d="M 130 255 Q 215 315 300 255 Q 385 315 470 255 L 470 330 Q 385 340 300 330 Q 215 340 130 330 Z" fill="#9C27B0" stroke="#221105" strokeWidth="2" />
+                  <path
+                    d="M 130 255 Q 215 315 300 255 Q 385 315 470 255 L 470 330 Q 385 340 300 330 Q 215 340 130 330 Z"
+                    fill="#9C27B0"
+                    stroke="#221105"
+                    strokeWidth="2"
+                  />
 
                   {/* Papel Picado Garland Tier 3 - Blue, Yellow, Green */}
-                  <path d="M 65 415 Q 182 485 300 415 Q 417 485 535 415 L 535 495 Q 417 505 300 495 Q 182 505 65 495 Z" fill="#00BCD4" stroke="#221105" strokeWidth="2" />
+                  <path
+                    d="M 65 415 Q 182 485 300 415 Q 417 485 535 415 L 535 495 Q 417 505 300 495 Q 182 505 65 495 Z"
+                    fill="#00BCD4"
+                    stroke="#221105"
+                    strokeWidth="2"
+                  />
                 </svg>
               )}
 
@@ -635,7 +797,9 @@ export function OfrendaView() {
               <Styled.TierGuideZone
                 $tier="cielo"
                 $isOver={hoveredTier === "cielo"}
-                $isAnyDragging={Boolean(draggedItem || selectedItemForPlacement || draggingInstanceId)}
+                $isAnyDragging={Boolean(
+                  draggedItem || selectedItemForPlacement || draggingInstanceId
+                )}
               >
                 <Styled.TierLabelBadge $tier="cielo">
                   NIVEL I · CIELO
@@ -645,7 +809,9 @@ export function OfrendaView() {
               <Styled.TierGuideZone
                 $tier="tierra"
                 $isOver={hoveredTier === "tierra"}
-                $isAnyDragging={Boolean(draggedItem || selectedItemForPlacement || draggingInstanceId)}
+                $isAnyDragging={Boolean(
+                  draggedItem || selectedItemForPlacement || draggingInstanceId
+                )}
               >
                 <Styled.TierLabelBadge $tier="tierra">
                   NIVEL II · TIERRA
@@ -655,7 +821,9 @@ export function OfrendaView() {
               <Styled.TierGuideZone
                 $tier="inframundo"
                 $isOver={hoveredTier === "inframundo"}
-                $isAnyDragging={Boolean(draggedItem || selectedItemForPlacement || draggingInstanceId)}
+                $isAnyDragging={Boolean(
+                  draggedItem || selectedItemForPlacement || draggingInstanceId
+                )}
               >
                 <Styled.TierLabelBadge $tier="inframundo">
                   NIVEL III · INFRAMUNDO
@@ -664,18 +832,41 @@ export function OfrendaView() {
 
               {/* Drop Target Ghost Preview when dragging from panel */}
               {dropPreviewCoords && draggedItem && (
-                <Styled.DropPreviewGhost $x={dropPreviewCoords.x} $y={dropPreviewCoords.y}>
+                <Styled.DropPreviewGhost
+                  $x={dropPreviewCoords.x}
+                  $y={dropPreviewCoords.y}
+                  $isArco={isArcoItem(draggedItem.id)}
+                >
                   <Styled.DropTargetRing />
                   {itemImages[draggedItem.id] ? (
                     <img
                       src={itemImages[draggedItem.id]}
                       alt={draggedItem.name}
-                      style={{
-                        height: 60,
-                        opacity: 0.85,
-                        filter: "drop-shadow(0 4px 10px rgba(0,0,0,0.5))",
-                        pointerEvents: "none",
-                      }}
+                      style={
+                        isArcoItem(draggedItem.id)
+                          ? {
+                              width: "100%",
+                              maxWidth: "100%",
+                              height: "auto",
+                              opacity: 0.85,
+                              filter: "drop-shadow(0 4px 10px rgba(0,0,0,0.5))",
+                              pointerEvents: "none",
+                            }
+                          : {
+                              height: getItemHeight(
+                                draggedItem,
+                                hoveredTier || "tierra"
+                              ),
+                              maxWidth:
+                                getItemWidth(
+                                  draggedItem,
+                                  hoveredTier || "tierra"
+                                ) || 120,
+                              opacity: 0.85,
+                              filter: "drop-shadow(0 4px 10px rgba(0,0,0,0.5))",
+                              pointerEvents: "none",
+                            }
+                      }
                     />
                   ) : (
                     <span style={{ fontSize: "2.3rem", opacity: 0.85 }}>
@@ -690,10 +881,16 @@ export function OfrendaView() {
               {/* -------------------------------------------------------- */}
               <AnimatePresence>
                 {placedItems.map((placed) => {
-                  const itemDef = OFRENDA_ITEMS.find((i) => i.id === placed.itemId);
+                  const itemDef = OFRENDA_ITEMS.find(
+                    (i) => i.id === placed.itemId
+                  );
                   if (!itemDef) return null;
-                  const isDraggingThis = draggingInstanceId === placed.instanceId;
-                  const imgSrc = itemImages[placed.itemId] || `/ofrenda/elementos/${placed.itemId}.png`;
+                  const isDraggingThis =
+                    draggingInstanceId === placed.instanceId;
+                  const imgSrc =
+                    itemImages[placed.itemId] ||
+                    `/ofrenda/elementos/${placed.itemId}.png`;
+                  const isArco = isArcoItem(placed.itemId);
 
                   return (
                     <Styled.PlacedItemDraggable
@@ -702,21 +899,42 @@ export function OfrendaView() {
                       $yPercent={placed.yPercent}
                       $zIndex={placed.zIndex}
                       $isDraggingThis={isDraggingThis}
-                      onPointerDown={(e) => handleItemPointerDown(e, placed.instanceId)}
+                      $isArco={isArco}
+                      onPointerDown={(e) =>
+                        handleItemPointerDown(e, placed.instanceId)
+                      }
                       onDoubleClick={(e) => {
                         e.stopPropagation();
                         removeItem(placed.instanceId);
                       }}
                       title={`${itemDef.name} • Arrastra para organizar • Doble clic para retirar`}
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: isDraggingThis ? 1.08 : 1, opacity: 1 }}
+                      initial={
+                        isArco ? { opacity: 0 } : { scale: 0, opacity: 0 }
+                      }
+                      animate={
+                        isArco
+                          ? { opacity: 1 }
+                          : { scale: isDraggingThis ? 1.08 : 1, opacity: 1 }
+                      }
                       exit={{ scale: 0, opacity: 0 }}
-                      transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 350,
+                        damping: 25,
+                      }}
                     >
                       {/* Small discreet remove button (does not affect image dimensions) */}
                       <Styled.ItemRemoveBtn
+                        type="button"
+                        onPointerDown={(e) => {
+                          e.stopPropagation();
+                        }}
+                        onMouseDown={(e) => {
+                          e.stopPropagation();
+                        }}
                         onClick={(e) => {
                           e.stopPropagation();
+                          e.preventDefault();
                           removeItem(placed.instanceId);
                         }}
                         title={`Retirar ${itemDef.name}`}
@@ -736,11 +954,19 @@ export function OfrendaView() {
                         <Styled.PlacedItemImg
                           src={imgSrc}
                           alt={itemDef.name}
-                          $height={getItemHeight(itemDef.id, placed.tier)}
+                          $height={getItemHeight(itemDef, placed.tier)}
+                          $width={getItemWidth(itemDef, placed.tier)}
+                          $isArco={isArco}
                         />
                       ) : (
                         <Styled.PlacedItemFallback
-                          $size={placed.tier === "cielo" ? 2.1 : placed.tier === "tierra" ? 2.4 : 2.6}
+                          $size={
+                            placed.tier === "cielo"
+                              ? 2.1
+                              : placed.tier === "tierra"
+                              ? 2.4
+                              : 2.6
+                          }
                         >
                           {itemDef.iconFallback}
                         </Styled.PlacedItemFallback>
@@ -756,7 +982,10 @@ export function OfrendaView() {
             {/* Hint Banner below Altar */}
             <Styled.TipBanner>
               <span>
-                <strong>Organiza libremente:</strong> Arrastra cualquier elemento a la posición que desees (en cualquier nivel, izquierda, derecha o frente). Usa el botón ✕ o haz doble clic para retirarlo.
+                <strong>Organiza libremente:</strong> Arrastra cualquier
+                elemento a la posición que desees (en cualquier nivel,
+                izquierda, derecha o frente). Usa el botón ✕ o haz doble clic
+                para retirarlo.
               </span>
             </Styled.TipBanner>
           </Styled.AltarStageWrapper>
@@ -776,7 +1005,8 @@ export function OfrendaView() {
             <Styled.ItemsGrid>
               {rightItems.map((item) => {
                 const count = getItemCount(item.id);
-                const imgSrc = itemImages[item.id] || `/ofrenda/elementos/${item.id}.png`;
+                const imgSrc =
+                  itemImages[item.id] || `/ofrenda/elementos/${item.id}.png`;
                 const isSelected = selectedItemForPlacement?.id === item.id;
                 const isItemDragging = draggedItem?.id === item.id;
 
@@ -821,7 +1051,9 @@ export function OfrendaView() {
                           draggable={false}
                         />
                       ) : (
-                        <Styled.ItemIconFallback>{item.iconFallback}</Styled.ItemIconFallback>
+                        <Styled.ItemIconFallback>
+                          {item.iconFallback}
+                        </Styled.ItemIconFallback>
                       )}
                     </Styled.ItemThumbnailWrap>
 
@@ -875,10 +1107,10 @@ export function OfrendaView() {
                 El Significado de los Tres Niveles
               </Styled.SignificanceTitle>
               <Styled.SignificanceBody>
-                En la cosmovisión tradicional, el nivel superior encarna el cielo y la
-                memoria divina; el escalón central representa la vida terrenal y los
-                banquetes compartidos; y el inferior conecta con la tierra y el
-                Mictlán.
+                En la cosmovisión tradicional, el nivel superior encarna el
+                cielo y la memoria divina; el escalón central representa la vida
+                terrenal y los banquetes compartidos; y el inferior conecta con
+                la tierra y el Mictlán.
               </Styled.SignificanceBody>
             </Styled.SignificanceText>
           </Styled.SignificanceContent>
@@ -904,8 +1136,8 @@ export function OfrendaView() {
           <Styled.QuoteText>
             <span>🏵</span>
             <span>
-              “A nuestros ancestros: mientras su memoria florezca en cempasúchil,
-              jamás partirán del todo.”
+              “A nuestros ancestros: mientras su memoria florezca en
+              cempasúchil, jamás partirán del todo.”
             </span>
           </Styled.QuoteText>
           <Styled.HeritageText>
