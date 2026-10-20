@@ -33,6 +33,9 @@ const outfitOptions: OutfitOption[] = [
 export function CatrinasView() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const isScrollingRef = useRef<boolean>(false);
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const sidebarRef = useRef<HTMLElement | null>(null);
 
   const handleWheel = useCallback((e: WheelEvent) => {
     if (isScrollingRef.current) return;
@@ -59,6 +62,77 @@ export function CatrinasView() {
     };
   }, [handleWheel]);
 
+  // Auto-scroll the active vestuario button strictly inside SidebarWrapper container
+  useEffect(() => {
+    const container = sidebarRef.current;
+    const activeBtn = buttonRefs.current[selectedIndex];
+    if (container && activeBtn) {
+      const containerWidth = container.clientWidth;
+      const btnLeft = activeBtn.offsetLeft;
+      const btnWidth = activeBtn.offsetWidth;
+      // Center the button inside the container only (never scrolling the viewport/window)
+      const targetScrollLeft = btnLeft - (containerWidth - btnWidth) / 2;
+      container.scrollTo({
+        left: Math.max(0, targetScrollLeft),
+        behavior: "smooth",
+      });
+    }
+    // Safeguard: ensure the window itself never shifts horizontally
+    if (typeof window !== "undefined" && window.scrollX !== 0) {
+      window.scrollTo({ left: 0, top: window.scrollY });
+    }
+  }, [selectedIndex]);
+
+  const handlePrev = () => {
+    setSelectedIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNext = () => {
+    setSelectedIndex((prev) => Math.min(outfitOptions.length - 1, prev + 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length === 1) {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        time: Date.now(),
+      };
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!touchStartRef.current) return;
+    const touchEnd = e.changedTouches[0];
+    const deltaX = touchEnd.clientX - touchStartRef.current.x;
+    const deltaY = touchEnd.clientY - touchStartRef.current.y;
+    const deltaTime = Date.now() - touchStartRef.current.time;
+    touchStartRef.current = null;
+
+    if (deltaTime < 600) {
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+
+      if (absY >= 30 && absY >= absX) {
+        if (deltaY < 0) {
+          // Swipe up -> next outfit
+          setSelectedIndex((prev) => Math.min(outfitOptions.length - 1, prev + 1));
+        } else {
+          // Swipe down -> prev outfit
+          setSelectedIndex((prev) => Math.max(0, prev - 1));
+        }
+      } else if (absX >= 30 && absX > absY) {
+        if (deltaX < 0) {
+          // Swipe left -> next outfit
+          setSelectedIndex((prev) => Math.min(outfitOptions.length - 1, prev + 1));
+        } else {
+          // Swipe right -> prev outfit
+          setSelectedIndex((prev) => Math.max(0, prev - 1));
+        }
+      }
+    }
+  };
+
   const currentOutfit = outfitOptions[selectedIndex] || outfitOptions[0];
   const scrollProgress = Math.round(
     ((selectedIndex + 1) / outfitOptions.length) * 100
@@ -76,13 +150,13 @@ export function CatrinasView() {
         <Styled.SubtitleDividerWrapper>
           <Styled.DividerLine />
           <Styled.SubtitleText>
-            Desplaza el scroll vertical o selecciona una vestimenta
+            Desliza o selecciona una vestimenta para vestir a tu Catrina
           </Styled.SubtitleText>
           <Styled.DividerLine />
         </Styled.SubtitleDividerWrapper>
 
         <Styled.StageLayout>
-          <Styled.SidebarWrapper>
+          <Styled.SidebarWrapper ref={sidebarRef}>
             <Styled.SidebarHeader>
               <span>✨</span>
               <span>VESTIMENTAS</span>
@@ -93,6 +167,9 @@ export function CatrinasView() {
               return (
                 <Styled.OutfitOptionButton
                   key={opt.id}
+                  ref={(el) => {
+                    buttonRefs.current[idx] = el;
+                  }}
                   $active={isActive}
                   onClick={() => setSelectedIndex(idx)}
                 >
@@ -103,11 +180,43 @@ export function CatrinasView() {
             })}
           </Styled.SidebarWrapper>
 
-          <Styled.CharacterStage>
+          <Styled.CharacterStage
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <Styled.NavArrowButton
+              $direction="left"
+              onClick={handlePrev}
+              disabled={selectedIndex === 0}
+              aria-label="Vestuario anterior"
+            >
+              ‹
+            </Styled.NavArrowButton>
+
             <Skull
               activeOutfit={currentOutfit.id}
               outfitImageSrc={currentOutfit.imageSrc}
             />
+
+            <Styled.NavArrowButton
+              $direction="right"
+              onClick={handleNext}
+              disabled={selectedIndex === outfitOptions.length - 1}
+              aria-label="Siguiente vestuario"
+            >
+              ›
+            </Styled.NavArrowButton>
+
+            <Styled.DotsContainer>
+              {outfitOptions.map((opt, idx) => (
+                <Styled.Dot
+                  key={opt.id}
+                  $active={idx === selectedIndex}
+                  onClick={() => setSelectedIndex(idx)}
+                  aria-label={`Seleccionar ${opt.label}`}
+                />
+              ))}
+            </Styled.DotsContainer>
           </Styled.CharacterStage>
 
           <Styled.ScrollIndicatorWrapper>

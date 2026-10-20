@@ -39,17 +39,22 @@ export const SkullWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 440px;
-  margin: 20px auto 30px;
+  max-width: 380px;
+  margin: 10px auto 20px;
   animation: ${floatAnim} 5s ease-in-out infinite;
+
+  @media (min-width: 900px) {
+    max-width: 440px;
+    margin: 20px auto 30px;
+  }
 `;
 
 export const GlowSpotlight = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 480px;
-  height: 580px;
+  width: 320px;
+  height: 420px;
   transform: translate(-50%, -50%);
   background: radial-gradient(
     ellipse at center,
@@ -61,14 +66,24 @@ export const GlowSpotlight = styled.div`
   pointer-events: none;
   z-index: 0;
   animation: ${auraPulse} 6s ease-in-out infinite;
+
+  @media (min-width: 900px) {
+    width: 480px;
+    height: 580px;
+  }
 `;
 
 export const SkeletonSvg = styled.svg`
   width: 100%;
   height: auto;
-  max-height: 520px;
+  max-height: 490px;
   filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.65));
   z-index: 1;
+  overflow: visible;
+
+  @media (min-width: 900px) {
+    max-height: 520px;
+  }
 `;
 
 export const OutfitImageOverlay = styled.img`
@@ -84,5 +99,3 @@ export const OutfitImageOverlay = styled.img`
   filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
   animation: ${outfitFadeIn} 0.35s ease-out;
 `;
-
-

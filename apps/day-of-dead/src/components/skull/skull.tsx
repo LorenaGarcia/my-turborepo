@@ -35,7 +35,17 @@ export function Skull({ activeOutfit = "base", outfitImageSrc }: SkullProps) {
         viewBox="0 0 340 570"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
       >
+        <defs>
+          <clipPath id="clip-catrina-hat" clipPathUnits="userSpaceOnUse">
+            <rect x="-100" y="-250" width="600" height="390" />
+          </clipPath>
+          <clipPath id="clip-catrina-dress" clipPathUnits="userSpaceOnUse">
+            <rect x="-100" y="200" width="600" height="420" />
+          </clipPath>
+        </defs>
+
         {/* BASE SKELETON CHARACTER */}
         {/* SKULL HEAD */}
         <g id="skull-head">
@@ -441,15 +451,36 @@ export function Skull({ activeOutfit = "base", outfitImageSrc }: SkullProps) {
             <ellipse cx="210" cy="554" rx="16" ry="10" fill="#FBC02D" stroke="#F57F17" strokeWidth="3" />
           </g>
         )}
-      </Styled.SkeletonSvg>
 
-      {/* .PNG / .SVG OUTFIT IMAGE OVERLAY */}
-      {showImageOutfit && (
-        <Styled.OutfitImageOverlay
-          src={outfitImageSrc || "/vestido-catrina-negro.png"}
-          alt="Vestimenta Catrina"
-        />
-      )}
+        {/* 7. CATRINA ELEGANTE (SOMBRERO FLORAL + VESTIDO BORDADO) */}
+        {showImageOutfit && (
+          <g id="outfit-catrina-elegante">
+            {/* Hat portion (Sombrero con flores, trenzas y aretes) */}
+            <image
+              href={outfitImageSrc || "/vestido-catrina-negro.png"}
+              xlinkHref={outfitImageSrc || "/vestido-catrina-negro.png"}
+              x="-18"
+              y="-160"
+              width="375"
+              height="667"
+              clipPath="url(#clip-catrina-hat)"
+              preserveAspectRatio="xMidYMid meet"
+            />
+
+            {/* Dress portion (Vestido negro con bordados florales) */}
+            <image
+              href={outfitImageSrc || "/vestido-catrina-negro.png"}
+              xlinkHref={outfitImageSrc || "/vestido-catrina-negro.png"}
+              x="-20"
+              y="-106"
+              width="380"
+              height="675"
+              clipPath="url(#clip-catrina-dress)"
+              preserveAspectRatio="xMidYMid meet"
+            />
+          </g>
+        )}
+      </Styled.SkeletonSvg>
     </Styled.SkullWrapper>
   );
 }

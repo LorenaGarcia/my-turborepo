@@ -213,7 +213,7 @@ export const OFRENDA_ITEMS: OfrendaItem[] = [
     },
   },
   {
-    id: "Tacos",
+    id: "tacos",
     name: "Tacos",
     category: "alma",
     defaultTier: "inframundo",
