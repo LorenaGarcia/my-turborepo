@@ -20,6 +20,8 @@ import {
   Trash2,
   Check,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Heart,
   Volume2,
 } from "lucide-react";
@@ -127,6 +129,41 @@ export function OfrendaView() {
     y: number;
   } | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isMobileGridOpen, setIsMobileGridOpen] = useState<boolean>(true);
+  const [mobileCategoryFilter, setMobileCategoryFilter] = useState<
+    "todos" | "tierra" | "alma"
+  >("todos");
+
+  // Check if at least one candle / veladora is placed on the altar
+  const placedCandlesCount = placedItems.filter((p) => {
+    const itemDef = OFRENDA_ITEMS.find((i) => i.id === p.itemId);
+    return Boolean(itemDef?.isCandle || p.itemId === "veladora");
+  }).length;
+  const hasCandles = placedCandlesCount > 0;
+
+  const prevCandlesCountRef = useRef<number>(0);
+  const [shouldBounceCandleBtn, setShouldBounceCandleBtn] =
+    useState<boolean>(false);
+
+  // Trigger bounce & shake animation on the candle button ONLY when adding the first candle
+  useEffect(() => {
+    if (prevCandlesCountRef.current === 0 && placedCandlesCount > 0) {
+      setShouldBounceCandleBtn(true);
+      const timer = setTimeout(() => {
+        setShouldBounceCandleBtn(false);
+      }, 1000);
+      prevCandlesCountRef.current = placedCandlesCount;
+      return () => clearTimeout(timer);
+    }
+    prevCandlesCountRef.current = placedCandlesCount;
+  }, [placedCandlesCount]);
+
+  // Turn off flames if all candles are removed
+  useEffect(() => {
+    if (!hasCandles && velasEncendidas) {
+      setVelasEncendidas(false);
+    }
+  }, [hasCandles, velasEncendidas]);
 
   // References to altar elements
   const altarContainerRef = useRef<HTMLDivElement>(null);
@@ -412,9 +449,100 @@ export function OfrendaView() {
   const leftItems = OFRENDA_ITEMS.filter((i) => i.category === "tierra");
   const rightItems = OFRENDA_ITEMS.filter((i) => i.category === "alma");
 
+  const displayedMobileItems =
+    mobileCategoryFilter === "todos"
+      ? OFRENDA_ITEMS
+      : mobileCategoryFilter === "tierra"
+      ? leftItems
+      : rightItems;
+
   // Count placements per item
   const getItemCount = (itemId: string) => {
     return placedItems.filter((p) => p.itemId === itemId).length;
+  };
+
+  const renderItemCard = (item: OfrendaItem, isMobile = false) => {
+    const count = getItemCount(item.id);
+    const imgSrc = itemImages[item.id] || `/ofrenda/elementos/${item.id}.png`;
+    const isSelected = selectedItemForPlacement?.id === item.id;
+    const isItemDragging = draggedItem?.id === item.id;
+
+    return (
+      <Styled.ItemCard
+        key={item.id}
+        $isPlaced={count > 0}
+        $isSelected={isSelected}
+        $isDragging={isItemDragging}
+        draggable={true}
+        drag={!isMobile}
+        dragSnapToOrigin
+        dragElastic={0.15}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        whileDrag={{ scale: 1.15, zIndex: 25, cursor: "grabbing" }}
+        onClick={() => {
+          setSelectedItemForPlacement((prev) =>
+            prev?.id === item.id ? null : item
+          );
+          if (isMobile) {
+            setIsMobileGridOpen(false);
+          }
+        }}
+        onDragStart={(e) => {
+          const dt = (e as unknown as React.DragEvent).dataTransfer;
+          if (dt) {
+            dt.setData("text/plain", item.id);
+            dt.effectAllowed = "copy";
+          }
+          handleDragStart(item);
+        }}
+        onDrag={handleDrag}
+        onDragEnd={(e, info) => handleDragEnd(e, info, item)}
+      >
+        {count > 0 && (
+          <Styled.PlacedCountBadge>{count}</Styled.PlacedCountBadge>
+        )}
+
+        <Styled.ItemThumbnailWrap>
+          {imgSrc ? (
+            <Styled.ItemImage
+              src={imgSrc}
+              alt={item.name}
+              loading="eager"
+              draggable={false}
+            />
+          ) : (
+            <Styled.ItemIconFallback>
+              {item.iconFallback || "✨"}
+            </Styled.ItemIconFallback>
+          )}
+        </Styled.ItemThumbnailWrap>
+
+        <Styled.ItemName>{item.name}</Styled.ItemName>
+
+        <Styled.ItemActionsRow>
+          <Styled.DragHint title="Toca o arrastra para seleccionar">
+            <GripVertical size={12} />
+            <span>
+              {isSelected ? "Seleccionado" : isMobile ? "Tocar" : "Arrastrar"}
+            </span>
+          </Styled.DragHint>
+
+          <Styled.AddButton
+            title={`Colocar en ${item.defaultTier.toUpperCase()}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              addDefaultItem(item);
+              if (isMobile) {
+                setIsMobileGridOpen(false);
+              }
+            }}
+          >
+            <Plus size={14} />
+          </Styled.AddButton>
+        </Styled.ItemActionsRow>
+      </Styled.ItemCard>
+    );
   };
 
   return (
@@ -452,16 +580,58 @@ export function OfrendaView() {
 
           <Styled.ToolbarButton
             $variant={velasEncendidas ? "active" : "secondary"}
-            onClick={() => setVelasEncendidas((prev) => !prev)}
-            title="Enciende las veladoras con flama brillante"
+            onClick={() => {
+              if (hasCandles) {
+                setVelasEncendidas((prev) => !prev);
+              }
+            }}
+            disabled={!hasCandles}
+            title={
+              !hasCandles
+                ? "Coloca al menos una veladora en el altar para encenderla"
+                : velasEncendidas
+                ? "Apagar las velas"
+                : "Enciende las veladoras con flama brillante"
+            }
+            animate={
+              shouldBounceCandleBtn
+                ? {
+                    y: [0, -12, 2, -6, 0],
+                    rotate: [0, -7, 7, -4, 4, 0],
+                    scale: [1, 1.15, 0.95, 1.08, 1],
+                    boxShadow: [
+                      "0 0 0px rgba(255, 160, 0, 0)",
+                      "0 0 20px rgba(255, 160, 0, 0.7)",
+                      "0 0 25px rgba(255, 87, 34, 0.8)",
+                      "0 0 10px rgba(255, 160, 0, 0.4)",
+                      "0 0 0px rgba(255, 160, 0, 0)",
+                    ],
+                    transition: {
+                      duration: 0.85,
+                      ease: "easeInOut",
+                    },
+                  }
+                : {
+                    y: 0,
+                    rotate: 0,
+                    scale: 1,
+                  }
+            }
           >
             <Flame
               size={15}
-              color={velasEncendidas ? "#FFB300" : "#D8C7E6"}
+              color={
+                !hasCandles
+                  ? "rgba(255, 255, 255, 0.35)"
+                  : velasEncendidas
+                  ? "#FFB300"
+                  : "#D8C7E6"
+              }
               style={{
-                filter: velasEncendidas
-                  ? "drop-shadow(0 0 6px #FFA000)"
-                  : "none",
+                filter:
+                  hasCandles && velasEncendidas
+                    ? "drop-shadow(0 0 6px #FFA000)"
+                    : "none",
               }}
             />
             <span>
@@ -523,6 +693,90 @@ export function OfrendaView() {
         {/* Main 3-Column Layout: Left Grid | Altar Stage | Right Grid */}
         <Styled.WorkspaceLayout>
           {/* ======================================================== */}
+          {/* MÓVIL: PANEL ÚNICO COLAPSABLE CON TODOS LOS ELEMENTOS     */}
+          {/* ======================================================== */}
+          <Styled.MobileItemsPanel>
+            <Styled.MobilePanelToggleBtn
+              type="button"
+              onClick={() => setIsMobileGridOpen((prev) => !prev)}
+              $isOpen={isMobileGridOpen}
+              aria-expanded={isMobileGridOpen}
+            >
+              <Styled.MobilePanelTitleGroup>
+                <Styled.MobilePanelIcon>🏵️</Styled.MobilePanelIcon>
+                <div>
+                  <Styled.MobilePanelTitle>
+                    <span>Elementos de Ofrenda</span>
+                    <Styled.MobileItemCountBadge>
+                      {OFRENDA_ITEMS.length}
+                    </Styled.MobileItemCountBadge>
+                  </Styled.MobilePanelTitle>
+                  <Styled.MobilePanelSubtitle>
+                    {isMobileGridOpen
+                      ? "Toca un elemento para seleccionarlo y colocarlo"
+                      : selectedItemForPlacement
+                      ? `Colocando: ${selectedItemForPlacement.name} (Toca el altar)`
+                      : "Toca para desplegar elementos"}
+                  </Styled.MobilePanelSubtitle>
+                </div>
+              </Styled.MobilePanelTitleGroup>
+
+              <Styled.MobileToggleIndicator $isOpen={isMobileGridOpen}>
+                <span>{isMobileGridOpen ? "Ocultar" : "Desplegar"}</span>
+                {isMobileGridOpen ? (
+                  <ChevronUp size={16} />
+                ) : (
+                  <ChevronDown size={16} />
+                )}
+              </Styled.MobileToggleIndicator>
+            </Styled.MobilePanelToggleBtn>
+
+            <AnimatePresence>
+              {isMobileGridOpen && (
+                <Styled.MobileGridContent
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                >
+                  <Styled.MobileFilterTabs>
+                    <Styled.MobileFilterChip
+                      type="button"
+                      $active={mobileCategoryFilter === "todos"}
+                      onClick={() => setMobileCategoryFilter("todos")}
+                    >
+                      <span>✨</span>
+                      <span>Todos ({OFRENDA_ITEMS.length})</span>
+                    </Styled.MobileFilterChip>
+                    <Styled.MobileFilterChip
+                      type="button"
+                      $active={mobileCategoryFilter === "tierra"}
+                      onClick={() => setMobileCategoryFilter("tierra")}
+                    >
+                      <span style={{ color: "#FF9D00" }}>●</span>
+                      <span>Luz y Mística ({leftItems.length})</span>
+                    </Styled.MobileFilterChip>
+                    <Styled.MobileFilterChip
+                      type="button"
+                      $active={mobileCategoryFilter === "alma"}
+                      onClick={() => setMobileCategoryFilter("alma")}
+                    >
+                      <span style={{ color: "#E91E63" }}>●</span>
+                      <span>El Banquete ({rightItems.length})</span>
+                    </Styled.MobileFilterChip>
+                  </Styled.MobileFilterTabs>
+
+                  <Styled.ItemsGrid>
+                    {displayedMobileItems.map((item) =>
+                      renderItemCard(item, true)
+                    )}
+                  </Styled.ItemsGrid>
+                </Styled.MobileGridContent>
+              )}
+            </AnimatePresence>
+          </Styled.MobileItemsPanel>
+
+          {/* ======================================================== */}
           {/* PANEL IZQUIERDO: LUZ Y MÍSTICA (GRID DE ELEMENTOS)        */}
           {/* ======================================================== */}
           <Styled.SidePanel $isDraggingActive={Boolean(draggedItem)}>
@@ -535,81 +789,7 @@ export function OfrendaView() {
             </Styled.PanelHeader>
 
             <Styled.ItemsGrid>
-              {leftItems.map((item) => {
-                const count = getItemCount(item.id);
-                const imgSrc =
-                  itemImages[item.id] || `/ofrenda/elementos/${item.id}.png`;
-                const isSelected = selectedItemForPlacement?.id === item.id;
-                const isItemDragging = draggedItem?.id === item.id;
-
-                return (
-                  <Styled.ItemCard
-                    key={item.id}
-                    $isPlaced={count > 0}
-                    $isSelected={isSelected}
-                    $isDragging={isItemDragging}
-                    draggable={true}
-                    drag
-                    dragSnapToOrigin
-                    dragElastic={0.15}
-                    whileHover={{ scale: 1.03 }}
-                    whileDrag={{ scale: 1.15, zIndex: 25, cursor: "grabbing" }}
-                    onClick={() => {
-                      setSelectedItemForPlacement((prev) =>
-                        prev?.id === item.id ? null : item
-                      );
-                    }}
-                    onDragStart={(e) => {
-                      const dt = (e as unknown as React.DragEvent).dataTransfer;
-                      if (dt) {
-                        dt.setData("text/plain", item.id);
-                        dt.effectAllowed = "copy";
-                      }
-                      handleDragStart(item);
-                    }}
-                    onDrag={handleDrag}
-                    onDragEnd={(e, info) => handleDragEnd(e, info, item)}
-                  >
-                    {count > 0 && (
-                      <Styled.PlacedCountBadge>{count}</Styled.PlacedCountBadge>
-                    )}
-
-                    <Styled.ItemThumbnailWrap>
-                      {imgSrc ? (
-                        <Styled.ItemImage
-                          src={imgSrc}
-                          alt={item.name}
-                          loading="eager"
-                          draggable={false}
-                        />
-                      ) : (
-                        <Styled.ItemIconFallback>
-                          {item.iconFallback || "✨"}
-                        </Styled.ItemIconFallback>
-                      )}
-                    </Styled.ItemThumbnailWrap>
-
-                    <Styled.ItemName>{item.name}</Styled.ItemName>
-
-                    <Styled.ItemActionsRow>
-                      <Styled.DragHint title="Arrastra o toca para seleccionar">
-                        <GripVertical size={12} />
-                        <span>{isSelected ? "Seleccionado" : "Arrastrar"}</span>
-                      </Styled.DragHint>
-
-                      <Styled.AddButton
-                        title={`Colocar en ${item.defaultTier.toUpperCase()}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addDefaultItem(item);
-                        }}
-                      >
-                        <Plus size={14} />
-                      </Styled.AddButton>
-                    </Styled.ItemActionsRow>
-                  </Styled.ItemCard>
-                );
-              })}
+              {leftItems.map((item) => renderItemCard(item, false))}
             </Styled.ItemsGrid>
           </Styled.SidePanel>
 
@@ -1003,81 +1183,7 @@ export function OfrendaView() {
             </Styled.PanelHeader>
 
             <Styled.ItemsGrid>
-              {rightItems.map((item) => {
-                const count = getItemCount(item.id);
-                const imgSrc =
-                  itemImages[item.id] || `/ofrenda/elementos/${item.id}.png`;
-                const isSelected = selectedItemForPlacement?.id === item.id;
-                const isItemDragging = draggedItem?.id === item.id;
-
-                return (
-                  <Styled.ItemCard
-                    key={item.id}
-                    $isPlaced={count > 0}
-                    $isSelected={isSelected}
-                    $isDragging={isItemDragging}
-                    draggable={true}
-                    drag
-                    dragSnapToOrigin
-                    dragElastic={0.15}
-                    whileHover={{ scale: 1.03 }}
-                    whileDrag={{ scale: 1.15, zIndex: 25, cursor: "grabbing" }}
-                    onClick={() => {
-                      setSelectedItemForPlacement((prev) =>
-                        prev?.id === item.id ? null : item
-                      );
-                    }}
-                    onDragStart={(e) => {
-                      const dt = (e as unknown as React.DragEvent).dataTransfer;
-                      if (dt) {
-                        dt.setData("text/plain", item.id);
-                        dt.effectAllowed = "copy";
-                      }
-                      handleDragStart(item);
-                    }}
-                    onDrag={handleDrag}
-                    onDragEnd={(e, info) => handleDragEnd(e, info, item)}
-                  >
-                    {count > 0 && (
-                      <Styled.PlacedCountBadge>{count}</Styled.PlacedCountBadge>
-                    )}
-
-                    <Styled.ItemThumbnailWrap>
-                      {imgSrc ? (
-                        <Styled.ItemImage
-                          src={imgSrc}
-                          alt={item.name}
-                          loading="eager"
-                          draggable={false}
-                        />
-                      ) : (
-                        <Styled.ItemIconFallback>
-                          {item.iconFallback || "✨"}
-                        </Styled.ItemIconFallback>
-                      )}
-                    </Styled.ItemThumbnailWrap>
-
-                    <Styled.ItemName>{item.name}</Styled.ItemName>
-
-                    <Styled.ItemActionsRow>
-                      <Styled.DragHint title="Arrastra o toca para seleccionar">
-                        <GripVertical size={12} />
-                        <span>{isSelected ? "Seleccionado" : "Arrastrar"}</span>
-                      </Styled.DragHint>
-
-                      <Styled.AddButton
-                        title={`Colocar en ${item.defaultTier.toUpperCase()}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addDefaultItem(item);
-                        }}
-                      >
-                        <Plus size={14} />
-                      </Styled.AddButton>
-                    </Styled.ItemActionsRow>
-                  </Styled.ItemCard>
-                );
-              })}
+              {rightItems.map((item) => renderItemCard(item, false))}
             </Styled.ItemsGrid>
           </Styled.SidePanel>
         </Styled.WorkspaceLayout>

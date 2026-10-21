@@ -233,7 +233,7 @@ export const CounterBadge = styled.div`
   }
 `;
 
-export const ToolbarButton = styled.button<{
+export const ToolbarButton = styled(motion.button)<{
   $variant?: "secondary" | "primary" | "active";
 }>`
   display: inline-flex;
@@ -246,6 +246,19 @@ export const ToolbarButton = styled.button<{
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
   border: 1px solid transparent;
+  user-select: none;
+  touch-action: manipulation;
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    filter: grayscale(0.6);
+    box-shadow: none !important;
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+  }
 
   ${(props) =>
     props.$variant === "primary"
@@ -254,7 +267,7 @@ export const ToolbarButton = styled.button<{
           color: #fff9e6;
           box-shadow: 0 4px 18px rgba(255, 110, 0, 0.45);
 
-          &:hover {
+          &:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 24px rgba(255, 110, 0, 0.65);
             background: linear-gradient(135deg, #ffa000 0%, #f4511e 100%);
@@ -272,14 +285,14 @@ export const ToolbarButton = styled.button<{
           border-color: rgba(255, 255, 255, 0.12);
           color: #e6d8f2;
 
-          &:hover {
+          &:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.12);
             color: #ffffff;
             transform: translateY(-1px);
           }
         `}
 
-  &:active {
+  &:active:not(:disabled) {
     transform: scale(0.97);
   }
 `;
@@ -287,7 +300,7 @@ export const ToolbarButton = styled.button<{
 const WorkspaceLayout = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 16px;
   width: 100%;
   align-items: center;
   z-index: 5;
@@ -305,26 +318,23 @@ const WorkspaceLayout = styled.div`
   }
 `;
 
+/* DESKTOP SIDE PANEL: Hidden on mobile, visible on desktop >= 1100px */
 const SidePanel = styled.aside<{ $isDraggingActive?: boolean }>`
-  background: rgba(22, 10, 30, 0.72);
-  border: 1px solid rgba(255, 138, 20, 0.22);
-  border-radius: 20px;
-  padding: 16px 14px;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 520px;
-  position: relative;
-  z-index: 10;
-  overflow: visible;
+  display: none;
 
   @media (min-width: 1100px) {
-    max-width: none;
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
     gap: 14px;
+    width: 100%;
+    background: rgba(22, 10, 30, 0.72);
+    border: 1px solid rgba(255, 138, 20, 0.22);
+    border-radius: 20px;
+    padding: 10px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+    position: relative;
+    z-index: 10;
     max-height: 860px;
     overflow-y: ${(props) => (props.$isDraggingActive ? "visible" : "auto")};
   }
@@ -341,6 +351,157 @@ const SidePanel = styled.aside<{ $isDraggingActive?: boolean }>`
     background: rgba(255, 138, 20, 0.35);
     border-radius: 4px;
   }
+`;
+
+/* MOBILE ITEMS PANEL: Visible only on mobile (< 1100px) */
+export const MobileItemsPanel = styled.aside`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  background: rgba(22, 10, 30, 0.85);
+  border: 1px solid rgba(255, 138, 20, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  @media (min-width: 1100px) {
+    display: none;
+  }
+`;
+
+export const MobilePanelToggleBtn = styled.button<{ $isOpen?: boolean }>`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  color: #fff2e0;
+  cursor: pointer;
+  font-family: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease;
+
+  &:active {
+    background: rgba(255, 140, 25, 0.1);
+  }
+`;
+
+export const MobilePanelTitleGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+`;
+
+export const MobilePanelIcon = styled.span`
+  font-size: 1.35rem;
+  line-height: 1;
+`;
+
+export const MobilePanelTitle = styled.h3`
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const MobilePanelSubtitle = styled.p`
+  font-size: 0.72rem;
+  color: #c9b6dc;
+  margin: 2px 0 0;
+  font-weight: 500;
+`;
+
+export const MobileItemCountBadge = styled.span`
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(255, 138, 20, 0.25);
+  border: 1px solid rgba(255, 138, 20, 0.45);
+  color: #ffb366;
+`;
+
+export const MobileToggleIndicator = styled.div<{ $isOpen?: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: ${(props) => (props.$isOpen ? "#ff9d00" : "#ffd180")};
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: ${(props) =>
+    props.$isOpen ? "rgba(255, 140, 25, 0.15)" : "rgba(255, 255, 255, 0.08)"};
+  border: 1px solid
+    ${(props) =>
+      props.$isOpen ? "rgba(255, 140, 25, 0.4)" : "rgba(255, 255, 255, 0.12)"};
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+`;
+
+export const MobileGridContent = styled(motion.div)`
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 12px 14px;
+  max-height: 58vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 138, 20, 0.35);
+    border-radius: 4px;
+  }
+`;
+
+export const MobileFilterTabs = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const MobileFilterChip = styled.button<{ $active?: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: ${(props) => (props.$active ? "800" : "600")};
+  white-space: nowrap;
+  border: 1px solid
+    ${(props) =>
+      props.$active ? "rgba(255, 140, 25, 0.75)" : "rgba(255, 255, 255, 0.1)"};
+  background: ${(props) =>
+    props.$active
+      ? "linear-gradient(135deg, rgba(255, 111, 0, 0.85) 0%, rgba(233, 30, 99, 0.8) 100%)"
+      : "rgba(255, 255, 255, 0.05)"};
+  color: ${(props) => (props.$active ? "#ffffff" : "#d3c5e0")};
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.2s ease;
 `;
 
 export const PanelHeader = styled.div`
