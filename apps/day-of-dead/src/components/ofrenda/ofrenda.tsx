@@ -378,13 +378,17 @@ export function OfrendaView() {
         $isPlaced={count > 0}
         $isSelected={isSelected}
         $isDragging={isItemDragging}
-        draggable={true}
+        draggable={!isMobile}
         drag={!isMobile}
-        dragSnapToOrigin
+        dragSnapToOrigin={!isMobile}
         dragElastic={0.15}
-        whileHover={{ scale: 1.03 }}
+        whileHover={isMobile ? undefined : { scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        whileDrag={{ scale: 1.15, zIndex: 25, cursor: "grabbing" }}
+        whileDrag={
+          !isMobile
+            ? { scale: 1.15, zIndex: 25, cursor: "grabbing" }
+            : undefined
+        }
         onClick={() => {
           setSelectedItemForPlacement((prev) =>
             prev?.id === item.id ? null : item
@@ -393,16 +397,22 @@ export function OfrendaView() {
             setIsMobileGridOpen(false);
           }
         }}
-        onDragStart={(e) => {
-          const dt = (e as unknown as React.DragEvent).dataTransfer;
-          if (dt) {
-            dt.setData("text/plain", item.id);
-            dt.effectAllowed = "copy";
-          }
-          handleDragStart(item);
-        }}
-        onDrag={handleDrag}
-        onDragEnd={(e, info) => handleDragEnd(e, info, item)}
+        onDragStart={
+          !isMobile
+            ? (e) => {
+                const dt = (e as unknown as React.DragEvent).dataTransfer;
+                if (dt) {
+                  dt.setData("text/plain", item.id);
+                  dt.effectAllowed = "copy";
+                }
+                handleDragStart(item);
+              }
+            : undefined
+        }
+        onDrag={!isMobile ? handleDrag : undefined}
+        onDragEnd={
+          !isMobile ? (e, info) => handleDragEnd(e, info, item) : undefined
+        }
       >
         {count > 0 && (
           <Styled.PlacedCountBadge>{count}</Styled.PlacedCountBadge>

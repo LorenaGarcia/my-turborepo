@@ -453,18 +453,24 @@ export const MobileToggleIndicator = styled.div<{ $isOpen?: boolean }>`
 `;
 
 export const MobileGridContent = styled(motion.div)`
-  overflow: hidden;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 10px 12px 14px;
   max-height: 58vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
-    width: 4px;
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 138, 20, 0.35);
+    background: rgba(255, 138, 20, 0.45);
     border-radius: 4px;
   }
 `;
@@ -475,6 +481,7 @@ export const MobileFilterTabs = styled.div`
   gap: 8px;
   padding-bottom: 12px;
   overflow-x: auto;
+  touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
@@ -560,6 +567,7 @@ export const ItemsGrid = styled.div`
   gap: 12px;
   padding: 4px 2px;
   overflow: visible;
+  touch-action: pan-y;
 `;
 
 export const ItemCard = styled(motion.div)<{
@@ -585,9 +593,14 @@ export const ItemCard = styled(motion.div)<{
   cursor: grab;
   position: relative;
   user-select: none;
-  touch-action: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
   transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   overflow: visible;
+
+  @media (min-width: 1100px) {
+    touch-action: none;
+  }
 
   ${(props) =>
     props.$isSelected &&
@@ -624,6 +637,7 @@ export const ItemThumbnailWrap = styled.div`
   justify-content: center;
   margin-bottom: 8px;
   position: relative;
+  pointer-events: none;
 `;
 
 export const ItemImage = styled.img`
@@ -632,6 +646,9 @@ export const ItemImage = styled.img`
   object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
   transition: transform 0.25s ease;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
 
   ${ItemCard}:hover & {
     transform: scale(1.08);
@@ -641,6 +658,7 @@ export const ItemImage = styled.img`
 export const ItemIconFallback = styled.span`
   font-size: 2.4rem;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
 `;
 
 export const ItemName = styled.h3`
@@ -649,6 +667,7 @@ export const ItemName = styled.h3`
   color: #fff2df;
   margin: 0 0 4px;
   line-height: 1.25;
+  pointer-events: none;
 `;
 
 export const ItemSubtitle = styled.p`
@@ -656,6 +675,7 @@ export const ItemSubtitle = styled.p`
   color: #afa0be;
   margin: 0 0 8px;
   line-height: 1.25;
+  pointer-events: none;
 `;
 
 export const PlacedCountBadge = styled.div`
@@ -669,6 +689,7 @@ export const PlacedCountBadge = styled.div`
   border-radius: 9999px;
   padding: 1px 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 `;
 
 export const ItemActionsRow = styled.div`
@@ -687,6 +708,7 @@ export const DragHint = styled.span`
   display: flex;
   align-items: center;
   gap: 3px;
+  pointer-events: none;
 `;
 
 export const AddButton = styled.button`
