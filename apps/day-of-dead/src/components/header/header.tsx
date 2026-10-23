@@ -4,8 +4,6 @@ import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   TopBarWrapper,
-  ColorBanner,
-  ColorSegment,
   HeaderContainer,
   BrandSection,
   SkullIconBadge,
@@ -16,16 +14,6 @@ import {
   NavButton,
 } from "./header.styles";
 
-const bannerColors = [
-  "#FFC107",
-  "#2196F3",
-  "#E91E63",
-  "#FF5722",
-  "#4CAF50",
-  "#00BCD4",
-  "#D81B60",
-  "#9C27B0", 
-];
 
 export function Header() {
   const pathname = usePathname();
@@ -33,12 +21,6 @@ export function Header() {
 
   return (
     <TopBarWrapper>
-      <ColorBanner>
-        {bannerColors.map((col, idx) => (
-          <ColorSegment key={idx} $color={col} />
-        ))}
-      </ColorBanner>
-
       <HeaderContainer>
         <BrandSection onClick={() => router.push("/")} style={{ cursor: "pointer" }}>
           <SkullIconBadge>

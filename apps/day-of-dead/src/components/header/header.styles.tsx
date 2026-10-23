@@ -10,17 +10,6 @@ export const TopBarWrapper = styled.div`
   z-index: 100;
 `;
 
-export const ColorBanner = styled.div`
-  display: flex;
-  height: 6px;
-  width: 100%;
-`;
-
-export const ColorSegment = styled.div<{ $color: string }>`
-  flex: 1;
-  background-color: ${(props) => props.$color};
-`;
-
 export const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
@@ -40,7 +29,7 @@ export const HeaderContainer = styled.header`
 export const BrandSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
 `;
 
 export const SkullIconBadge = styled.div`
@@ -54,8 +43,8 @@ export const SkullIconBadge = styled.div`
 `;
 
 export const HeaderFlowerImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 60%;
+  height: 60%;
   object-fit: contain;
 `;
 
