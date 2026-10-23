@@ -1,13 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Header from "../header/header";
-import Footer from "../footer/footer";
-import Petals from "../petals/petals";
-import { OFRENDA_ITEMS, OfrendaItem, AltarTier } from "./ofrenda-data";
-import { useOfrendaSprites } from "./useOfrendaSprites";
-import * as Styled from "./ofrenda.styles";
 import {
   Flame,
   RotateCcw,
@@ -17,104 +11,29 @@ import {
   Sun,
   GripVertical,
   Plus,
-  Trash2,
-  Check,
-  ChevronRight,
   ChevronDown,
   ChevronUp,
   Heart,
-  Volume2,
 } from "lucide-react";
 
-export interface PlacedInstance {
-  instanceId: string;
-  itemId: string;
-  tier: AltarTier;
-  xPercent: number; // 0 to 100% of altar width
-  yPercent: number; // exact shelf level (18.5, 38.5, or 58.5)
-  zIndex?: number; // stacking order
-}
+import { useOfrendaSprites } from "./useOfrendaSprites";
+import { OFRENDA_ITEMS, OfrendaItem, AltarTier } from "./ofrenda-data";
 
-export const TIER_SHELF_Y: Record<AltarTier, number> = {
-  cielo: 5.0, // Escalón I (Cielo): plataforma superior de madera elevada
-  tierra: 32, // Escalón II (Tierra): plataforma intermedia de madera
-  inframundo: 58.5, // Escalón III (Inframundo): plataforma inferior de madera
-};
+import Header from "../header/header";
+import Footer from "../footer/footer";
+import Petals from "../petals/petals";
 
-export const getTierFromYPercent = (yPercent: number): AltarTier => {
-  if (yPercent < 28) return "cielo";
-  if (yPercent < 48) return "tierra";
-  return "inframundo";
-};
+import {getItemHeight, getItemWidth, getTierFromYPercent, getClampedX, isArcoItem} from "./ofrenda.utils";
+import { SYMBOL_RIBBONS, ARCO_LEFT_X, ARCO_SHELF_Y, TIER_SHELF_Y  } from "./ofrenda.constants";
+import { PlacedInstance } from "./ofrenda.types";
 
-export const getClampedX = (tier: AltarTier, xPercent: number): number => {
-  if (tier === "cielo") return Math.max(24, Math.min(76, xPercent));
-  if (tier === "tierra") return Math.max(16, Math.min(84, xPercent));
-  return Math.max(10, Math.min(90, xPercent));
-};
+import * as Styled from "./ofrenda.styles";
 
-export const isArcoItem = (itemId?: string | null): boolean => {
-  if (!itemId) return false;
-  return itemId === "arco_flores" || itemId.includes("arco");
-};
 
-export const ARCO_LEFT_X = 50; // Centrado horizontalmente
-export const ARCO_TOP_Y = -20; // top: -20%
-export const ARCO_SHELF_Y = -20;
-
-const TIER_SCALE: Record<AltarTier, number> = {
-  cielo: 0.85,
-  tierra: 1.0,
-  inframundo: 1.15,
-};
-
-export const getItemHeight = (
-  itemOrId: OfrendaItem | string,
-  tier: AltarTier
-): number => {
-  const item =
-    typeof itemOrId === "string"
-      ? OFRENDA_ITEMS.find((i) => i.id === itemOrId)
-      : itemOrId;
-
-  const baseHeight = item?.height ?? item?.heigth ?? 56;
-  if (isArcoItem(item?.id)) {
-    return baseHeight;
-  }
-  return Math.round(baseHeight * TIER_SCALE[tier]);
-};
-
-export const getItemWidth = (
-  itemOrId: OfrendaItem | string,
-  tier: AltarTier
-): number | undefined => {
-  const item =
-    typeof itemOrId === "string"
-      ? OFRENDA_ITEMS.find((i) => i.id === itemOrId)
-      : itemOrId;
-
-  const baseWidth = item?.width ?? item?.weigth;
-  if (!baseWidth) return undefined;
-  if (isArcoItem(item?.id)) {
-    return baseWidth;
-  }
-  return Math.round(baseWidth * TIER_SCALE[tier]);
-};
-
-const SYMBOL_RIBBONS = [
-  { icon: "🌼", color: "#FFA000", label: "Cempasúchil" },
-  { icon: "💀", color: "#E91E63", label: "Calavera" },
-  { icon: "☀️", color: "#00BCD4", label: "Luz Divina" },
-  { icon: "🔥", color: "#FF5722", label: "Fuego Sagrado" },
-  { icon: "💖", color: "#D81B60", label: "Amor Eterno" },
-  { icon: "🌿", color: "#4CAF50", label: "Mictlán" },
-  { icon: "🐾", color: "#FF9800", label: "Xoloitzcuintle" },
-];
 
 export function OfrendaView() {
-  const { altarImage, itemImages, isLoading } = useOfrendaSprites();
+  const { altarImage, itemImages } = useOfrendaSprites();
 
-  // State for placed items on the altar - perfectly aligned on each wooden step (escalón)
   const [placedItems, setPlacedItems] = useState<PlacedInstance[]>([]);
   const [velasEncendidas, setVelasEncendidas] = useState<boolean>(false);
   const [hoveredTier, setHoveredTier] = useState<AltarTier | null>(null);
@@ -134,7 +53,6 @@ export function OfrendaView() {
     "todos" | "tierra" | "alma"
   >("todos");
 
-  // Check if at least one candle / veladora is placed on the altar
   const placedCandlesCount = placedItems.filter((p) => {
     const itemDef = OFRENDA_ITEMS.find((i) => i.id === p.itemId);
     return Boolean(itemDef?.isCandle || p.itemId === "veladora");
@@ -145,7 +63,6 @@ export function OfrendaView() {
   const [shouldBounceCandleBtn, setShouldBounceCandleBtn] =
     useState<boolean>(false);
 
-  // Trigger bounce & shake animation on the candle button ONLY when adding the first candle
   useEffect(() => {
     if (prevCandlesCountRef.current === 0 && placedCandlesCount > 0) {
       setShouldBounceCandleBtn(true);
@@ -158,14 +75,12 @@ export function OfrendaView() {
     prevCandlesCountRef.current = placedCandlesCount;
   }, [placedCandlesCount]);
 
-  // Turn off flames if all candles are removed
   useEffect(() => {
     if (!hasCandles && velasEncendidas) {
       setVelasEncendidas(false);
     }
   }, [hasCandles, velasEncendidas]);
 
-  // References to altar elements
   const altarContainerRef = useRef<HTMLDivElement>(null);
 
   const showFeedbackToast = (itemName: string, tier: AltarTier) => {
@@ -180,7 +95,6 @@ export function OfrendaView() {
     }, 2400);
   };
 
-  // Convert any event or info coordinates to true viewport coordinates
   const getViewportCoords = (event: any, info?: any) => {
     if (event) {
       if (
@@ -212,7 +126,6 @@ export function OfrendaView() {
     return null;
   };
 
-  // Add an item at a specific shelf location on the altar
   const addItemToAltarAt = (
     itemId: string,
     rawXPercent: number,
@@ -241,7 +154,6 @@ export function OfrendaView() {
     setSelectedItemForPlacement(null);
   };
 
-  // Place item with smart default coordinates on its designated tier shelf
   const addDefaultItem = (item: OfrendaItem) => {
     const isArco = isArcoItem(item.id);
     if (isArco) {
@@ -274,14 +186,11 @@ export function OfrendaView() {
     showFeedbackToast(item.name, tier);
   };
 
-  // Remove item from altar
   const removeItem = (instanceId: string) => {
     setPlacedItems((prev) => prev.filter((p) => p.instanceId !== instanceId));
   };
 
-  // Pointer drag handler for moving items already placed on the altar along shelves
   const handleItemPointerDown = (e: React.PointerEvent, instanceId: string) => {
-    // Ignore drag if clicking the remove button
     if ((e.target as HTMLElement)?.closest("button")) {
       return;
     }
@@ -385,7 +294,6 @@ export function OfrendaView() {
     window.addEventListener("pointerup", onPointerUp);
   };
 
-  // Drag handlers for side panel items
   const handleDragStart = (item: OfrendaItem) => {
     setDraggedItem(item);
   };
@@ -440,12 +348,10 @@ export function OfrendaView() {
     setHoveredTier(null);
   };
 
-  // Clear entire altar
   const clearAltar = () => {
     setPlacedItems([]);
   };
 
-  // Separate catalog items by category
   const leftItems = OFRENDA_ITEMS.filter((i) => i.category === "tierra");
   const rightItems = OFRENDA_ITEMS.filter((i) => i.category === "alma");
 
@@ -456,7 +362,6 @@ export function OfrendaView() {
       ? leftItems
       : rightItems;
 
-  // Count placements per item
   const getItemCount = (itemId: string) => {
     return placedItems.filter((p) => p.itemId === itemId).length;
   };
@@ -553,7 +458,6 @@ export function OfrendaView() {
       <Styled.ContentWrapper>
         <Styled.TitleBacklight />
 
-        {/* Top Sacred Symbols Ribbon */}
         <Styled.SymbolsRibbon>
           {SYMBOL_RIBBONS.map((badge, idx) => (
             <Styled.RibbonBadge
@@ -566,10 +470,7 @@ export function OfrendaView() {
           ))}
         </Styled.SymbolsRibbon>
 
-        {/* Main Section Titles */}
         <Styled.MainTitle>Crea tu Ofrenda</Styled.MainTitle>
-
-        {/* Action Toolbar */}
         <Styled.ToolbarContainer>
           <Styled.CounterBadge>
             <Sparkles size={16} color="#FF9D00" />
@@ -649,7 +550,6 @@ export function OfrendaView() {
           </Styled.ToolbarButton>
         </Styled.ToolbarContainer>
 
-        {/* Selection Banner if an item is clicked */}
         {selectedItemForPlacement && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -690,11 +590,7 @@ export function OfrendaView() {
           </motion.div>
         )}
 
-        {/* Main 3-Column Layout: Left Grid | Altar Stage | Right Grid */}
         <Styled.WorkspaceLayout>
-          {/* ======================================================== */}
-          {/* MÓVIL: PANEL ÚNICO COLAPSABLE CON TODOS LOS ELEMENTOS     */}
-          {/* ======================================================== */}
           <Styled.MobileItemsPanel>
             <Styled.MobilePanelToggleBtn
               type="button"
@@ -776,9 +672,6 @@ export function OfrendaView() {
             </AnimatePresence>
           </Styled.MobileItemsPanel>
 
-          {/* ======================================================== */}
-          {/* PANEL IZQUIERDO: LUZ Y MÍSTICA (GRID DE ELEMENTOS)        */}
-          {/* ======================================================== */}
           <Styled.SidePanel $isDraggingActive={Boolean(draggedItem)}>
             <Styled.PanelHeader>
               <Styled.PanelTitleWrap>
@@ -793,9 +686,6 @@ export function OfrendaView() {
             </Styled.ItemsGrid>
           </Styled.SidePanel>
 
-          {/* ======================================================== */}
-          {/* CENTRO: EL ALTAR DE TRES NIVELES (SEGÚN IMAGEN 2)        */}
-          {/* ======================================================== */}
           <Styled.AltarStageWrapper>
             <Styled.AltarContainer
               ref={altarContainerRef}
@@ -871,14 +761,12 @@ export function OfrendaView() {
                 cursor: selectedItemForPlacement ? "copy" : "default",
               }}
             >
-              {/* Altar Illustration Backdrop (Image 2 style) */}
               {altarImage ? (
                 <Styled.AltarBackingImage
                   src={altarImage}
                   alt="Altar de Tres Niveles Tradicional"
                 />
               ) : (
-                /* High-fidelity Vector fallback matching Image 2 exactly */
                 <svg
                   viewBox="0 0 600 520"
                   style={{ width: "100%", height: "auto", display: "block" }}
@@ -894,7 +782,6 @@ export function OfrendaView() {
                     </linearGradient>
                   </defs>
 
-                  {/* TIER 1 - TOP */}
                   <polygon
                     points="210,65 390,65 460,110 140,110"
                     fill="url(#woodStep)"
@@ -911,7 +798,6 @@ export function OfrendaView() {
                     strokeWidth="3"
                   />
 
-                  {/* TIER 2 - MIDDLE */}
                   <polygon
                     points="140,195 460,195 520,250 80,250"
                     fill="url(#woodStep)"
@@ -945,23 +831,18 @@ export function OfrendaView() {
                     strokeWidth="3"
                   />
 
-                  {/* Papel Picado Garland Tier 1 - Orange */}
                   <path
                     d="M 180 115 Q 240 160 300 115 Q 360 160 420 115 L 420 185 Q 360 195 300 185 Q 240 195 180 185 Z"
                     fill="#FF7A00"
                     stroke="#221105"
                     strokeWidth="2"
                   />
-
-                  {/* Papel Picado Garland Tier 2 - Purple & Pink */}
                   <path
                     d="M 130 255 Q 215 315 300 255 Q 385 315 470 255 L 470 330 Q 385 340 300 330 Q 215 340 130 330 Z"
                     fill="#9C27B0"
                     stroke="#221105"
                     strokeWidth="2"
                   />
-
-                  {/* Papel Picado Garland Tier 3 - Blue, Yellow, Green */}
                   <path
                     d="M 65 415 Q 182 485 300 415 Q 417 485 535 415 L 535 495 Q 417 505 300 495 Q 182 505 65 495 Z"
                     fill="#00BCD4"
@@ -971,9 +852,6 @@ export function OfrendaView() {
                 </svg>
               )}
 
-              {/* -------------------------------------------------------- */}
-              {/* TIER GUIDE OVERLAYS (Visual cues & sacred badges)       */}
-              {/* -------------------------------------------------------- */}
               <Styled.TierGuideZone
                 $tier="cielo"
                 $isOver={hoveredTier === "cielo"}
@@ -1010,7 +888,6 @@ export function OfrendaView() {
                 </Styled.TierLabelBadge>
               </Styled.TierGuideZone>
 
-              {/* Drop Target Ghost Preview when dragging from panel */}
               {dropPreviewCoords && draggedItem && (
                 <Styled.DropPreviewGhost
                   $x={dropPreviewCoords.x}
@@ -1056,9 +933,6 @@ export function OfrendaView() {
                 </Styled.DropPreviewGhost>
               )}
 
-              {/* -------------------------------------------------------- */}
-              {/* PLACED ITEMS ON THE ALTAR (Freeform 2D & Reorderable)    */}
-              {/* -------------------------------------------------------- */}
               <AnimatePresence>
                 {placedItems.map((placed) => {
                   const itemDef = OFRENDA_ITEMS.find(
@@ -1103,7 +977,6 @@ export function OfrendaView() {
                         damping: 25,
                       }}
                     >
-                      {/* Small discreet remove button (does not affect image dimensions) */}
                       <Styled.ItemRemoveBtn
                         type="button"
                         onPointerDown={(e) => {
@@ -1122,7 +995,6 @@ export function OfrendaView() {
                         ✕
                       </Styled.ItemRemoveBtn>
 
-                      {/* Candle Flame effect if candle and lit */}
                       {itemDef.isCandle && velasEncendidas && (
                         <>
                           <Styled.CandleFlameEffect />
@@ -1159,7 +1031,6 @@ export function OfrendaView() {
               </AnimatePresence>
             </Styled.AltarContainer>
 
-            {/* Hint Banner below Altar */}
             <Styled.TipBanner>
               <span>
                 <strong>Organiza libremente:</strong> Arrastra cualquier
@@ -1170,9 +1041,6 @@ export function OfrendaView() {
             </Styled.TipBanner>
           </Styled.AltarStageWrapper>
 
-          {/* ======================================================== */}
-          {/* PANEL DERECHO: EL BANQUETE (GRID DE ELEMENTOS)           */}
-          {/* ======================================================== */}
           <Styled.SidePanel $isDraggingActive={Boolean(draggedItem)}>
             <Styled.PanelHeader>
               <Styled.PanelTitleWrap>
@@ -1188,7 +1056,6 @@ export function OfrendaView() {
           </Styled.SidePanel>
         </Styled.WorkspaceLayout>
 
-        {/* Real-time Toast Feedback */}
         <AnimatePresence>
           {toastMessage && (
             <Styled.ToastFeedback
@@ -1237,7 +1104,6 @@ export function OfrendaView() {
           </Styled.SignificanceBadges>
         </Styled.SignificanceCard>
 
-        {/* Sacred Quote Footer */}
         <Styled.QuoteFooter>
           <Styled.QuoteText>
             <span>🏵</span>

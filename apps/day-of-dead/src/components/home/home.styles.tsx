@@ -1,7 +1,7 @@
 "use client";
 
 import styled, { keyframes } from "styled-components";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 const pulseGlow = keyframes`
   0%, 100% {
@@ -105,6 +105,45 @@ export const TraditionSubtitle = styled.h3`
   gap: 8px;
   z-index: 1;
 `;
+
+export const titleText = "DÍA DE MUERTOS";
+export const titleWords = titleText.split(" ");
+
+export const titleContainerVariants: Variants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+export const letterVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+    z: -100,
+    rotateX: -90,
+    scale: 0.4,
+    filter: "blur(12px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    z: 0,
+    rotateX: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      type: "spring",
+      damping: 12,
+      stiffness: 100,
+      mass: 0.8,
+    },
+  },
+};
 
 export const MainTitle = styled(motion.h1)`
   font-family: 'Cinzel Decorative', 'Cinzel', serif;

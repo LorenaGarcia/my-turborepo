@@ -9,9 +9,7 @@ interface LoadedSprites {
   isLoading: boolean;
 }
 
-// Global in-memory cache to prevent re-processing on re-renders
 let cachedAltar: string | null = null;
-const cachedItems: Record<string, string> = {};
 
 function removeOuterWhiteBackground(
   ctx: CanvasRenderingContext2D,
@@ -32,7 +30,6 @@ function removeOuterWhiteBackground(
     return r >= threshold && g >= threshold && b >= threshold;
   };
 
-  // Seed boundary pixels
   for (let x = 0; x < width; x++) {
     if (isBg(x, 0)) queue.push(x, 0);
     if (isBg(x, height - 1)) queue.push(x, height - 1);
@@ -42,7 +39,6 @@ function removeOuterWhiteBackground(
     if (isBg(width - 1, y)) queue.push(width - 1, y);
   }
 
-  // BFS Flood Fill to erase only the outer background
   let head = 0;
   while (head < queue.length) {
     const cx = queue[head++];
@@ -51,11 +47,9 @@ function removeOuterWhiteBackground(
     if (visited[pIdx]) continue;
     visited[pIdx] = 1;
 
-    // Set pixel alpha to 0
     const dIdx = pIdx * 4;
     data[dIdx + 3] = 0;
 
-    // Neighbors
     const n = [
       [cx + 1, cy],
       [cx - 1, cy],
@@ -130,7 +124,7 @@ export function useOfrendaSprites(): LoadedSprites {
       }
     }
 
-    // Load actual elements loaded in the project (/ofrenda/elementos/*.png)
+
     const newItems: Record<string, string> = {};
     for (const item of OFRENDA_ITEMS) {
       newItems[item.id] = `/ofrenda/elementos/${item.id}.png`;
