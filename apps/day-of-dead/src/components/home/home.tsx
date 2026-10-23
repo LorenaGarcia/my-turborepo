@@ -37,8 +37,17 @@ export function Home() {
           ))}
         </Styled.MainTitle>
 
-        <Styled.InteractiveCardsGrid>
-          <Styled.InteractiveCard onClick={() => router.push("/catrinas")}>
+        <Styled.InteractiveCardsGrid
+          initial="hidden"
+          animate="visible"
+          variants={Styled.cardsContainerVariants}
+        >
+          <Styled.InteractiveCard
+            onClick={() => router.push("/catrinas")}
+            variants={Styled.cardLeftVariants}
+            whileHover={{ y: -5 }}
+            whileTap={{ scale: 0.98 }}
+          >
             <Styled.CardLeftContent>
               <Styled.CatrinaBadge>
                 <Styled.CatrinaImage src="/catrina-skull.png" alt="Catrina" />
@@ -55,6 +64,9 @@ export function Home() {
           <Styled.InteractiveCard
             onClick={() => router.push("/ofrenda")}
             style={{ cursor: "pointer" }}
+            variants={Styled.cardRightVariants}
+            whileHover={{ y: -5 }}
+            whileTap={{ scale: 0.98 }}
           >
             <Styled.CardLeftContent>
               <Styled.OfrendaBadge>

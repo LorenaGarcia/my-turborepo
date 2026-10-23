@@ -186,7 +186,64 @@ export const DescriptionText = styled.p`
   z-index: 1;
 `;
 
-export const InteractiveCardsGrid = styled.div`
+export const cardsContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.35,
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+export const cardLeftVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -80,
+    y: 25,
+    scale: 0.85,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      type: "spring",
+      damping: 18,
+      stiffness: 90,
+      mass: 0.9,
+    },
+  },
+};
+
+export const cardRightVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: 80,
+    y: 25,
+    scale: 0.85,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      type: "spring",
+      damping: 18,
+      stiffness: 90,
+      mass: 0.9,
+    },
+  },
+};
+
+export const InteractiveCardsGrid = styled(motion.div)`
   display: flex;
   gap: 24px;
   margin-top: 70px;
@@ -201,7 +258,7 @@ export const InteractiveCardsGrid = styled.div`
   }
 `;
 
-export const InteractiveCard = styled.div`
+export const InteractiveCard = styled(motion.div)`
   background: rgba(22, 10, 32, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
@@ -219,7 +276,7 @@ export const InteractiveCard = styled.div`
 
   &:hover {
     border-color: rgba(255, 122, 0, 0.5);
-    transform: translateY(-5px);
+    transform: translateY(-5px) !important;
     background: rgba(30, 14, 44, 0.85);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 122, 0, 0.2);
   }

@@ -14,21 +14,17 @@ import {
   BrandName,
   NavContainer,
   NavButton,
-  RightSection,
-  MusicButton,
-  StatusDot,
-  AvatarButton,
 } from "./header.styles";
 
 const bannerColors = [
-  "#FFC107", // Yellow
-  "#2196F3", // Blue
-  "#E91E63", // Pink
-  "#FF5722", // Orange
-  "#4CAF50", // Green
-  "#00BCD4", // Cyan
-  "#D81B60", // Magenta
-  "#9C27B0", // Purple
+  "#FFC107",
+  "#2196F3",
+  "#E91E63",
+  "#FF5722",
+  "#4CAF50",
+  "#00BCD4",
+  "#D81B60",
+  "#9C27B0", 
 ];
 
 export function Header() {

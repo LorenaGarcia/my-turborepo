@@ -5,7 +5,6 @@ import {
   FooterContainer,
   FooterContent,
   BrandText,
-  QuoteText,
   CopyRight,
 } from "./footer.styles";
 
