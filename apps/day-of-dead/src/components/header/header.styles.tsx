@@ -13,23 +13,28 @@ export const TopBarWrapper = styled.div`
 export const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 18px 40px;
+  justify-content: center;
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
   background: rgba(12, 5, 18, 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
-  @media (max-width: 992px) {
-    padding: 16px 20px;
-    flex-wrap: wrap;
-    gap: 16px;
+  @media (min-width: 768px) {
+    justify-content: space-between;
+    padding: 18px 40px;
   }
 `;
 
 export const BrandSection = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   gap: 5px;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
 `;
 
 export const SkullIconBadge = styled.div`
@@ -78,20 +83,31 @@ export const BrandSubtitle = styled.span`
 export const NavContainer = styled.nav`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: rgba(22, 10, 32, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
-  padding: 5px 6px;
+  padding: 3px;
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+  overflow: hidden;
 
-  @media (max-width: 992px) {
-    order: 3;
-    width: 100%;
-    justify-content: center;
-    overflow-x: auto;
+  @media (min-width: 768px) {
+    width: auto;
+    padding: 5px 6px;
+    gap: 4px;
+    overflow: visible;
   }
 `;
 
 export const NavButton = styled.button<{ $active?: boolean }>`
+  flex: 1;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   background: ${(props) =>
     props.$active
       ? "linear-gradient(135deg, #FF6F00 0%, #FF9100 100%)"
@@ -99,8 +115,9 @@ export const NavButton = styled.button<{ $active?: boolean }>`
   color: ${(props) => (props.$active ? "#FFFFFF" : "#C5B4D6")};
   font-family: 'Montserrat', sans-serif;
   font-weight: ${(props) => (props.$active ? "700" : "500")};
-  font-size: 0.85rem;
-  padding: 8px 20px;
+  font-size: clamp(0.7rem, 2.75vw, 0.82rem);
+  letter-spacing: -0.2px;
+  padding: 8px 4px;
   border: none;
   border-radius: 9999px;
   cursor: pointer;
@@ -108,6 +125,8 @@ export const NavButton = styled.button<{ $active?: boolean }>`
   transition: all 0.25s ease;
   box-shadow: ${(props) =>
     props.$active ? "0 2px 10px rgba(255, 111, 0, 0.4)" : "none"};
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 
   &:hover {
     color: #FFFFFF;
@@ -115,6 +134,13 @@ export const NavButton = styled.button<{ $active?: boolean }>`
       props.$active
         ? "linear-gradient(135deg, #FF6F00 0%, #FF9100 100%)"
         : "rgba(255, 255, 255, 0.08)"};
+  }
+
+  @media (min-width: 768px) {
+    flex: initial;
+    font-size: 0.85rem;
+    letter-spacing: normal;
+    padding: 8px 20px;
   }
 `;
 
