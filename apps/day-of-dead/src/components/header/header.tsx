@@ -14,7 +14,6 @@ import {
   NavButton,
 } from "./header.styles";
 
-
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
@@ -22,9 +21,15 @@ export function Header() {
   return (
     <TopBarWrapper>
       <HeaderContainer>
-        <BrandSection onClick={() => router.push("/")} style={{ cursor: "pointer" }}>
+        <BrandSection
+          onClick={() => router.push("/")}
+          style={{ cursor: "pointer" }}
+        >
           <SkullIconBadge>
-            <HeaderFlowerImage src="/cempasuchil-flower.png" alt="Flor de cempasúchil" />
+            <HeaderFlowerImage
+              src="/cempasuchil-flower.png"
+              alt="Flor de cempasúchil"
+            />
           </SkullIconBadge>
           <BrandTitles>
             <BrandName>Día de Muertos</BrandName>
@@ -52,7 +57,6 @@ export function Header() {
           >
             Crea tu Ofrenda
           </NavButton>
-
         </NavContainer>
       </HeaderContainer>
     </TopBarWrapper>
@@ -60,4 +64,3 @@ export function Header() {
 }
 
 export default Header;
-

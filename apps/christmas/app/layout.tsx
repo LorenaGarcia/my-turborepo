@@ -1,0 +1,33 @@
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import StyledComponentsRegistry from "@/lib/registry";
+import "./globals.css";
+
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+});
+
+export const metadata: Metadata = {
+  title: "Villa Navideña",
+  description:
+    "Vive la magia decembrina entre luces coloniales, posadas y recuerdos inolvidables.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="es">
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+      </body>
+    </html>
+  );
+}

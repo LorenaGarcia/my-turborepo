@@ -13,7 +13,10 @@ export function Footer() {
     <FooterContainer>
       <FooterContent>
         <BrandText>DÍA DE MUERTOS • TRADICIÓN VIVA</BrandText>
-        <CopyRight>© {new Date().getFullYear()} Día de Muertos México. Todos los derechos reservados.</CopyRight>
+        <CopyRight>
+          © {new Date().getFullYear()} Día de Muertos México. Todos los derechos
+          reservados.
+        </CopyRight>
       </FooterContent>
     </FooterContainer>
   );

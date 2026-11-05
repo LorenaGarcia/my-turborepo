@@ -59,7 +59,7 @@ export const BrandTitles = styled.div`
 `;
 
 export const BrandName = styled.span`
-  font-family: 'Cinzel', serif;
+  font-family: "Cinzel", serif;
   font-weight: 800;
   font-size: 1.15rem;
   color: #e85917ff;
@@ -76,7 +76,7 @@ export const BrandSubtitle = styled.span`
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 1.5px;
-  color: #9C88B0;
+  color: #9c88b0;
   text-transform: uppercase;
 `;
 
@@ -113,7 +113,7 @@ export const NavButton = styled.button<{ $active?: boolean }>`
       ? "linear-gradient(135deg, #FF6F00 0%, #FF9100 100%)"
       : "transparent"};
   color: ${(props) => (props.$active ? "#FFFFFF" : "#C5B4D6")};
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: ${(props) => (props.$active ? "700" : "500")};
   font-size: clamp(0.7rem, 2.75vw, 0.82rem);
   letter-spacing: -0.2px;
@@ -129,7 +129,7 @@ export const NavButton = styled.button<{ $active?: boolean }>`
   user-select: none;
 
   &:hover {
-    color: #FFFFFF;
+    color: #ffffff;
     background: ${(props) =>
       props.$active
         ? "linear-gradient(135deg, #FF6F00 0%, #FF9100 100%)"
@@ -153,8 +153,8 @@ export const RightSection = styled.div`
 export const MusicButton = styled.button`
   background: rgba(32, 14, 48, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #E2D4F0;
-  font-family: 'Montserrat', sans-serif;
+  color: #e2d4f0;
+  font-family: "Montserrat", sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
   padding: 8px 18px;
@@ -166,8 +166,8 @@ export const MusicButton = styled.button`
   transition: all 0.25s ease;
 
   &:hover {
-    border-color: #FF7A00;
-    color: #FFFFFF;
+    border-color: #ff7a00;
+    color: #ffffff;
     box-shadow: 0 0 12px rgba(255, 122, 0, 0.3);
   }
 `;
@@ -175,17 +175,17 @@ export const MusicButton = styled.button`
 export const StatusDot = styled.span`
   width: 7px;
   height: 7px;
-  background-color: #FFB300;
+  background-color: #ffb300;
   border-radius: 50%;
   display: inline-block;
-  box-shadow: 0 0 6px #FFB300;
+  box-shadow: 0 0 6px #ffb300;
 `;
 
 export const AvatarButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #F88379;
+  background: #f88379;
   border: none;
   display: flex;
   align-items: center;
