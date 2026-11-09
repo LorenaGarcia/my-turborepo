@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 791 1024" width="791" height="1024">
+  <defs>
+    <pattern id="polkaDots" width="52" height="52" patternUnits="userSpaceOnUse">
+      <rect width="52" height="52" fill="#dc2626" />
+      <circle cx="14" cy="14" r="5.5" fill="#ffffff" />
+      <circle cx="14" cy="14" r="7.5" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.6" />
+      <circle cx="40" cy="40" r="5.5" fill="#ffffff" />
+      <circle cx="40" cy="40" r="7.5" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.6" />
+    </pattern>
+    <pattern id="vintageStripes" width="48" height="48" patternTransform="rotate(-45)" patternUnits="userSpaceOnUse">
+      <rect width="48" height="48" fill="#ffffff" />
+      <rect x="0" width="12" height="48" fill="#dc2626" />
+      <rect x="24" width="12" height="48" fill="#1e6b45" />
+    </pattern>
+    <mask id="frameCutoutMask">
+      <rect width="791" height="1024" fill="#ffffff" />
+      <path d="M 160,120
+  Q 280,155 395.5,95
+  Q 511,155 631,120
+  Q 715,120 700,230
+  Q 665,380 715,512
+  Q 665,644 700,794
+  Q 715,904 631,904
+  Q 511,869 395.5,929
+  Q 280,869 160,904
+  Q 76,904 91,794
+  Q 126,644 76,512
+  Q 126,380 91,230
+  Q 76,120 160,120 Z" fill="#000000" />
+    </mask>
+  </defs>
+
+  <g mask="url(#frameCutoutMask)">
+    <!-- Top polka-dot section -->
+    <rect x="0" y="0" width="791" height="600" fill="url(#polkaDots)" />
+    <!-- Bottom diagonal stripes section -->
+    <rect x="0" y="600" width="791" height="424" fill="url(#vintageStripes)" />
+    <!-- Middle green ribbon band -->
+    <rect x="0" y="585" width="791" height="48" fill="#058c42" />
+  </g>
+
+  <!-- Outer dashed stitching around the ornate bracket cutout -->
+  <g transform="translate(395.5, 512) scale(1.055) translate(-395.5, -512)">
+    <path d="M 160,120
+  Q 280,155 395.5,95
+  Q 511,155 631,120
+  Q 715,120 700,230
+  Q 665,380 715,512
+  Q 665,644 700,794
+  Q 715,904 631,904
+  Q 511,869 395.5,929
+  Q 280,869 160,904
+  Q 76,904 91,794
+  Q 126,644 76,512
+  Q 126,380 91,230
+  Q 76,120 160,120 Z" fill="none" stroke="#b91c1c" stroke-width="3.5" stroke-dasharray="12 10" stroke-linecap="round" />
+  </g>
+</svg>

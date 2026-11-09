@@ -19,7 +19,7 @@ export const getHeroCtaActions = (): HeroCtaAction[] => [
   {
     id: "crea-porta-retrato",
     label: "Crea tu Porta Retrato",
-    href: "/proximamente",
+    href: "/postal",
   },
 ];
 

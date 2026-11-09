@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 791 1024" width="791" height="1024">
+  <!-- Red mat with center cutout -->
+  <path fill="#c43644" fill-rule="evenodd" d="M 0,0 H 791 V 1024 H 0 Z M 105,105 H 686 V 919 H 105 Z" />
+  <!-- Green outer border -->
+  <path fill="#96d062" fill-rule="evenodd" d="M 0,0 H 791 V 1024 H 0 Z M 26,26 H 765 V 998 H 26 Z" />
+</svg>

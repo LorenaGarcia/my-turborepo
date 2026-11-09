@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 791 1024" width="791" height="1024">
+  <defs>
+    <pattern id="candyRedWhite" width="64" height="64" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="64" height="64" fill="#ffffff" />
+      <rect width="34" height="64" fill="#b80f0a" />
+    </pattern>
+  </defs>
+  <path fill="url(#candyRedWhite)" fill-rule="evenodd" d="M 0,0 H 791 V 1024 H 0 Z M 44,44 H 747 V 980 H 44 Z" />
+  <rect x="44" y="44" width="703" height="936" fill="none" stroke="#8b0000" stroke-width="3.5" />
+</svg>
