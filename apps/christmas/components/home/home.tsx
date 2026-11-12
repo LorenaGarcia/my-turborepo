@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { animate, stagger } from "motion";
 import Header from "../header";
 import Footer from "../footer";
 import Snowfall from "../snowfall";
@@ -12,6 +13,23 @@ import { getHeroCtaActions } from "./home.utils";
 export function Home() {
   const router = useRouter();
   const ctaActions = getHeroCtaActions();
+  const ctaRowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ctaRowRef.current) return;
+    const buttons = ctaRowRef.current.querySelectorAll("button");
+    if (!buttons.length) return;
+
+    animate(
+      buttons,
+      { opacity: [0, 1], y: [50, 0] },
+      {
+        duration: 0.65,
+        delay: stagger(0.18, { startDelay: 0.55, from: "first" }),
+        ease: [0, 0.71, 0.2, 1.01],
+      }
+    );
+  }, []);
 
   return (
     <Styled.PageWrapper>
@@ -20,12 +38,20 @@ export function Home() {
       <Styled.HeroSection>
         <Snowfall count={45} />
         <Styled.HeroCenterContent>
-          <Styled.HeroTitle>
+          <Styled.HeroTitle
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.2,
+              ease: [0, 0.71, 0.2, 1.01],
+            }}
+          >
             Bienvenidos a la{" "}
             <Styled.HeroTitleAccent>Villa Navideña</Styled.HeroTitleAccent>
           </Styled.HeroTitle>
 
-          <Styled.CtaButtonsRow>
+          <Styled.CtaButtonsRow ref={ctaRowRef}>
             {ctaActions.map((action) => (
               <Styled.SnowyButton
                 key={action.id}

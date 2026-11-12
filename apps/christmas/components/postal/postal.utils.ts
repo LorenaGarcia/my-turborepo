@@ -16,9 +16,7 @@ export const DEFAULT_POSTAL_PHOTO = "/postal-family-default.jpg";
 
 export const DEFAULT_FRAME_ELEMENTS: PostalFrameElementsState = {
   showLights: true,
-  showTrees: true,
   showGifts: true,
-  showSnowDots: true,
 };
 
 export const DEFAULT_POSTAL_TEXT: PostalTextState = {
@@ -39,6 +37,8 @@ export const addStickerToPostalList = (
     stickerId: sticker.id,
     src: sticker.src,
     name: sticker.name,
+    width: sticker.width,
+    height: sticker.height,
     xPercent: Math.max(18, Math.min(82, 50 + offset)),
     yPercent: Math.max(22, Math.min(74, 48 + offset)),
   };
@@ -119,14 +119,11 @@ export const generatePostalDataUrl = async (
   const filterCss = getPostalFilterCss(options.filterId);
   const frameMeta = getPostalFrameById(options.selectedFrameId);
 
-  // 1. Base white background & user photo in center window
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, width, height);
-
-  const photoX = Math.round(width * 0.05);
-  const photoY = Math.round(height * 0.05);
-  const photoW = Math.round(width * 0.9);
-  const photoH = Math.round(height * 0.9);
+  // 1. User photo filling the full frame window (no white border)
+  const photoX = 0;
+  const photoY = 0;
+  const photoW = width;
+  const photoH = height;
 
   const userImg = await loadImage(options.photoSrc);
   if (userImg && userImg.naturalWidth > 0) {
@@ -154,13 +151,6 @@ export const generatePostalDataUrl = async (
     ctx.drawImage(frameImg, 0, 0, width, height);
   }
 
-  // 3. Frame decorative layers
-  if (options.frameElements.showSnowDots) {
-    const snowDotsImg = await loadImage("/postal-elements/frame-snowdots.svg");
-    if (snowDotsImg) {
-      ctx.drawImage(snowDotsImg, innerX, innerY, innerW, innerH);
-    }
-  }
 
   if (options.frameElements.showLights) {
     const lightsImg = await loadImage("/postal-elements/frame-lights.svg");
@@ -190,17 +180,19 @@ export const generatePostalDataUrl = async (
     ctx.restore();
   }
 
-  // 5. Placed Stickers
+  // 5. Placed Stickers & Elements
+  const canvasScale = width / 430;
   for (const sticker of options.placedStickers) {
     const sImg = await loadImage(sticker.src);
     if (!sImg) continue;
     const sx = (sticker.xPercent / 100) * width;
     const sy = (sticker.yPercent / 100) * height;
-    const sSize = 115;
+    const sWidth = sticker.width * canvasScale;
+    const sHeight = sticker.height * canvasScale;
     ctx.save();
     ctx.shadowColor = "rgba(0,0,0,0.4)";
     ctx.shadowBlur = 10;
-    ctx.drawImage(sImg, sx - sSize / 2, sy - sSize / 2, sSize, sSize);
+    ctx.drawImage(sImg, sx - sWidth / 2, sy - sHeight / 2, sWidth, sHeight);
     ctx.restore();
   }
 

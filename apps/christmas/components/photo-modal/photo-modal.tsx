@@ -131,19 +131,11 @@ export function PhotoModal({
             </Styled.PhotoPreviewFrame>
           )}
 
-          <Styled.StatusBadge $completed={hasAutoDownloaded}>
-            {hasAutoDownloaded ? (
-              <>
-                <CheckCircle2 size={15} strokeWidth={2.4} />
-                <span>{copy.downloadedBadge}</span>
-              </>
-            ) : (
-              <>
+          {!hasAutoDownloaded && ( <Styled.StatusBadge $completed={hasAutoDownloaded}>
                 <Sparkles size={15} strokeWidth={2.4} />
                 <span>Preparando descarga...</span>
-              </>
-            )}
-          </Styled.StatusBadge>
+          </Styled.StatusBadge>)}
+         
 
           <Styled.ActionsRow>
             <Styled.PrimaryActionButton

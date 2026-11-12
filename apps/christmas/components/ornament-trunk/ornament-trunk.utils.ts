@@ -7,12 +7,20 @@ export type OrnamentVariant =
   | "esfera-santa"
   | "esfera-esmeralda"
   | "esfera-copo"
+  | "esfera-copo-mono"
+  | "esfera-verde-copos"
+  | "esfera-floral-turquesa"
+  | "esfera-espiral-dorada"
+  | "esfera-acuarela-rosa"
   | "figura-campana"
   | "figura-baston"
   | "figura-copo"
   | "figura-bota"
   | "figura-galleta"
   | "figura-regalo"
+  | "figura-campana-jengibre"
+  | "figura-mono-cascabeles"
+  | "figura-mono-brillante"
   | "mexicano-pinata"
   | "mexicano-nochebuena"
   | "mexicano-farol"
@@ -68,6 +76,36 @@ export const ALL_ORNAMENTS: OrnamentItem[] = [
     category: "esferas",
     variant: "esfera-copo",
   },
+  {
+    id: "esfera-copo-mono",
+    name: "Esfera Moño",
+    category: "esferas",
+    variant: "esfera-copo-mono",
+  },
+  {
+    id: "esfera-verde-copos",
+    name: "Esfera Copos",
+    category: "esferas",
+    variant: "esfera-verde-copos",
+  },
+  {
+    id: "esfera-floral-turquesa",
+    name: "Esfera Floral",
+    category: "esferas",
+    variant: "esfera-floral-turquesa",
+  },
+  {
+    id: "esfera-espiral-dorada",
+    name: "Esfera Espiral",
+    category: "esferas",
+    variant: "esfera-espiral-dorada",
+  },
+  {
+    id: "esfera-acuarela-rosa",
+    name: "Esfera Acuarela",
+    category: "esferas",
+    variant: "esfera-acuarela-rosa",
+  },
 
   // Figuras
   {
@@ -83,12 +121,6 @@ export const ALL_ORNAMENTS: OrnamentItem[] = [
     variant: "figura-baston",
   },
   {
-    id: "figura-copo",
-    name: "Copo Cristal",
-    category: "figuras",
-    variant: "figura-copo",
-  },
-  {
     id: "figura-bota",
     name: "Bota Navideña",
     category: "figuras",
@@ -99,6 +131,24 @@ export const ALL_ORNAMENTS: OrnamentItem[] = [
     name: "Jengibre",
     category: "figuras",
     variant: "figura-galleta",
+  },
+  {
+    id: "figura-campana-jengibre",
+    name: "Campana Jengibre",
+    category: "figuras",
+    variant: "figura-campana-jengibre",
+  },
+  {
+    id: "figura-mono-cascabeles",
+    name: "Moño Cascabeles",
+    category: "figuras",
+    variant: "figura-mono-cascabeles",
+  },
+  {
+    id: "figura-mono-brillante",
+    name: "Moño Brillante",
+    category: "figuras",
+    variant: "figura-mono-brillante",
   },
 
   // Mexicanos

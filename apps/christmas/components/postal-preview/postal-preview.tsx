@@ -157,11 +157,6 @@ export function PostalPreview({
 
   return (
     <Styled.PreviewCardColumn>
-      <Styled.TopStatusRow>
-        <Styled.FrameUppercaseTag>
-          MARCO: {frameMeta.name}
-        </Styled.FrameUppercaseTag>
-      </Styled.TopStatusRow>
 
       <Styled.PostcardOuterFrame ref={frameRef}>
         <Styled.PhotoWindow
@@ -186,14 +181,6 @@ export function PostalPreview({
           alt={frameMeta.name}
           $zIndex={3}
         />
-
-        {frameElements.showSnowDots && (
-          <Styled.FullFrameOverlayImg
-            src="/postal-elements/frame-snowdots.svg"
-            alt="Copos de nieve del marco"
-            $zIndex={4}
-          />
-        )}
 
         {frameElements.showLights && (
           <>
@@ -242,6 +229,8 @@ export function PostalPreview({
             key={sticker.instanceId}
             $x={sticker.xPercent}
             $y={sticker.yPercent}
+            $width={sticker.width}
+            $height={sticker.height}
             $dragging={draggingStickerId === sticker.instanceId}
           >
             <Styled.PlacedStickerBtn

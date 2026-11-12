@@ -81,7 +81,7 @@ export const PostcardOuterFrame = styled.div`
   width: 100%;
   max-width: 430px;
   aspect-ratio: 791 / 1024;
-  background-color: #ffffff;
+  background-color: transparent;
   border-radius: 8px;
   box-shadow: 0 22px 48px rgba(0, 0, 0, 0.55);
   overflow: hidden;
@@ -90,10 +90,10 @@ export const PostcardOuterFrame = styled.div`
 
 export const PhotoWindow = styled.div`
   position: absolute;
-  inset: 5%;
+  inset: 0;
   z-index: 1;
   overflow: hidden;
-  background: #ffffff;
+  background: transparent;
   cursor: grab;
 
   &:active {
@@ -164,6 +164,8 @@ export const OptionalFestiveText = styled.div<{
 export const PlacedStickerWrapper = styled.div<{
   $x: number;
   $y: number;
+  $width: number;
+  $height: number;
   $dragging: boolean;
 }>`
   position: absolute;
@@ -171,8 +173,8 @@ export const PlacedStickerWrapper = styled.div<{
   top: ${({ $y }) => $y}%;
   transform: translate(-50%, -50%)
     scale(${({ $dragging }) => ($dragging ? 1.12 : 1)});
-  width: 68px;
-  height: 68px;
+  width: ${({ $width }) => $width}px;
+  height: ${({ $height }) => $height}px;
   z-index: 15;
   transition: transform 0.12s ease;
 

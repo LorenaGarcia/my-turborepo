@@ -8,8 +8,8 @@ export interface PostalHeaderCopy {
 }
 
 export const getPostalHeaderCopy = (): PostalHeaderCopy => ({
-  titleMain: "Crea tu Porta Retrato",
-  titleAccent: "Navideño",
+  titleMain: "Crea tu Postal",
+  titleAccent: "Navideña",
   uploadLabel: "Cargar Foto",
   resetLabel: "Reiniciar",
   shareLabel: "Compartir",

@@ -4,7 +4,6 @@ export interface PhotoModalCopy {
   capturingLabel: string;
   title: string;
   subtitle: string;
-  downloadedBadge: string;
   downloadAgainLabel: string;
   closeLabel: string;
   filename: string;
@@ -21,7 +20,6 @@ export const getPhotoModalCopy = (): PhotoModalCopy => ({
   title: "¡Tu Postal Navideña está lista!",
   subtitle:
     "Tu diseño fue capturado y la descarga ha comenzado automáticamente.",
-  downloadedBadge: "Imagen descargada en tu dispositivo",
   downloadAgainLabel: "Descargar de nuevo",
   closeLabel: "Seguir decorando",
   filename: "mi-arbol-villa-navidena.png",

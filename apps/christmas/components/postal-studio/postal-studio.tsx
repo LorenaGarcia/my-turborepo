@@ -1,20 +1,14 @@
 "use client";
 
-import React from "react";
-import {
-  Brush,
-  Frame,
-  Sparkles,
-  Trees,
-  Type,
-  Wand2,
-} from "lucide-react";
+import React, { useEffect, useRef } from "react";
+import { Brush, Frame, Trees, Type } from "lucide-react";
+import { animate, stagger } from "motion";
 import * as Styled from "./postal-studio.styles";
 import {
   FRAME_ELEMENT_TOGGLES,
   POSTAL_FONTS,
   POSTAL_FRAMES,
-  POSTAL_STICKERS,
+  POSTAL_ELEMENTS,
   TEXT_COLOR_SWATCHES,
   type PostalFrameElementsState,
   type PostalFrameId,
@@ -50,6 +44,53 @@ export function PostalStudio({
   onRemoveStickerById,
   onChangeTextConfig,
 }: PostalStudioProps) {
+  const framesGridRef = useRef<HTMLDivElement>(null);
+  const elementsGridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const activeGrid =
+      activeTab === "marcos"
+        ? framesGridRef.current
+        : activeTab === "elementos"
+          ? elementsGridRef.current
+          : null;
+    if (!activeGrid) return;
+
+    const cards = activeGrid.querySelectorAll("button");
+    if (!cards.length) return;
+
+    animate(
+      cards,
+      { opacity: [0, 1], scale: [0.6, 1] },
+      {
+        duration: 0.45,
+        delay: stagger(activeTab === "marcos" ? 0.035 : 0.02, {
+          from: "center",
+        }),
+        ease: [0, 0.71, 0.2, 1.01],
+      }
+    );
+  }, [activeTab]);
+
+  const triggerGridRipple = (
+    container: HTMLDivElement | null,
+    originIndex: number
+  ) => {
+    if (!container) return;
+    const cards = container.querySelectorAll("button");
+    if (!cards.length) return;
+
+    animate(
+      cards,
+      { scale: [0.92, 1] },
+      {
+        duration: 0.35,
+        delay: stagger(0.02, { from: originIndex }),
+        ease: "easeOut",
+      }
+    );
+  };
+
   return (
     <Styled.StudioColumn>
       <Styled.StudioCard>
@@ -61,11 +102,10 @@ export function PostalStudio({
             <Styled.StudioTitleText>
               <Styled.StudioTitle>Estudio Navideño</Styled.StudioTitle>
               <Styled.StudioSubtitle>
-                Personaliza tu marco, elementos, stickers y texto
+                Personaliza tu marco, elementos y texto
               </Styled.StudioSubtitle>
             </Styled.StudioTitleText>
           </Styled.StudioTitleGroup>
-
         </Styled.StudioHeaderRow>
 
         <Styled.TabsBar role="tablist">
@@ -89,15 +129,6 @@ export function PostalStudio({
 
           <Styled.TabButton
             type="button"
-            $active={activeTab === "stickers"}
-            onClick={() => onSelectTab("stickers")}
-          >
-            <Wand2 size={13} />
-            <span>Stickers</span>
-          </Styled.TabButton>
-
-          <Styled.TabButton
-            type="button"
             $active={activeTab === "texto"}
             onClick={() => onSelectTab("texto")}
           >
@@ -115,27 +146,21 @@ export function PostalStudio({
               </Styled.SectionCountAccent>
             </Styled.SectionMetaRow>
 
-            <Styled.FramesGrid>
-              {POSTAL_FRAMES.map((frame) => (
+            <Styled.FramesGrid ref={framesGridRef}>
+              {POSTAL_FRAMES.map((frame, index) => (
                 <Styled.FrameOptionCard
                   key={frame.id}
                   type="button"
                   $selected={selectedFrameId === frame.id}
-                  onClick={() => onSelectFrame(frame.id)}
+                  onClick={() => {
+                    onSelectFrame(frame.id);
+                    triggerGridRipple(framesGridRef.current, index);
+                  }}
+                  aria-label={frame.name}
                 >
                   <Styled.FrameThumbBox>
                     <Styled.FrameThumbImg src={frame.src} alt={frame.name} />
                   </Styled.FrameThumbBox>
-
-                  <Styled.FrameInfoCol>
-                    <Styled.FrameTitleRow>
-                      <Styled.FrameName>{frame.name}</Styled.FrameName>
-                      {frame.popular && (
-                        <Styled.PopularBadge>Popular</Styled.PopularBadge>
-                      )}
-                    </Styled.FrameTitleRow>
-                    <Styled.FrameDesc>{frame.description}</Styled.FrameDesc>
-                  </Styled.FrameInfoCol>
                 </Styled.FrameOptionCard>
               ))}
             </Styled.FramesGrid>
@@ -151,15 +176,18 @@ export function PostalStudio({
               </Styled.SectionCountAccent>
             </Styled.SectionMetaRow>
 
-            <Styled.ElementsGrid>
-              {FRAME_ELEMENT_TOGGLES.map((item) => {
+            <Styled.ElementsGrid ref={elementsGridRef}>
+              {FRAME_ELEMENT_TOGGLES.map((item, index) => {
                 const isActive = frameElements[item.key];
                 return (
                   <Styled.ElementImageCard
                     key={item.key}
                     type="button"
                     $active={isActive}
-                    onClick={() => onToggleFrameElement(item.key)}
+                    onClick={() => {
+                      onToggleFrameElement(item.key);
+                      triggerGridRipple(elementsGridRef.current, index);
+                    }}
                     aria-label={item.name}
                   >
                     <Styled.ElementGraphicImg
@@ -170,49 +198,18 @@ export function PostalStudio({
                 );
               })}
 
-              {POSTAL_STICKERS.map((sticker) => {
+              {POSTAL_ELEMENTS.map((sticker, index) => {
                 const isPlaced = placedStickerIds.includes(sticker.id);
+                const gridIndex = FRAME_ELEMENT_TOGGLES.length + index;
                 return (
                   <Styled.ElementImageCard
                     key={sticker.id}
                     type="button"
                     $active={isPlaced}
-                    onClick={() => onAddSticker(sticker)}
-                    onDoubleClick={(e) => {
-                      e.stopPropagation();
-                      onRemoveStickerById(sticker.id);
+                    onClick={() => {
+                      onAddSticker(sticker);
+                      triggerGridRipple(elementsGridRef.current, gridIndex);
                     }}
-                    aria-label={sticker.name}
-                  >
-                    <Styled.ElementGraphicImg
-                      src={sticker.src}
-                      alt={sticker.name}
-                    />
-                  </Styled.ElementImageCard>
-                );
-              })}
-            </Styled.ElementsGrid>
-          </>
-        )}
-
-        {activeTab === "stickers" && (
-          <>
-            <Styled.SectionMetaRow>
-              <span>STICKERS Y PERSONAJES</span>
-              <Styled.SectionCountAccent>
-                Toca para añadir al retrato
-              </Styled.SectionCountAccent>
-            </Styled.SectionMetaRow>
-
-            <Styled.ElementsGrid>
-              {POSTAL_STICKERS.map((sticker) => {
-                const isPlaced = placedStickerIds.includes(sticker.id);
-                return (
-                  <Styled.ElementImageCard
-                    key={sticker.id}
-                    type="button"
-                    $active={isPlaced}
-                    onClick={() => onAddSticker(sticker)}
                     onDoubleClick={(e) => {
                       e.stopPropagation();
                       onRemoveStickerById(sticker.id);
@@ -333,22 +330,6 @@ export function PostalStudio({
           </Styled.TextConfigForm>
         )}
       </Styled.StudioCard>
-
-      <Styled.PromoBannerCard>
-        <Styled.PromoIconCircle>
-          <Sparkles size={16} strokeWidth={2.3} />
-        </Styled.PromoIconCircle>
-        <Styled.PromoTextCol>
-          <Styled.PromoTitle>
-            ¡Personaliza tu Porta Retrato Navideño!
-          </Styled.PromoTitle>
-          <Styled.PromoDescription>
-            Elige entre los distintos marcos navideños (ondulados, bastón de
-            caramelo, lunares o pino dorado), activa o agrega árboles, regalos y
-            luces, y añade un texto opcional con caligrafía festiva.
-          </Styled.PromoDescription>
-        </Styled.PromoTextCol>
-      </Styled.PromoBannerCard>
     </Styled.StudioColumn>
   );
 }

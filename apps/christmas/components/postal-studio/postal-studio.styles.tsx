@@ -89,7 +89,7 @@ export const StepPill = styled.span`
 
 export const TabsBar = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 4px;
   border-bottom: 1px solid rgba(250, 204, 21, 0.2);
   padding-bottom: 8px;
@@ -139,11 +139,14 @@ export const SectionCountAccent = styled.span`
 
 export const FramesGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 2px;
 
   @media (min-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 `;
 
@@ -151,46 +154,46 @@ export const FrameOptionCard = styled.button<{ $selected: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 12px;
+  justify-content: center;
+  padding: 8px;
   border-radius: 14px;
-  text-align: left;
   cursor: pointer;
   background: ${({ $selected }) =>
     $selected
-      ? "linear-gradient(135deg, rgba(185, 28, 28, 0.28) 0%, rgba(20, 56, 36, 0.92) 100%)"
+      ? "linear-gradient(135deg, rgba(185, 28, 28, 0.32) 0%, rgba(20, 56, 36, 0.94) 100%)"
       : "rgba(11, 28, 19, 0.75)"};
   border: 1.5px solid
     ${({ $selected }) =>
       $selected ? "#fca5a5" : "rgba(250, 204, 21, 0.22)"};
   box-shadow: ${({ $selected }) =>
     $selected ? "0 0 0 2px rgba(248, 113, 113, 0.25)" : "none"};
-  transition: all 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
 
   &:hover {
-    border-color: rgba(250, 204, 21, 0.6);
-    transform: translateY(-1px);
+    border-color: rgba(250, 204, 21, 0.65);
   }
 `;
 
 export const FrameThumbBox = styled.div`
-  width: 44px;
-  height: 56px;
+  width: 100%;
+  aspect-ratio: 791 / 1024;
   border-radius: 8px;
   background: #ffffff;
   border: 1px solid rgba(250, 204, 21, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   overflow: hidden;
-  padding: 2px;
 `;
 
 export const FrameThumbImg = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
+  display: block;
 `;
 
 export const FrameInfoCol = styled.div`
@@ -260,12 +263,13 @@ export const ElementImageCard = styled.button<{ $active?: boolean }>`
   border: 1.5px solid
     ${({ $active }) =>
       $active ? "#4ade80" : "rgba(250, 204, 21, 0.24)"};
-  transition: all 0.16s ease;
+  transition:
+    border-color 0.16s ease,
+    background 0.16s ease;
 
   &:hover {
     background: rgba(250, 204, 21, 0.18);
     border-color: #facc15;
-    transform: translateY(-2px) scale(1.03);
   }
 `;
 

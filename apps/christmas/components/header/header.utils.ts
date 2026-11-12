@@ -6,11 +6,11 @@ export interface NavItem {
 
 export const getHeaderNavItems = (): NavItem[] => [
   {
-    id: "experiencias",
-    label: "Experiencias Navideñas",
-    href: "/proximamente",
+    id: "arbol",
+    label: "Adorna tu árbol",
+    href: "/arbol",
   },
-  { id: "musica", label: "Música & Villancicos", href: "/proximamente" },
+  { id: "postal", label: "Crea tu postal", href: "/postal" },
 ];
 
 export const isNavItemActive = (

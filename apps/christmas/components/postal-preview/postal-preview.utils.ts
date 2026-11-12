@@ -11,6 +11,8 @@ export interface PlacedPostalSticker {
   stickerId: string;
   src: string;
   name: string;
+  width: number;
+  height: number;
   xPercent: number;
   yPercent: number;
 }

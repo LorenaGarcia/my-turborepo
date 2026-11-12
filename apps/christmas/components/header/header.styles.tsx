@@ -85,6 +85,7 @@ export const HatLetterWrapper = styled.span`
   position: relative;
   display: inline-block;
   margin-right: 10px;
+  transform-origin: bottom center;
 `;
 
 export const SantaHatImage = styled.img`
@@ -93,7 +94,9 @@ export const SantaHatImage = styled.img`
   left: -3px;
   width: 24px;
   height: auto;
+  opacity: 0;
   pointer-events: none;
+  transform-origin: center center;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
 `;
 

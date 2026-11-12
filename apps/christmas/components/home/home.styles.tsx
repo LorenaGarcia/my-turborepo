@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import styled, { keyframes } from "styled-components";
 
 const twinkle = keyframes`
@@ -142,7 +143,7 @@ export const SparkleIconSpan = styled.span`
   align-items: center;
 `;
 
-export const HeroTitle = styled.h1`
+export const HeroTitle = styled(motion.h1)`
   font-size: clamp(2rem, 6vw, 4.1rem);
   font-weight: 800;
   line-height: 1.12;
@@ -216,8 +217,8 @@ export const SnowyButton = styled.button`
     0 10px 20px rgba(0, 0, 0, 0.45),
     0 4px 0 #5c1111,
     inset 0 2px 3px rgba(255, 255, 255, 0.35);
+  opacity: 0;
   transition:
-    transform 0.2s ease,
     box-shadow 0.2s ease,
     filter 0.2s ease;
 

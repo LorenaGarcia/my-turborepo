@@ -128,7 +128,6 @@ export const OrnamentTile = styled.button<{ $selected?: boolean }>`
     ${(props) => (props.$selected ? "#facc15" : "rgba(255, 255, 255, 0.6)")};
   cursor: grab;
   transition:
-    transform 0.18s ease,
     border-color 0.18s ease,
     box-shadow 0.18s ease;
   box-shadow: ${(props) =>
@@ -137,14 +136,12 @@ export const OrnamentTile = styled.button<{ $selected?: boolean }>`
       : "0 4px 10px rgba(0, 0, 0, 0.18)"};
 
   &:hover {
-    transform: translateY(-2px);
     border-color: #facc15;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
   }
 
   &:active {
     cursor: grabbing;
-    transform: scale(0.97);
   }
 `;
 
