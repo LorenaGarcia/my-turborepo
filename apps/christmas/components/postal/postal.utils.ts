@@ -12,7 +12,7 @@ import {
   type PostalTextState,
 } from "../postal-studio";
 
-export const DEFAULT_POSTAL_PHOTO = "/postal-family-default.jpg";
+export const DEFAULT_POSTAL_PHOTO = "";
 
 export const DEFAULT_FRAME_ELEMENTS: PostalFrameElementsState = {
   showLights: true,
@@ -125,7 +125,7 @@ export const generatePostalDataUrl = async (
   const photoW = width;
   const photoH = height;
 
-  const userImg = await loadImage(options.photoSrc);
+  const userImg = options.photoSrc ? await loadImage(options.photoSrc) : null;
   if (userImg && userImg.naturalWidth > 0) {
     ctx.save();
     ctx.beginPath();

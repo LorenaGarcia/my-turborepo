@@ -88,17 +88,94 @@ export const PostcardOuterFrame = styled.div`
   user-select: none;
 `;
 
-export const PhotoWindow = styled.div`
+export const PhotoWindow = styled.div<{ $hasPhoto?: boolean }>`
   position: absolute;
   inset: 0;
   z-index: 1;
   overflow: hidden;
-  background: transparent;
-  cursor: grab;
+  background: ${({ $hasPhoto }) =>
+    $hasPhoto
+      ? "transparent"
+      : "radial-gradient(circle at center, #183826 0%, #0d2116 100%)"};
+  cursor: ${({ $hasPhoto }) => ($hasPhoto ? "grab" : "default")};
 
   &:active {
-    cursor: grabbing;
+    cursor: ${({ $hasPhoto }) => ($hasPhoto ? "grabbing" : "default")};
   }
+`;
+
+export const EmptyPhotoState = styled.div`
+  position: absolute;
+  inset: 14%;
+  z-index: 14;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 20px 16px;
+  border-radius: 16px;
+  background: rgba(11, 28, 19, 0.78);
+  border: 1.5px dashed rgba(250, 204, 21, 0.45);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+`;
+
+export const EmptyPhotoIconCircle = styled.div`
+  width: 52px;
+  height: 52px;
+  border-radius: 9999px;
+  background: rgba(234, 179, 8, 0.16);
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  color: #fde047;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const EmptyPhotoTitle = styled.p`
+  margin: 0;
+  max-width: 220px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #fef3c7;
+`;
+
+export const EmptyPhotoUploadBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  border: 1.5px solid #fde047;
+  background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.16s ease,
+    filter 0.16s ease,
+    box-shadow 0.16s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+export const HiddenPhotoInput = styled.input`
+  display: none;
 `;
 
 export const UserPhotoImg = styled.img<{

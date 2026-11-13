@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
+import { ImagePlus, RotateCcw, Upload, ZoomIn, ZoomOut } from "lucide-react";
 import {
   getPostalFontById,
   getPostalFrameById,
@@ -26,6 +26,7 @@ export interface PostalPreviewProps {
   photoZoom: number;
   photoPan: { x: number; y: number };
   placedStickers: PlacedPostalSticker[];
+  onUploadPhoto: (file: File) => void;
   onZoomIn: () => void;
   onZoomOut: () => void;
   onResetZoom: () => void;
@@ -49,6 +50,7 @@ export function PostalPreview({
   photoZoom,
   photoPan,
   placedStickers,
+  onUploadPhoto,
   onZoomIn,
   onZoomOut,
   onResetZoom,
@@ -59,6 +61,7 @@ export function PostalPreview({
   onToggleFrameElement,
 }: PostalPreviewProps) {
   const frameRef = useRef<HTMLDivElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const lastTapRef = useRef<{ id: string; time: number }>({ id: "", time: 0 });
   const [draggingStickerId, setDraggingStickerId] = useState<string | null>(
     null
@@ -155,25 +158,62 @@ export function PostalPreview({
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      onUploadPhoto(file);
+      event.target.value = "";
+    }
+  };
+
+  const hasPhoto = Boolean(photoSrc);
+
   return (
     <Styled.PreviewCardColumn>
+      <Styled.HiddenPhotoInput
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
 
       <Styled.PostcardOuterFrame ref={frameRef}>
         <Styled.PhotoWindow
-          onPointerDown={handlePhotoPointerDown}
-          onPointerMove={handlePhotoPointerMove}
-          onPointerUp={handlePhotoPointerUp}
-          title="Arrastra para encuadrar tu foto"
+          $hasPhoto={hasPhoto}
+          onPointerDown={hasPhoto ? handlePhotoPointerDown : undefined}
+          onPointerMove={hasPhoto ? handlePhotoPointerMove : undefined}
+          onPointerUp={hasPhoto ? handlePhotoPointerUp : undefined}
+          title={hasPhoto ? "Arrastra para encuadrar tu foto" : undefined}
         >
-          <Styled.UserPhotoImg
-            src={photoSrc}
-            alt="Foto familiar navideña"
-            $zoom={photoZoom}
-            $panX={photoPan.x}
-            $panY={photoPan.y}
-            $filter={filterCss}
-          />
+          {hasPhoto && (
+            <Styled.UserPhotoImg
+              src={photoSrc}
+              alt="Foto familiar navideña"
+              $zoom={photoZoom}
+              $panX={photoPan.x}
+              $panY={photoPan.y}
+              $filter={filterCss}
+            />
+          )}
         </Styled.PhotoWindow>
+
+        {!hasPhoto && (
+          <Styled.EmptyPhotoState>
+            <Styled.EmptyPhotoIconCircle>
+              <ImagePlus size={24} strokeWidth={2.2} />
+            </Styled.EmptyPhotoIconCircle>
+            <Styled.EmptyPhotoTitle>
+              Sube tu foto para comenzar a crear tu postal
+            </Styled.EmptyPhotoTitle>
+            <Styled.EmptyPhotoUploadBtn
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload size={15} strokeWidth={2.4} />
+              <span>Subir foto</span>
+            </Styled.EmptyPhotoUploadBtn>
+          </Styled.EmptyPhotoState>
+        )}
 
         {/* Pure SVG Frame Overlay (with transparent center cutout) */}
         <Styled.FullFrameOverlayImg

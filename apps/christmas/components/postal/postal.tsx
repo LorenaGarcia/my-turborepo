@@ -190,6 +190,7 @@ export function Postal() {
               photoZoom={photoZoom}
               photoPan={photoPan}
               placedStickers={placedStickers}
+              onUploadPhoto={handleUploadPhoto}
               onZoomIn={() =>
                 setPhotoZoom((z) => Math.min(2.2, +(z + 0.15).toFixed(2)))
               }
